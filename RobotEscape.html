@@ -1,50 +1,25 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <title>Robot X-42 - Cuộc Phiêu Lưu</title>
     <style>
         @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
         @keyframes glow {
-            0% {
-                box-shadow: 0 0 5px #00ff88;
-            }
-
-            50% {
-                box-shadow: 0 0 20px #00ff88;
-            }
-
-            100% {
-                box-shadow: 0 0 5px #00ff88;
-            }
+            0% { box-shadow: 0 0 5px #00ff88; }
+            50% { box-shadow: 0 0 20px #00ff88; }
+            100% { box-shadow: 0 0 5px #00ff88; }
         }
 
         * {
@@ -61,8 +36,7 @@
             color: #fff;
             min-height: 100vh;
             padding: 20px;
-            padding-top: calc(72px + 20px);
-            /* Thêm padding-top bằng chiều cao navbar + padding gốc */
+            padding-top: calc(72px + 20px); /* Thêm padding-top bằng chiều cao navbar + padding gốc */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -104,7 +78,7 @@
             background-clip: text;
             color: transparent;
             margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            text-shadow: 0 0 10px rgba(0,255,136,0.3);
         }
 
         .story {
@@ -156,7 +130,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
             justify-content: center;
             align-items: center;
@@ -310,12 +284,11 @@
             .options-container {
                 grid-template-columns: 1fr;
             }
-
+            
             .modal-content {
                 padding: 20px;
             }
         }
-
         :root {
             --primary: #2c3e50;
             --primary-light: #34495e;
@@ -329,8 +302,8 @@
             --danger-dark: #d32f2f;
             --success: #4CAF50;
             --success-dark: #45a049;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
             --radius-md: 8px;
         }
 
@@ -412,7 +385,6 @@
             background: #c0392b;
             transform: translateY(-2px);
         }
-
         .status {
             background: rgba(15, 52, 96, 0.95);
             border-radius: 15px;
@@ -433,8 +405,7 @@
             gap: 20px;
         }
 
-        .badge,
-        .current-level {
+        .badge, .current-level {
             font-size: 1.3em;
             font-weight: 700;
             background: linear-gradient(135deg, #FFF3B0, #FFE66D, #FFD93D);
@@ -450,7 +421,6 @@
             0% {
                 background-position: -100% center;
             }
-
             100% {
                 background-position: 200% center;
             }
@@ -471,17 +441,9 @@
         }
 
         @keyframes goldGlow {
-            0% {
-                box-shadow: 0 0 15px rgba(255, 217, 61, 0.15);
-            }
-
-            50% {
-                box-shadow: 0 0 30px rgba(255, 217, 61, 0.3);
-            }
-
-            100% {
-                box-shadow: 0 0 15px rgba(255, 217, 61, 0.15);
-            }
+            0% { box-shadow: 0 0 15px rgba(255, 217, 61, 0.15); }
+            50% { box-shadow: 0 0 30px rgba(255, 217, 61, 0.3); }
+            100% { box-shadow: 0 0 15px rgba(255, 217, 61, 0.15); }
         }
 
         .badge-label {
@@ -491,8 +453,7 @@
             letter-spacing: 1px;
             margin-bottom: 10px;
         }
-
-        .game-controls {
+                .game-controls {
             display: flex;
             gap: 12px;
         }
@@ -532,66 +493,41 @@
             .status-content {
                 flex-direction: column;
             }
-
+            
             .game-info {
                 flex-direction: column;
                 width: 100%;
             }
-
+            
             .badge-container {
                 width: 100%;
             }
-
+            
             .game-controls {
                 width: 100%;
             }
-
+            
             .btn-control {
                 flex: 1;
                 justify-content: center;
             }
         }
-
         @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
         @keyframes glow {
-            0% {
-                box-shadow: 0 0 5px #00ff88;
-            }
-
-            50% {
-                box-shadow: 0 0 20px #00ff88;
-            }
-
-            100% {
-                box-shadow: 0 0 5px #00ff88;
-            }
+            0% { box-shadow: 0 0 5px #00ff88; }
+            50% { box-shadow: 0 0 20px #00ff88; }
+            100% { box-shadow: 0 0 5px #00ff88; }
         }
 
         * {
@@ -642,15 +578,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .feedback-icon {
@@ -689,7 +618,7 @@
             background-clip: text;
             color: transparent;
             margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            text-shadow: 0 0 10px rgba(0,255,136,0.3);
         }
 
         /* Add all other existing styles... */
@@ -712,9 +641,9 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
         }
+
     </style>
 </head>
-
 <body>
     <nav class="navbar">
         <div class="nav-content">
@@ -735,9 +664,7 @@
         </div>
 
         <div class="story">
-            <p>Robot X-42, một cỗ máy thông minh vượt thời đại, đang trên hành trình khám phá những bí ẩn của thế giới.
-                Mỗi thử thách là một cơ hội để chứng minh trí tuệ và sự nhanh nhạy của bạn. Hãy giúp X-42 vượt qua các
-                câu đố để tiến lên level cao hơn!</p>
+            <p>Robot X-42, một cỗ máy thông minh vượt thời đại, đang trên hành trình khám phá những bí ẩn của thế giới. Mỗi thử thách là một cơ hội để chứng minh trí tuệ và sự nhanh nhạy của bạn. Hãy giúp X-42 vượt qua các câu đố để tiến lên level cao hơn!</p>
         </div>
 
         <div class="levels">
@@ -763,25 +690,25 @@
             </div>
         </div>
         <div class="status">
-            <div class="status-content">
-                <div class="game-info">
-                    <div class="badge-container">
-                        <div class="badge-label">Danh hiệu:</div>
-                        <div class="badge">🌱 Tân thủ</div>
-                    </div>
-                </div>
-                <div class="game-controls">
-                    <button class="btn-control save-btn" onclick="saveGame()">
-                        <span class="btn-icon">💾</span>
-                        <span class="btn-text">Lưu game</span>
-                    </button>
-                    <button class="btn-control restart-btn" onclick="restartGame()">
-                        <span class="btn-icon">🔄</span>
-                        <span class="btn-text">Chơi lại</span>
-                    </button>
+        <div class="status-content">
+            <div class="game-info">
+                <div class="badge-container">
+                    <div class="badge-label">Danh hiệu:</div>
+                    <div class="badge">🌱 Tân thủ</div>
                 </div>
             </div>
+            <div class="game-controls">
+                <button class="btn-control save-btn" onclick="saveGame()">
+                    <span class="btn-icon">💾</span>
+                    <span class="btn-text">Lưu game</span>
+                </button>
+                <button class="btn-control restart-btn" onclick="restartGame()">
+                    <span class="btn-icon">🔄</span>
+                    <span class="btn-text">Chơi lại</span>
+                </button>
+            </div>
         </div>
+    </div>
     </div>
 
     <div class="modal" id="levelModal">
@@ -815,29 +742,29 @@
         // Get initials from username
         function getInitials(username) {
             if (!username) return 'U';
-
+            
             // Split the username by spaces or special characters
             const words = username.split(/[\s_-]+/);
-
+            
             // Get first letter of each word and convert to uppercase
             const initials = words
                 .map(word => word.charAt(0).toUpperCase())
                 .join('')
                 .slice(0, 2); // Limit to 2 characters
-
+                
             return initials || 'U';
         }
 
         // Authentication check function
         async function checkAuthentication() {
             const token = localStorage.getItem('auth_token');
-
+            
             if (!token) {
                 console.log('No token found, redirecting to login');
                 window.location.href = 'Login.html';
                 return false;
             }
-
+            
             try {
                 const response = await fetch(`${API_URL}/check-auth`, {
                     method: 'GET',
@@ -846,13 +773,13 @@
                         'Content-Type': 'application/json'
                     }
                 });
-
+                
                 const data = await response.json();
-
+                
                 if (!response.ok || !data.authenticated) {
                     throw new Error('Authentication failed');
                 }
-
+                
                 return true;
             } catch (error) {
                 console.error('Auth check failed:', error);
@@ -877,9 +804,9 @@
         }
 
         // Initialize on page load
-        window.addEventListener('DOMContentLoaded', async function () {
+        window.addEventListener('DOMContentLoaded', async function() {
             const isAuthenticated = await checkAuthentication();
-
+            
             if (isAuthenticated) {
                 const username = localStorage.getItem('username');
                 if (username) {
@@ -933,41 +860,276 @@
                         }
                         return -1;
                     }
-                    `
+                    `   
                 },
             ],
             2: [
                 {
                     type: 'multiple-choice',
-                    question: "Trong dãy số: 2, 4, 6, 8, số tiếp theo là gì?",
+                    question: "Điều kiện tiên quyết để có thể áp dụng thuật toán tìm kiếm nhị phân là gì?",
+                    options: ["Mảng phải được sắp xếp tăng dần", "Mảng phải được sắp xếp giảm dần", "Mảng phải là số nguyên", "Mảng có ít nhất 2 phần tử"],
+                    answer: "Mảng phải được sắp xếp tăng dần",
+                    explanation: "Tìm kiếm nhị phân chỉ hoạt động trên mảng đã sắp xếp, thông thường là tăng dần. Điều này cho phép thuật toán so sánh giá trị cần tìm với phần tử giữa để quyết định tìm kiếm nửa trái hay nửa phải của mảng."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Độ phức tạp thời gian của thuật toán tìm kiếm nhị phân là:",
+                    options: ["O(n)", "O(log n)", "O(n log n)", "O(n²)"],
+                    answer: "O(log n)", 
+                    explanation: "Với mỗi bước, thuật toán chia đôi khoảng tìm kiếm, làm giảm số phần tử cần xét đi một nửa. Do đó độ phức tạp là logarit cơ số 2 của n, hay O(log n)."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Trong tìm kiếm nhị phân, phần tử giữa (middle) được tính như thế nào?",
+                    options: ["mid = left + right", "mid = (left + right) / 2", "mid = left + (right - left) / 2", "mid = right - left"],
+                    answer: "mid = left + (right - left) / 2",
+                    explanation: "Công thức C là cách tính an toàn nhất vì tránh được tràn số khi left + right vượt quá giới hạn của kiểu dữ liệu. Về mặt toán học, công thức này tương đương với (left + right) / 2."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Trong một mảng có 1024 phần tử, số lần so sánh tối đa cần thực hiện trong tìm kiếm nhị phân là:",
                     options: ["9", "10", "11", "12"],
-                    answer: "10"
+                    answer: "10",
+                    explanation: "Với n = 1024 = 2^10, số lần so sánh tối đa là log₂(1024) = 10. Mỗi lần so sánh, kích thước mảng giảm đi một nửa cho đến khi còn 1 phần tử."
                 },
                 {
-                    type: 'multiple-choice',
-                    question: "Robot X-42 di chuyển theo quy luật: Bắc 2 bước, Đông 3 bước. Tổng quãng đường là?",
-                    options: ["4 bước", "5 bước", "6 bước", "7 bước"],
-                    answer: "5 bước"
-                },
-                {
-                    type: 'multiple-choice',
-                    question: "Nếu mỗi bước Robot tiêu tốn 2 đơn vị năng lượng, để di chuyển 10 bước cần bao nhiêu năng lượng?",
-                    options: ["15", "18", "20", "22"],
-                    answer: "20"
-                },
-                {
-                    type: 'multiple-choice',
-                    question: "Nếu mỗi bước Robot tiêu tốn 2 đơn vị năng lượng, để di chuyển 10 bước cần bao nhiêu năng lượng?",
-                    options: ["15", "18", "20", "22"],
-                    answer: "20"
-                },
-                {
-                    type: 'essay',
-                    question: "Hãy giải thích quy luật của dãy số trên và ứng dụng thực tế của nó.",
-                    minWords: 30,
-                    sampleAnswer: "Dãy số này tăng đều với bước nhảy là 2 đơn vị. Quy luật này có thể áp dụng trong việc dự đoán các chu kỳ, lập lịch định kỳ, hoặc trong việc tính toán khoảng cách đều nhau."
-                },
+                    {
+            type: 'fill-in-the-code',
+            question: "Viết hàm tìm kiếm nhị phân trong JavaScript để tìm một phần tử trong mảng đã sắp xếp. Trả về chỉ số nếu tìm thấy, -1 nếu không tìm thấy.",
+            sampleCode: `function binarySearch(arr, target) {
+    let left = 0;
+    let right = arr.length - 1;
+    
+    while (left <= right) {
+        let mid = left + Math.floor((right - left) / 2);
+        
+        if (arr[mid] === target) {
+            return mid;
+        }
+        
+        if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    return -1;
+}`
+        }
+    ],
+    
+    3: [
+        {
+            type: 'multiple-choice',
+            question: "Thuật toán sắp xếp chèn (Insertion Sort) hoạt động như thế nào?",
+            options: [
+                "Tìm phần tử nhỏ nhất và đưa về đầu mảng",
+                "Chia mảng thành hai phần và sắp xếp từng phần",
+                "So sánh và hoán đổi các cặp phần tử liền kề",
+                "Duyệt từng phần tử và chèn vào vị trí thích hợp trong phần đã sắp xếp"
             ],
+            answer: "Duyệt từng phần tử và chèn vào vị trí thích hợp trong phần đã sắp xếp",
+            explanation: "Insertion Sort xây dựng mảng đã sắp xếp từng bước một, bằng cách lấy từng phần tử và chèn vào đúng vị trí trong phần mảng đã được sắp xếp."
+        },
+        {
+            type: 'multiple-choice',
+            question: "Độ phức tạp thời gian trung bình của Insertion Sort là:",
+            options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+            answer: "O(n²)",
+            explanation: "Insertion Sort có độ phức tạp O(n²) vì với mỗi phần tử (n), có thể phải dịch chuyển đến n-1 phần tử khác để chèn nó vào đúng vị trí."
+        },
+        {
+            type: 'multiple-choice',
+            question: "Insertion Sort phù hợp nhất trong trường hợp nào?",
+            options: [
+                "Mảng có kích thước rất lớn",
+                "Mảng gần như đã được sắp xếp",
+                "Mảng hoàn toàn ngẫu nhiên",
+                "Mảng được sắp xếp ngược"
+            ],
+            answer: "Mảng gần như đã được sắp xếp",
+            explanation: "Insertion Sort rất hiệu quả với mảng gần như đã sắp xếp vì số lần di chuyển phần tử sẽ ít, trong trường hợp tốt nhất có độ phức tạp O(n)."
+        },
+        {
+            type: 'multiple-choice',
+            question: "Insertion Sort là thuật toán sắp xếp:",
+            options: [
+                "Ổn định và tại chỗ",
+                "Không ổn định và tại chỗ",
+                "Ổn định và không tại chỗ",
+                "Không ổn định và không tại chỗ"
+            ],
+            answer: "Ổn định và tại chỗ",
+            explanation: "Insertion Sort là thuật toán sắp xếp ổn định (giữ nguyên thứ tự tương đối của các phần tử có giá trị bằng nhau) và tại chỗ (không cần thêm bộ nhớ phụ đáng kể)."
+        },
+        {
+            type: 'fill-in-the-code',
+            question: "Viết hàm sắp xếp chèn (Insertion Sort) trong JavaScript.",
+            sampleCode: `function insertionSort(arr) {
+                    for (let i = 1; i < arr.length; i++) {
+                        let current = arr[i];
+                        let j = i - 1;
+                        
+                        while (j >= 0 && arr[j] > current) {
+                            arr[j + 1] = arr[j];
+                            j--;
+                        }
+                        
+                        arr[j + 1] = current;
+                    }
+                    
+                    return arr;
+                }`
+                }
+            ],
+            4: [
+        {
+            type: 'multiple-choice',
+            question: "Thuật toán sắp xếp chọn (Selection Sort) hoạt động theo nguyên tắc nào?",
+            options: [
+                "Hoán đổi các phần tử liền kề cho đến khi mảng được sắp xếp",
+                "Tìm phần tử nhỏ nhất trong mảng chưa sắp xếp và đưa về đầu phần chưa sắp xếp",
+                "Chèn từng phần tử vào vị trí thích hợp trong mảng đã sắp xếp",
+                "Chia mảng thành các phần nhỏ và sắp xếp từng phần"
+            ],
+            answer: "Tìm phần tử nhỏ nhất trong mảng chưa sắp xếp và đưa về đầu phần chưa sắp xếp",
+            explanation: "Selection Sort hoạt động bằng cách tìm phần tử nhỏ nhất trong phần chưa sắp xếp của mảng và đưa nó về vị trí đầu tiên của phần chưa sắp xếp. Quá trình này lặp lại cho đến khi toàn bộ mảng được sắp xếp."
+        },
+        {
+            type: 'multiple-choice',
+            question: "Độ phức tạp thời gian của Selection Sort là bao nhiêu?",
+            options: [
+                "O(n)",
+                "O(n log n)",
+                "O(n²)",
+                "O(log n)"
+            ],
+            answer: "O(n²)",
+            explanation: "Selection Sort có độ phức tạp O(n²) vì với mỗi vị trí i (n lần), thuật toán phải duyệt qua tất cả các phần tử còn lại (n-i lần) để tìm phần tử nhỏ nhất."
+        },
+        {
+            type: 'multiple-choice',
+            question: "Selection Sort có đặc điểm nào sau đây?",
+            options: [
+                "Là thuật toán sắp xếp ổn định và không tại chỗ",
+                "Là thuật toán sắp xếp không ổn định và tại chỗ",
+                "Là thuật toán sắp xếp ổn định và tại chỗ",
+                "Là thuật toán sắp xếp không ổn định và không tại chỗ"
+            ],
+            answer: "Là thuật toán sắp xếp không ổn định và tại chỗ",
+            explanation: "Selection Sort là thuật toán sắp xếp tại chỗ (in-place) vì không cần bộ nhớ phụ, nhưng không ổn định (unstable) vì có thể thay đổi thứ tự tương đối của các phần tử có giá trị bằng nhau."
+        },
+        {
+            type: 'multiple-choice',
+            question: "Ưu điểm chính của Selection Sort là gì?",
+            options: [
+                "Tốc độ nhanh với mọi dữ liệu đầu vào",
+                "Số lần hoán đổi ít nhất trong các thuật toán sắp xếp cơ bản",
+                "Độ phức tạp thời gian thấp",
+                "Bảo toàn thứ tự tương đối của các phần tử bằng nhau"
+            ],
+            answer: "Số lần hoán đổi ít nhất trong các thuật toán sắp xếp cơ bản",
+            explanation: "Selection Sort thực hiện tối đa n-1 lần hoán đổi (với n là số phần tử), ít hơn nhiều so với các thuật toán sắp xếp cơ bản khác. Điều này làm nó hiệu quả trong các hệ thống mà việc hoán đổi tốn kém."
+        },
+        {
+            type: 'fill-in-the-code',
+            question: "Viết hàm sắp xếp chọn (Selection Sort) trong JavaScript để sắp xếp mảng theo thứ tự tăng dần.",
+            sampleCode: `function selectionSort(arr) {
+                    const n = arr.length;
+                    
+                    for (let i = 0; i < n - 1; i++) {
+                        let minIndex = i;
+                        
+                        for (let j = i + 1; j < n; j++) {
+                            if (arr[j] < arr[minIndex]) {
+                                minIndex = j;
+                            }
+                        }
+                        
+                        if (minIndex !== i) {
+                            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+                        }
+                    }
+                    
+                    return arr;
+                }`
+                        }
+                    ],
+                    5: [
+                        {
+                            type: 'multiple-choice',
+                            question: "Thuật toán sắp xếp nổi bọt (Bubble Sort) hoạt động như thế nào?",
+                            options: [
+                                "So sánh và hoán đổi các cặp phần tử liền kề, đưa phần tử lớn nhất về cuối sau mỗi lượt",
+                                "Tìm phần tử nhỏ nhất và đưa về đầu mảng",
+                                "Chèn từng phần tử vào vị trí thích hợp",
+                                "Chia mảng thành hai phần và sắp xếp riêng"
+                            ],
+                            answer: "So sánh và hoán đổi các cặp phần tử liền kề, đưa phần tử lớn nhất về cuối sau mỗi lượt",
+                            explanation: "Bubble Sort lặp đi lặp lại việc so sánh và hoán đổi các cặp phần tử liền kề. Sau mỗi lượt, phần tử lớn nhất trong phần chưa sắp xếp sẽ 'nổi' lên cuối mảng."
+                        },
+                        {
+                            type: 'multiple-choice',
+                            question: "Trường hợp nào Bubble Sort hoạt động hiệu quả nhất?",
+                            options: [
+                                "Mảng đã được sắp xếp hoàn toàn",
+                                "Mảng được sắp xếp ngược hoàn toàn",
+                                "Mảng có các phần tử ngẫu nhiên",
+                                "Mảng có kích thước lớn"
+                            ],
+                            answer: "Mảng đã được sắp xếp hoàn toàn",
+                            explanation: "Bubble Sort hoạt động tốt nhất khi mảng đã được sắp xếp, vì nó sẽ chỉ cần một lần duyệt qua mảng để xác nhận không cần hoán đổi nào, cho độ phức tạp O(n)."
+                        },
+                        {
+                            type: 'multiple-choice',
+                            question: "Bubble Sort có đặc điểm nào sau đây?",
+                            options: [
+                                "Không ổn định và tại chỗ",
+                                "Ổn định và không tại chỗ",
+                                "Ổn định và tại chỗ",
+                                "Không ổn định và không tại chỗ"
+                            ],
+                            answer: "Ổn định và tại chỗ",
+                            explanation: "Bubble Sort là thuật toán sắp xếp ổn định (stable) vì không thay đổi thứ tự tương đối của các phần tử bằng nhau, và tại chỗ (in-place) vì không cần thêm bộ nhớ phụ đáng kể."
+                        },
+                        {
+                            type: 'multiple-choice',
+                            question: "Làm thế nào để cải thiện hiệu suất của Bubble Sort?",
+                            options: [
+                                "Tăng số lần so sánh mỗi lượt",
+                                "Thêm biến flag để kiểm tra nếu không có hoán đổi nào trong một lượt",
+                                "Giảm kích thước mảng đầu vào",
+                                "Thêm bộ nhớ phụ trợ"
+                            ],
+                            answer: "Thêm biến flag để kiểm tra nếu không có hoán đổi nào trong một lượt",
+                            explanation: "Sử dụng biến flag để theo dõi việc hoán đổi trong mỗi lượt giúp thuật toán dừng sớm khi mảng đã được sắp xếp, tránh các lần duyệt không cần thiết."
+                        },
+                        {
+                            type: 'fill-in-the-code',
+                            question: "Viết hàm sắp xếp nổi bọt (Bubble Sort) trong JavaScript với cải tiến sử dụng biến flag.",
+                            sampleCode: `function bubbleSort(arr) {
+                    const n = arr.length;
+                    
+                    for (let i = 0; i < n - 1; i++) {
+                        let swapped = false;
+                        
+                        for (let j = 0; j < n - i - 1; j++) {
+                            if (arr[j] > arr[j + 1]) {
+                                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                                swapped = true;
+                            }
+                        }
+                        
+                        if (!swapped) {
+                            break;
+                        }
+                    }
+                    
+                    return arr;
+                }`
+                }
+            ]
         }
 
         function saveGame() {
@@ -980,7 +1142,7 @@
                     levelScores
                 }
             };
-
+            
             localStorage.setItem('robotX42SavedGame', JSON.stringify(gameData));
             alert('Trò chơi đã được lưu! 💾');
         }
@@ -992,7 +1154,7 @@
                 currentLevel = 1;
                 currentQuestion = 1;
                 levelScores = { multipleChoice: 0, essay: 0 };
-
+                
                 // Reset UI
                 document.querySelectorAll('.level').forEach((level, index) => {
                     if (index > 0) {
@@ -1000,7 +1162,7 @@
                         level.onclick = null;
                     }
                 });
-
+                
                 document.querySelector('.badge').textContent = '🌱 Tân thủ';
                 closeModal();
                 alert('Trò chơi đã được khởi động lại! 🔄');
@@ -1015,14 +1177,14 @@
                 currentLevel = gameData.currentLevel;
                 currentQuestion = gameData.levelProgress.currentQuestion;
                 levelScores = gameData.levelProgress.levelScores;
-
+                
                 // Restore unlocked levels
                 gameData.unlockedLevels.forEach(level => {
                     const levelElement = document.querySelectorAll('.level')[level - 1];
                     levelElement.classList.remove('locked');
                     levelElement.onclick = () => startLevel(level);
                 });
-
+                
                 document.querySelector('.badge').textContent = gameData.currentBadge;
             }
         });
@@ -1060,16 +1222,16 @@
                     levelElements[i].onclick = () => startLevel(level);
                 }
             }
-
+            
             // Khôi phục danh hiệu hiện tại
             document.querySelector('.badge').textContent = gameState.currentBadge;
-
+            
             // Khôi phục tiến độ level nếu đang trong level
             if (gameState.levelProgress[gameState.currentLevel]) {
                 currentLevel = gameState.currentLevel;
                 currentQuestion = gameState.levelProgress[currentLevel].currentQuestion;
                 levelScores = gameState.levelProgress[currentLevel].scores;
-
+                
                 // Nếu đang mở modal, cập nhật nội dung
                 const modal = document.getElementById('levelModal');
                 if (modal.style.display === 'flex') {
@@ -1083,8 +1245,8 @@
         let selectedOption = null;
         let essayAnswer = "";
         let levelScores = {
-            multipleChoice: 0,
-            essay: 0
+        multipleChoice: 0,
+        essay: 0
         };
 
         // Định nghĩa các danh hiệu theo level
@@ -1105,7 +1267,7 @@
             };
             selectedOption = null;
             essayAnswer = "";
-
+            
             const modal = document.getElementById('levelModal');
             modal.style.display = 'flex';
             updateModalContent();
@@ -1115,7 +1277,7 @@
         function updateProgress() {
             const progress = ((currentQuestion - 1) / questions[currentLevel].length) * 100;
             document.getElementById('progressBar').style.width = `${progress}%`;
-            document.getElementById('questionCounter').textContent =
+            document.getElementById('questionCounter').textContent = 
                 `Câu hỏi ${currentQuestion}/${questions[currentLevel].length}`;
         }
 
@@ -1124,7 +1286,7 @@
             const currentQuestionData = questions[currentLevel][currentQuestion - 1];
             const wordCounter = document.getElementById('wordCounter');
             wordCounter.textContent = `Số từ: ${wordCount}/${currentQuestionData.minWords}`;
-
+            
             if (wordCount < currentQuestionData.minWords) {
                 wordCounter.style.color = '#ff6b6b';
             } else {
@@ -1176,7 +1338,7 @@
                 const levelElements = document.getElementsByClassName('level');
                 levelElements[nextLevel - 1].classList.remove('locked');
                 levelElements[nextLevel - 1].onclick = () => startLevel(nextLevel);
-
+                
                 // Cập nhật danh hiệu
                 document.querySelector('.badge').textContent = badges[nextLevel];
             }
@@ -1188,7 +1350,7 @@
         }
 
         // Khởi tạo sự kiện đóng modal khi click ngoài
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             const modal = document.getElementById('levelModal');
             if (event.target === modal) {
                 closeModal();
@@ -1307,9 +1469,9 @@
 
             // Cập nhật tiêu đề câu hỏi
             questionTitle.textContent = `Level ${currentLevel} - Câu hỏi ${currentQuestion}`;
-            questionType.textContent = currentQuestionData.type === 'multiple-choice' ? 'Trắc nghiệm'
-                : currentQuestionData.type === 'essay' ? 'Tự luận'
-                    : 'Viết mã';
+            questionType.textContent = currentQuestionData.type === 'multiple-choice' ? 'Trắc nghiệm' 
+                                    : currentQuestionData.type === 'essay' ? 'Tự luận' 
+                                    : 'Viết mã';
             questionType.className = `question-type ${currentQuestionData.type === 'essay' ? 'essay' : ''}`;
             questionText.textContent = currentQuestionData.question;
 
@@ -1361,5 +1523,4 @@
 
     </script>
 </body>
-
 </html>
