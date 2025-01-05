@@ -892,242 +892,242 @@
                     answer: "10",
                     explanation: "Với n = 1024 = 2^10, số lần so sánh tối đa là log₂(1024) = 10. Mỗi lần so sánh, kích thước mảng giảm đi một nửa cho đến khi còn 1 phần tử."
                 },
+
                 {
-                    {
-            type: 'fill-in-the-code',
-            question: "Viết hàm tìm kiếm nhị phân trong JavaScript để tìm một phần tử trong mảng đã sắp xếp. Trả về chỉ số nếu tìm thấy, -1 nếu không tìm thấy.",
-            sampleCode: `function binarySearch(arr, target) {
-    let left = 0;
-    let right = arr.length - 1;
-    
-    while (left <= right) {
-        let mid = left + Math.floor((right - left) / 2);
-        
-        if (arr[mid] === target) {
-            return mid;
-        }
-        
-        if (arr[mid] < target) {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
-        }
-    }
-    
-    return -1;
-}`
-        }
-    ],
-    
-    3: [
-        {
-            type: 'multiple-choice',
-            question: "Thuật toán sắp xếp chèn (Insertion Sort) hoạt động như thế nào?",
-            options: [
-                "Tìm phần tử nhỏ nhất và đưa về đầu mảng",
-                "Chia mảng thành hai phần và sắp xếp từng phần",
-                "So sánh và hoán đổi các cặp phần tử liền kề",
-                "Duyệt từng phần tử và chèn vào vị trí thích hợp trong phần đã sắp xếp"
-            ],
-            answer: "Duyệt từng phần tử và chèn vào vị trí thích hợp trong phần đã sắp xếp",
-            explanation: "Insertion Sort xây dựng mảng đã sắp xếp từng bước một, bằng cách lấy từng phần tử và chèn vào đúng vị trí trong phần mảng đã được sắp xếp."
-        },
-        {
-            type: 'multiple-choice',
-            question: "Độ phức tạp thời gian trung bình của Insertion Sort là:",
-            options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
-            answer: "O(n²)",
-            explanation: "Insertion Sort có độ phức tạp O(n²) vì với mỗi phần tử (n), có thể phải dịch chuyển đến n-1 phần tử khác để chèn nó vào đúng vị trí."
-        },
-        {
-            type: 'multiple-choice',
-            question: "Insertion Sort phù hợp nhất trong trường hợp nào?",
-            options: [
-                "Mảng có kích thước rất lớn",
-                "Mảng gần như đã được sắp xếp",
-                "Mảng hoàn toàn ngẫu nhiên",
-                "Mảng được sắp xếp ngược"
-            ],
-            answer: "Mảng gần như đã được sắp xếp",
-            explanation: "Insertion Sort rất hiệu quả với mảng gần như đã sắp xếp vì số lần di chuyển phần tử sẽ ít, trong trường hợp tốt nhất có độ phức tạp O(n)."
-        },
-        {
-            type: 'multiple-choice',
-            question: "Insertion Sort là thuật toán sắp xếp:",
-            options: [
-                "Ổn định và tại chỗ",
-                "Không ổn định và tại chỗ",
-                "Ổn định và không tại chỗ",
-                "Không ổn định và không tại chỗ"
-            ],
-            answer: "Ổn định và tại chỗ",
-            explanation: "Insertion Sort là thuật toán sắp xếp ổn định (giữ nguyên thứ tự tương đối của các phần tử có giá trị bằng nhau) và tại chỗ (không cần thêm bộ nhớ phụ đáng kể)."
-        },
-        {
-            type: 'fill-in-the-code',
-            question: "Viết hàm sắp xếp chèn (Insertion Sort) trong JavaScript.",
-            sampleCode: `function insertionSort(arr) {
-                    for (let i = 1; i < arr.length; i++) {
-                        let current = arr[i];
-                        let j = i - 1;
+                    type: 'fill-in-the-code',
+                    question: "Viết hàm tìm kiếm nhị phân trong JavaScript để tìm một phần tử trong mảng đã sắp xếp. Trả về chỉ số nếu tìm thấy, -1 nếu không tìm thấy.",
+                    sampleCode: `function binarySearch(arr, target) {
+                        let left = 0;
+                        let right = arr.length - 1;
                         
-                        while (j >= 0 && arr[j] > current) {
-                            arr[j + 1] = arr[j];
-                            j--;
-                        }
-                        
-                        arr[j + 1] = current;
-                    }
-                    
-                    return arr;
-                }`
-                }
-            ],
-            4: [
-        {
-            type: 'multiple-choice',
-            question: "Thuật toán sắp xếp chọn (Selection Sort) hoạt động theo nguyên tắc nào?",
-            options: [
-                "Hoán đổi các phần tử liền kề cho đến khi mảng được sắp xếp",
-                "Tìm phần tử nhỏ nhất trong mảng chưa sắp xếp và đưa về đầu phần chưa sắp xếp",
-                "Chèn từng phần tử vào vị trí thích hợp trong mảng đã sắp xếp",
-                "Chia mảng thành các phần nhỏ và sắp xếp từng phần"
-            ],
-            answer: "Tìm phần tử nhỏ nhất trong mảng chưa sắp xếp và đưa về đầu phần chưa sắp xếp",
-            explanation: "Selection Sort hoạt động bằng cách tìm phần tử nhỏ nhất trong phần chưa sắp xếp của mảng và đưa nó về vị trí đầu tiên của phần chưa sắp xếp. Quá trình này lặp lại cho đến khi toàn bộ mảng được sắp xếp."
-        },
-        {
-            type: 'multiple-choice',
-            question: "Độ phức tạp thời gian của Selection Sort là bao nhiêu?",
-            options: [
-                "O(n)",
-                "O(n log n)",
-                "O(n²)",
-                "O(log n)"
-            ],
-            answer: "O(n²)",
-            explanation: "Selection Sort có độ phức tạp O(n²) vì với mỗi vị trí i (n lần), thuật toán phải duyệt qua tất cả các phần tử còn lại (n-i lần) để tìm phần tử nhỏ nhất."
-        },
-        {
-            type: 'multiple-choice',
-            question: "Selection Sort có đặc điểm nào sau đây?",
-            options: [
-                "Là thuật toán sắp xếp ổn định và không tại chỗ",
-                "Là thuật toán sắp xếp không ổn định và tại chỗ",
-                "Là thuật toán sắp xếp ổn định và tại chỗ",
-                "Là thuật toán sắp xếp không ổn định và không tại chỗ"
-            ],
-            answer: "Là thuật toán sắp xếp không ổn định và tại chỗ",
-            explanation: "Selection Sort là thuật toán sắp xếp tại chỗ (in-place) vì không cần bộ nhớ phụ, nhưng không ổn định (unstable) vì có thể thay đổi thứ tự tương đối của các phần tử có giá trị bằng nhau."
-        },
-        {
-            type: 'multiple-choice',
-            question: "Ưu điểm chính của Selection Sort là gì?",
-            options: [
-                "Tốc độ nhanh với mọi dữ liệu đầu vào",
-                "Số lần hoán đổi ít nhất trong các thuật toán sắp xếp cơ bản",
-                "Độ phức tạp thời gian thấp",
-                "Bảo toàn thứ tự tương đối của các phần tử bằng nhau"
-            ],
-            answer: "Số lần hoán đổi ít nhất trong các thuật toán sắp xếp cơ bản",
-            explanation: "Selection Sort thực hiện tối đa n-1 lần hoán đổi (với n là số phần tử), ít hơn nhiều so với các thuật toán sắp xếp cơ bản khác. Điều này làm nó hiệu quả trong các hệ thống mà việc hoán đổi tốn kém."
-        },
-        {
-            type: 'fill-in-the-code',
-            question: "Viết hàm sắp xếp chọn (Selection Sort) trong JavaScript để sắp xếp mảng theo thứ tự tăng dần.",
-            sampleCode: `function selectionSort(arr) {
-                    const n = arr.length;
-                    
-                    for (let i = 0; i < n - 1; i++) {
-                        let minIndex = i;
-                        
-                        for (let j = i + 1; j < n; j++) {
-                            if (arr[j] < arr[minIndex]) {
-                                minIndex = j;
+                        while (left <= right) {
+                            let mid = left + Math.floor((right - left) / 2);
+                            
+                            if (arr[mid] === target) {
+                                return mid;
+                            }
+                            
+                            if (arr[mid] < target) {
+                                left = mid + 1;
+                            } else {
+                                right = mid - 1;
                             }
                         }
                         
-                        if (minIndex !== i) {
-                            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
-                        }
+                        return -1;
+                    }`
                     }
-                    
-                    return arr;
-                }`
+                ],
+    
+            3: [
+                {
+                    type: 'multiple-choice',
+                    question: "Thuật toán sắp xếp chèn (Insertion Sort) hoạt động như thế nào?",
+                    options: [
+                        "Tìm phần tử nhỏ nhất và đưa về đầu mảng",
+                        "Chia mảng thành hai phần và sắp xếp từng phần",
+                        "So sánh và hoán đổi các cặp phần tử liền kề",
+                        "Duyệt từng phần tử và chèn vào vị trí thích hợp trong phần đã sắp xếp"
+                    ],
+                    answer: "Duyệt từng phần tử và chèn vào vị trí thích hợp trong phần đã sắp xếp",
+                    explanation: "Insertion Sort xây dựng mảng đã sắp xếp từng bước một, bằng cách lấy từng phần tử và chèn vào đúng vị trí trong phần mảng đã được sắp xếp."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Độ phức tạp thời gian trung bình của Insertion Sort là:",
+                    options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+                    answer: "O(n²)",
+                    explanation: "Insertion Sort có độ phức tạp O(n²) vì với mỗi phần tử (n), có thể phải dịch chuyển đến n-1 phần tử khác để chèn nó vào đúng vị trí."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Insertion Sort phù hợp nhất trong trường hợp nào?",
+                    options: [
+                        "Mảng có kích thước rất lớn",
+                        "Mảng gần như đã được sắp xếp",
+                        "Mảng hoàn toàn ngẫu nhiên",
+                        "Mảng được sắp xếp ngược"
+                    ],
+                    answer: "Mảng gần như đã được sắp xếp",
+                    explanation: "Insertion Sort rất hiệu quả với mảng gần như đã sắp xếp vì số lần di chuyển phần tử sẽ ít, trong trường hợp tốt nhất có độ phức tạp O(n)."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Insertion Sort là thuật toán sắp xếp:",
+                    options: [
+                        "Ổn định và tại chỗ",
+                        "Không ổn định và tại chỗ",
+                        "Ổn định và không tại chỗ",
+                        "Không ổn định và không tại chỗ"
+                    ],
+                    answer: "Ổn định và tại chỗ",
+                    explanation: "Insertion Sort là thuật toán sắp xếp ổn định (giữ nguyên thứ tự tương đối của các phần tử có giá trị bằng nhau) và tại chỗ (không cần thêm bộ nhớ phụ đáng kể)."
+                },
+                {
+                    type: 'fill-in-the-code',
+                    question: "Viết hàm sắp xếp chèn (Insertion Sort) trong JavaScript.",
+                    sampleCode: `function insertionSort(arr) {
+                            for (let i = 1; i < arr.length; i++) {
+                                let current = arr[i];
+                                let j = i - 1;
+                                
+                                while (j >= 0 && arr[j] > current) {
+                                    arr[j + 1] = arr[j];
+                                    j--;
+                                }
+                                
+                                arr[j + 1] = current;
+                            }
+                            
+                            return arr;
+                        }`
                         }
                     ],
-                    5: [
-                        {
-                            type: 'multiple-choice',
-                            question: "Thuật toán sắp xếp nổi bọt (Bubble Sort) hoạt động như thế nào?",
-                            options: [
-                                "So sánh và hoán đổi các cặp phần tử liền kề, đưa phần tử lớn nhất về cuối sau mỗi lượt",
-                                "Tìm phần tử nhỏ nhất và đưa về đầu mảng",
-                                "Chèn từng phần tử vào vị trí thích hợp",
-                                "Chia mảng thành hai phần và sắp xếp riêng"
-                            ],
-                            answer: "So sánh và hoán đổi các cặp phần tử liền kề, đưa phần tử lớn nhất về cuối sau mỗi lượt",
-                            explanation: "Bubble Sort lặp đi lặp lại việc so sánh và hoán đổi các cặp phần tử liền kề. Sau mỗi lượt, phần tử lớn nhất trong phần chưa sắp xếp sẽ 'nổi' lên cuối mảng."
-                        },
-                        {
-                            type: 'multiple-choice',
-                            question: "Trường hợp nào Bubble Sort hoạt động hiệu quả nhất?",
-                            options: [
-                                "Mảng đã được sắp xếp hoàn toàn",
-                                "Mảng được sắp xếp ngược hoàn toàn",
-                                "Mảng có các phần tử ngẫu nhiên",
-                                "Mảng có kích thước lớn"
-                            ],
-                            answer: "Mảng đã được sắp xếp hoàn toàn",
-                            explanation: "Bubble Sort hoạt động tốt nhất khi mảng đã được sắp xếp, vì nó sẽ chỉ cần một lần duyệt qua mảng để xác nhận không cần hoán đổi nào, cho độ phức tạp O(n)."
-                        },
-                        {
-                            type: 'multiple-choice',
-                            question: "Bubble Sort có đặc điểm nào sau đây?",
-                            options: [
-                                "Không ổn định và tại chỗ",
-                                "Ổn định và không tại chỗ",
-                                "Ổn định và tại chỗ",
-                                "Không ổn định và không tại chỗ"
-                            ],
-                            answer: "Ổn định và tại chỗ",
-                            explanation: "Bubble Sort là thuật toán sắp xếp ổn định (stable) vì không thay đổi thứ tự tương đối của các phần tử bằng nhau, và tại chỗ (in-place) vì không cần thêm bộ nhớ phụ đáng kể."
-                        },
-                        {
-                            type: 'multiple-choice',
-                            question: "Làm thế nào để cải thiện hiệu suất của Bubble Sort?",
-                            options: [
-                                "Tăng số lần so sánh mỗi lượt",
-                                "Thêm biến flag để kiểm tra nếu không có hoán đổi nào trong một lượt",
-                                "Giảm kích thước mảng đầu vào",
-                                "Thêm bộ nhớ phụ trợ"
-                            ],
-                            answer: "Thêm biến flag để kiểm tra nếu không có hoán đổi nào trong một lượt",
-                            explanation: "Sử dụng biến flag để theo dõi việc hoán đổi trong mỗi lượt giúp thuật toán dừng sớm khi mảng đã được sắp xếp, tránh các lần duyệt không cần thiết."
-                        },
-                        {
-                            type: 'fill-in-the-code',
-                            question: "Viết hàm sắp xếp nổi bọt (Bubble Sort) trong JavaScript với cải tiến sử dụng biến flag.",
-                            sampleCode: `function bubbleSort(arr) {
-                    const n = arr.length;
-                    
-                    for (let i = 0; i < n - 1; i++) {
-                        let swapped = false;
-                        
-                        for (let j = 0; j < n - i - 1; j++) {
-                            if (arr[j] > arr[j + 1]) {
-                                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                                swapped = true;
+            4: [
+                {
+                    type: 'multiple-choice',
+                    question: "Thuật toán sắp xếp chọn (Selection Sort) hoạt động theo nguyên tắc nào?",
+                    options: [
+                        "Hoán đổi các phần tử liền kề cho đến khi mảng được sắp xếp",
+                        "Tìm phần tử nhỏ nhất trong mảng chưa sắp xếp và đưa về đầu phần chưa sắp xếp",
+                        "Chèn từng phần tử vào vị trí thích hợp trong mảng đã sắp xếp",
+                        "Chia mảng thành các phần nhỏ và sắp xếp từng phần"
+                    ],
+                    answer: "Tìm phần tử nhỏ nhất trong mảng chưa sắp xếp và đưa về đầu phần chưa sắp xếp",
+                    explanation: "Selection Sort hoạt động bằng cách tìm phần tử nhỏ nhất trong phần chưa sắp xếp của mảng và đưa nó về vị trí đầu tiên của phần chưa sắp xếp. Quá trình này lặp lại cho đến khi toàn bộ mảng được sắp xếp."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Độ phức tạp thời gian của Selection Sort là bao nhiêu?",
+                    options: [
+                        "O(n)",
+                        "O(n log n)",
+                        "O(n²)",
+                        "O(log n)"
+                    ],
+                    answer: "O(n²)",
+                    explanation: "Selection Sort có độ phức tạp O(n²) vì với mỗi vị trí i (n lần), thuật toán phải duyệt qua tất cả các phần tử còn lại (n-i lần) để tìm phần tử nhỏ nhất."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Selection Sort có đặc điểm nào sau đây?",
+                    options: [
+                        "Là thuật toán sắp xếp ổn định và không tại chỗ",
+                        "Là thuật toán sắp xếp không ổn định và tại chỗ",
+                        "Là thuật toán sắp xếp ổn định và tại chỗ",
+                        "Là thuật toán sắp xếp không ổn định và không tại chỗ"
+                    ],
+                    answer: "Là thuật toán sắp xếp không ổn định và tại chỗ",
+                    explanation: "Selection Sort là thuật toán sắp xếp tại chỗ (in-place) vì không cần bộ nhớ phụ, nhưng không ổn định (unstable) vì có thể thay đổi thứ tự tương đối của các phần tử có giá trị bằng nhau."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Ưu điểm chính của Selection Sort là gì?",
+                    options: [
+                        "Tốc độ nhanh với mọi dữ liệu đầu vào",
+                        "Số lần hoán đổi ít nhất trong các thuật toán sắp xếp cơ bản",
+                        "Độ phức tạp thời gian thấp",
+                        "Bảo toàn thứ tự tương đối của các phần tử bằng nhau"
+                    ],
+                    answer: "Số lần hoán đổi ít nhất trong các thuật toán sắp xếp cơ bản",
+                    explanation: "Selection Sort thực hiện tối đa n-1 lần hoán đổi (với n là số phần tử), ít hơn nhiều so với các thuật toán sắp xếp cơ bản khác. Điều này làm nó hiệu quả trong các hệ thống mà việc hoán đổi tốn kém."
+                },
+                {
+                    type: 'fill-in-the-code',
+                    question: "Viết hàm sắp xếp chọn (Selection Sort) trong JavaScript để sắp xếp mảng theo thứ tự tăng dần.",
+                    sampleCode: `function selectionSort(arr) {
+                            const n = arr.length;
+                            
+                            for (let i = 0; i < n - 1; i++) {
+                                let minIndex = i;
+                                
+                                for (let j = i + 1; j < n; j++) {
+                                    if (arr[j] < arr[minIndex]) {
+                                        minIndex = j;
+                                    }
+                                }
+                                
+                                if (minIndex !== i) {
+                                    [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+                                }
                             }
-                        }
-                        
-                        if (!swapped) {
-                            break;
-                        }
+                            
+                            return arr;
+                        }`
                     }
-                    
-                    return arr;
-                }`
+                ],
+                5: [
+                    {
+                        type: 'multiple-choice',
+                        question: "Thuật toán sắp xếp nổi bọt (Bubble Sort) hoạt động như thế nào?",
+                        options: [
+                            "So sánh và hoán đổi các cặp phần tử liền kề, đưa phần tử lớn nhất về cuối sau mỗi lượt",
+                            "Tìm phần tử nhỏ nhất và đưa về đầu mảng",
+                            "Chèn từng phần tử vào vị trí thích hợp",
+                            "Chia mảng thành hai phần và sắp xếp riêng"
+                        ],
+                        answer: "So sánh và hoán đổi các cặp phần tử liền kề, đưa phần tử lớn nhất về cuối sau mỗi lượt",
+                        explanation: "Bubble Sort lặp đi lặp lại việc so sánh và hoán đổi các cặp phần tử liền kề. Sau mỗi lượt, phần tử lớn nhất trong phần chưa sắp xếp sẽ 'nổi' lên cuối mảng."
+                    },
+                    {
+                        type: 'multiple-choice',
+                        question: "Trường hợp nào Bubble Sort hoạt động hiệu quả nhất?",
+                        options: [
+                            "Mảng đã được sắp xếp hoàn toàn",
+                            "Mảng được sắp xếp ngược hoàn toàn",
+                            "Mảng có các phần tử ngẫu nhiên",
+                            "Mảng có kích thước lớn"
+                        ],
+                        answer: "Mảng đã được sắp xếp hoàn toàn",
+                        explanation: "Bubble Sort hoạt động tốt nhất khi mảng đã được sắp xếp, vì nó sẽ chỉ cần một lần duyệt qua mảng để xác nhận không cần hoán đổi nào, cho độ phức tạp O(n)."
+                    },
+                    {
+                        type: 'multiple-choice',
+                        question: "Bubble Sort có đặc điểm nào sau đây?",
+                        options: [
+                            "Không ổn định và tại chỗ",
+                            "Ổn định và không tại chỗ",
+                            "Ổn định và tại chỗ",
+                            "Không ổn định và không tại chỗ"
+                        ],
+                        answer: "Ổn định và tại chỗ",
+                        explanation: "Bubble Sort là thuật toán sắp xếp ổn định (stable) vì không thay đổi thứ tự tương đối của các phần tử bằng nhau, và tại chỗ (in-place) vì không cần thêm bộ nhớ phụ đáng kể."
+                    },
+                    {
+                        type: 'multiple-choice',
+                        question: "Làm thế nào để cải thiện hiệu suất của Bubble Sort?",
+                        options: [
+                            "Tăng số lần so sánh mỗi lượt",
+                            "Thêm biến flag để kiểm tra nếu không có hoán đổi nào trong một lượt",
+                            "Giảm kích thước mảng đầu vào",
+                            "Thêm bộ nhớ phụ trợ"
+                        ],
+                        answer: "Thêm biến flag để kiểm tra nếu không có hoán đổi nào trong một lượt",
+                        explanation: "Sử dụng biến flag để theo dõi việc hoán đổi trong mỗi lượt giúp thuật toán dừng sớm khi mảng đã được sắp xếp, tránh các lần duyệt không cần thiết."
+                    },
+                    {
+                        type: 'fill-in-the-code',
+                        question: "Viết hàm sắp xếp nổi bọt (Bubble Sort) trong JavaScript với cải tiến sử dụng biến flag.",
+                        sampleCode: `function bubbleSort(arr) {
+                            const n = arr.length;
+                            
+                            for (let i = 0; i < n - 1; i++) {
+                                let swapped = false;
+                                
+                                for (let j = 0; j < n - i - 1; j++) {
+                                    if (arr[j] > arr[j + 1]) {
+                                        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                                        swapped = true;
+                                    }
+                                }
+                                
+                                if (!swapped) {
+                                    break;
+                                }
+                            }
+                            
+                            return arr;
+                        }`
                 }
             ]
         }
