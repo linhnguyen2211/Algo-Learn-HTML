@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mô phỏng Thuật toán Sắp xếp Nổi bọt</title>
+    <style>
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 10rem 2rem 6rem;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .centered-container {
+            display: grid;
+            place-items: center;
+            height: 20vh;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .path-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 176px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            border-radius: 8px;
+            padding: 10px 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #16a085;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+
+
+
+        @keyframes highlight {
+            0% {
+                background-color: #ffd700;
+                transform: scale(1.05);
+            }
+
+            100% {
+                background-color: #e2e8f0;
+                transform: scale(1);
+            }
+        }
+
+        .search-item {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .current-search {
+            animation: highlight 0.5s;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+            z-index: 10;
+        }
+
+        .found-item {
+            background-color: #48bb78 !important;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .not-found-item {
+            opacity: 0.6;
+        }
+
+        * {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            /* Add some space below the heading */
+            color: #16a085;
+            /* Add a nice color */
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            align-items: center;
+        }
+
+        button,
+        select,
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        button,
+        select,
+        input {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        button {
+            background: #16a085;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover:not(:disabled) {
+            background: #1abc9c;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .array-container {
+            display: flex;
+            gap: 15px;
+            min-height: 250px;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .array-box {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #16a085, #1abc9c);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border-radius: 8px;
+            transition: all 0.4s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .code-section {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .code-line {
+            padding: 5px 10px;
+            font-family: monospace;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .two-column-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .code-section {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .algorithm-section {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .array-container {
+            display: flex;
+            gap: 15px;
+            min-height: 250px;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .array-box {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #16a085, #1abc9c);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border-radius: 8px;
+            transition: all 0.4s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .code-line.active {
+            background: #4a5568;
+            color: #fbbf24;
+        }
+
+        .comparing {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            animation: pulse 0.8s infinite;
+        }
+
+        .swapping {
+            background: linear-gradient(135deg, #fbbf24, #fbbf24);
+            animation: bounce 0.5s;
+        }
+
+        .sorted {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Style cho dropdown */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 176px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            top: 100%;
+            left: 50%;
+            /* Đặt điểm neo ở giữa */
+            transform: translateX(-50%);
+            /* Dịch chuyển về trái 50% chiều rộng của chính nó */
+            border-radius: 8px;
+            padding: 10px 0;
+            animation: dropdown-fade 0.3s ease-in-out;
+        }
+
+        /* Hiệu ứng hiển thị dropdown */
+        @keyframes dropdown-fade {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #16a085;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s;
+            text-align: center;
+            /* Căn giữa text trong dropdown */
+            min-width: 100%;
+            /* Đảm bảo chiều rộng đầy đủ */
+        }
+
+        /* Hiệu ứng hover cho dropdown items */
+        .dropdown-content a:hover {
+            background-color: #16a085;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* Hiệu ứng active cho dropdown items */
+        .dropdown-content a:active {
+            background-color: #1abc9c;
+            transform: translateX(2px);
+        }
+
+        details {
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        summary {
+            font-size: 1 rem;
+            /* Kích thước lớn hơn, giá trị tùy chỉnh */
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2c3e50;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        summary:hover {
+            background-color: #e9ecef;
+        }
+
+        details[open] summary {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        ul {
+            padding-left: 40px;
+            /* Thụt vào từ cạnh trái */
+            margin: 0;
+            /* Bỏ khoảng cách mặc định */
+            list-style-type: disc;
+            /* Hiển thị dấu chấm tròn trước mỗi mục */
+        }
+
+        li {
+            margin-bottom: 5px;
+            /* Khoảng cách giữa các mục */
+        }
+
+        table {
+            width: 60%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            text-align: left;
+            font-family: Arial, sans-serif;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        label {
+            font-size: 16px;
+            /* Đảm bảo kích thước chữ phù hợp */
+            margin: 0;
+        }
+
+        .status-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            color: #2c3e50;
+            min-height: 50px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-comparing {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .status-swapping {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .status-complete {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        /* Hộp nổi bật cho mảng đầu vào và kết quả */
+        .highlighted-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #16a085;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Bảng minh họa ví dụ */
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .example-table th,
+        .example-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .example-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .example-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .example-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            /* Mặc định 1 cột */
+            gap: 16px;
+            /* Khoảng cách giữa các cột */
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+                /* Chia thành 2 cột khi màn hình rộng hơn 768px */
+            }
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .text-green-700 {
+            color: #15803d;
+        }
+
+        .text-red-700 {
+            color: #B91C1C;
+        }
+
+        .list-disc {
+            list-style-type: disc;
+        }
+
+        .list-inside {
+            padding-left: 0;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+            --bg-dark: #2c3e50;
+            --danger: #f44336;
+            --danger-dark: #d32f2f;
+            --success: #4CAF50;
+            --success-dark: #45a049;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-md: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            line-height: 1.5;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-light);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            background: var(--bg-light);
+            transform: translateX(4px);
+        }
+
+        .list-item:not(:last-child) {
+            border-bottom: 1px solid var(--bg-light);
+        }
+
+        .item-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .item-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-light);
+            border-radius: 6px;
+            color: var(--secondary);
+        }
+
+        .status {
+            text-align: center;
+            font-weight: 500;
+            padding: 0.5rem;
+            border-radius: 20px;
+            min-width: 100px;
+        }
+
+        .watched {
+            color: var(--success);
+            background: #ecfdf5;
+        }
+
+        .not-watched {
+            color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .btn {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            width: 120px;
+            justify-self: end;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn.disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .reset-container {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--bg-light);
+        }
+
+        .reset-btn {
+            background-color: var(--danger);
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            width: auto;
+            min-width: 200px;
+        }
+
+        .reset-btn:hover {
+            background-color: var(--danger-dark);
+        }
+
+        @media (max-width: 768px) {
+            .list-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .item-name {
+                justify-content: center;
+            }
+
+            .btn {
+                justify-self: center;
+            }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-user {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-name {
+            color: #2c3e50;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
+            background: #16a085;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="Home.html" class="logo">Algo<span>Learn</span></a>
+            <div class="nav-user">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <span class="user-name" id="userNameDisplay"></span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Thuật toán Sắp xếp Chèn (Insertion Sort)</h1>
+        </div>
+        <details>
+            <summary>I. Lý thuyết</summary>
+            <div class="theory-content">
+                <h3>1. Khái niệm</h3>
+                <p>Insertion Sort là thuật toán sắp xếp hoạt động bằng cách lấy từng phần tử và chèn nó vào vị trí đúng
+                    trong phần mảng đã được sắp xếp.</p>
+
+                <h3>2. Nguyên lý hoạt động</h3>
+                <ul>
+                    <li>Bắt đầu với phần tử đầu tiên, coi nó là đã được sắp xếp.</li>
+                    <li>Lấy phần tử tiếp theo và so sánh với các phần tử trong phần đã được sắp xếp.</li>
+                    <li>Di chuyển các phần tử lớn hơn về phía sau để tạo khoảng trống.</li>
+                    <li>Chèn phần tử vừa lấy vào vị trí đúng.</li>
+                    <li>Lặp lại quá trình cho đến khi tất cả các phần tử được sắp xếp.</li>
+                </ul>
+
+                <h3>3. Độ phức tạp</h3>
+                <strong>Thời gian:</strong><br>
+                - Trường hợp xấu nhất: O(n²) - Khi mảng ở trạng thái ngược hoàn toàn.<br>
+                - Trường hợp tốt nhất: O(n) - Khi mảng đã được sắp xếp.<br>
+                <strong>Không gian:</strong> O(1) - Không yêu cầu bộ nhớ bổ sung.
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-2">4. Ưu và Nhược Điểm</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Cột 1: Ưu Điểm -->
+                    <div>
+                        <h4 class="font-semibold text-green-700">Ưu Điểm</h4>
+                        <ul>
+                            <li>Dễ cài đặt và hiểu.</li>
+                            <li>Hiệu quả với mảng nhỏ hoặc gần như đã sắp xếp.</li>
+                            <li>Không yêu cầu bộ nhớ bổ sung.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Cột 2: Nhược Điểm -->
+                    <div>
+                        <h4 class="font-semibold text-red-700">Nhược Điểm</h4>
+                        <ul>
+                            <li>Hiệu suất kém với mảng lớn.</li>
+                            <li>Độ phức tạp thời gian cao: O(n²) trong trường hợp xấu nhất.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </details>
+        <details>
+            <summary>II. Minh họa bằng ví dụ</summary>
+            <div class="example-content">
+                <h3>1. Mảng đầu vào</h3>
+                <p>Giả sử chúng ta cần sắp xếp mảng số sau theo thứ tự tăng dần:</p>
+                <div class="highlighted-box">
+                    <strong>Mảng ban đầu:</strong> [5, 3, 8, 4, 2]
+                </div>
+                <h3>2. Các bước thực hiện</h3>
+                <p>Thuật toán sẽ duyệt qua từng phần tử của mảng, mỗi phần tử được chèn vào vị trí phù hợp trong phần
+                    mảng đã được sắp xếp trước đó.</p>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Lần lặp</th>
+                            <th>Trạng thái mảng</th>
+                            <th>Phần tử hiện tại</th>
+                            <th>Chèn vào</th>
+                            <th>Mô tả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>[5, 3, 8, 4, 2] → [3, 5, 8, 4, 2]</td>
+                            <td>3</td>
+                            <td>Trước 5</td>
+                            <td>Chèn 3 vào trước 5.</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>[3, 5, 8, 4, 2] → [3, 5, 8, 4, 2]</td>
+                            <td>8</td>
+                            <td>Đúng vị trí</td>
+                            <td>8 đã đúng vị trí.</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>[3, 5, 8, 4, 2] → [3, 4, 5, 8, 2]</td>
+                            <td>4</td>
+                            <td>Giữa 3 và 5</td>
+                            <td>Chèn 4 vào giữa 3 và 5.</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>[3, 4, 5, 8, 2] → [2, 3, 4, 5, 8]</td>
+                            <td>2</td>
+                            <td>Đầu mảng</td>
+                            <td>Chèn 2 vào đầu mảng.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>3. Kết quả cuối cùng</h3>
+                <div class="highlighted-box">
+                    <strong>Mảng kết quả:</strong> [2, 3, 4, 5, 8]
+                </div>
+
+                <h3>4. Giải thích</h3>
+                <p>Thuật toán chia mảng thành hai phần: phần đã được sắp xếp và phần chưa sắp xếp. Mỗi phần tử từ phần
+                    chưa sắp xếp được lấy ra và chèn vào vị trí thích hợp trong phần đã sắp xếp.</p>
+        </details>
+        <!-- Mô phỏng section -->
+        <details open>
+            <summary>III. Mô phỏng</summary>
+            <div class="main-content">
+                <div class="two-column-section">
+                    <div class="array-container" id="arrayContainer"></div>
+                    <div class="code-section">
+                        <h3>Mã nguồn thuật toán:</h3>
+                        <div id="codeContainer">
+                            <div class="code-line">def insertion_sort(arr):</div>
+                            <div class="code-line"> for i in range(1, len(arr)):</div>
+                            <div class="code-line"> key = arr[i]</div>
+                            <div class="code-line"> j = i - 1</div>
+                            <div class="code-line"> # Di chuyển các phần tử lớn hơn key về sau</div>
+                            <div class="code-line"> while j >= 0 and key < arr[j]:</div>
+                                    <div class="code-line"> arr[j + 1] = arr[j]</div>
+                                    <div class="code-line"> j -= 1</div>
+                                    <div class="code-line"> arr[j + 1] = key</div>
+                            </div>
+                        </div>
+                        <div id="statusDisplay" class="status-display ">Trạng thái sẽ hiển thị tại đây</div>
+                    </div>
+                    <div class="controls">
+                        <div class="control-group">
+                            <div class="button-group">
+                                <button id="startBtn" onclick="startSort()">Bắt đầu</button>
+                                <button id="nextStepBtn" onclick="manualStep()" disabled>Bước tiếp</button>
+                                <button id="pauseBtn" onclick="togglePause()" disabled>Tạm dừng</button>
+                                <button id="resetBtn" onclick="resetArray()">Đặt lại</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="input-group">
+                                <select id="mode" class="mode-select">
+                                    <option value="auto">Tự động</option>
+                                    <option value="manual">Thủ công</option>
+                                </select>
+                                <input type="text" id="arrayInput" placeholder="Nhập mảng (VD: 5,3,8,4,2)">
+                                <button onclick="generateRandomArray()">Tạo ngẫu nhiên</button>
+                                <select id="sortOrder">
+                                    <option value="asc">Tăng dần</option>
+                                    <option value="desc">Giảm dần</option>
+                                </select>
+                                <input type="range" id="speed" min="1" max="5" value="3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat-card">
+                            <h3>Thời gian</h3>
+                            <div id="timeStats">0.00s</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>So sánh</h3>
+                            <div id="compareStats">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Hoán đổi</h3>
+                            <div id="swapStats">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // Hàm lấy chữ cái đầu của tên người dùng
+                    function getInitials(name) {
+                        if (!name) return 'U';
+                        return name
+                            .split(' ')
+                            .map(word => word[0])
+                            .join('')
+                            .toUpperCase()
+                            .slice(0, 2);
+                    }
+
+                    // Cập nhật hiển thị avatar khi trang load
+                    window.addEventListener('DOMContentLoaded', async function () {
+                        const isAuthenticated = await checkAuthentication();
+
+                        if (isAuthenticated) {
+                            const username = localStorage.getItem('username');
+                            if (username) {
+                                const userNameDisplay = document.getElementById('userNameDisplay');
+                                const userAvatar = document.getElementById('userAvatar');
+
+                                if (userNameDisplay) userNameDisplay.textContent = username;
+                                if (userAvatar) userAvatar.textContent = getInitials(username);
+                            }
+                        }
+                    });
+                    // Add this at the start of your script section in BinarySearch.html
+                    const API_URL = 'https://873s8t-5000.csb.app';
+
+                    // Authentication check function
+                    async function checkAuthentication() {
+                        const token = localStorage.getItem('auth_token');
+
+                        if (!token) {
+                            console.log('No token found, redirecting to login');
+                            window.location.href = 'Login.html';
+                            return false;
+                        }
+
+                        try {
+                            const response = await fetch(`${API_URL}/check-auth`, {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            const data = await response.json();
+
+                            if (!response.ok || !data.authenticated) {
+                                throw new Error('Authentication failed');
+                            }
+
+                            return true;
+                        } catch (error) {
+                            console.error('Auth check failed:', error);
+                            clearAuthData();
+                            window.location.href = 'Login.html';
+                            return false;
+                        }
+                    }
+
+                    // Clear auth data function
+                    function clearAuthData() {
+                        localStorage.removeItem('auth_token');
+                        localStorage.removeItem('auth_user');
+                        localStorage.removeItem('username');
+                    }
+
+                    // Updated logout function
+                    function logout() {
+                        clearAuthData();
+                        // Use replace instead of href to prevent back button issues
+                        window.location.replace('Login.html');
+                    }
+
+                    window.addEventListener('DOMContentLoaded', async function () {
+                        const isAuthenticated = await checkAuthentication();
+
+                        if (isAuthenticated) {
+                            const username = localStorage.getItem('username');
+                            if (username) {
+                                document.getElementById('userNameDisplay').textContent = username;
+                                document.getElementById('userAvatar').textContent = getInitials(username);
+                            } else {
+                                document.getElementById('userNameDisplay').textContent = 'User';
+                                document.getElementById('userAvatar').textContent = 'U';
+                            }
+                        }
+                    });
+                    function parseArrayInput(input) {
+                        // Remove all whitespaces
+                        input = input.replace(/\s/g, '');
+
+                        // Check if input is empty
+                        if (!input) {
+                            throw new Error('Mảng không được để trống');
+                        }
+
+                        // Split by comma and filter out empty strings
+                        const parsedArray = input.split(',')
+                            .filter(x => x !== '')
+                            .map(x => {
+                                // Try to parse as integer
+                                const num = parseInt(x, 10);
+
+                                // Validate parsed number
+                                if (isNaN(num)) {
+                                    throw new Error(`Giá trị "${x}" không hợp lệ. Vui lòng chỉ nhập số.`);
+                                }
+
+                                return num;
+                            });
+
+                        // Check if array is empty after parsing
+                        if (parsedArray.length === 0) {
+                            throw new Error('Mảng không hợp lệ');
+                        }
+
+                        return parsedArray;
+                    }
+                    let array = [];
+                    let currentI = 0;  // Start from 0 to allow initial step
+                    let currentJ;
+                    let key;
+                    let isPaused = false;
+                    let startTime;
+                    let comparisons = 0;
+                    let swaps = 0;
+                    let isAnimating = false;
+                    let currentTimeout = null;
+                    let originalArray = [];
+                    let isSortedIncreasing = true;
+
+                    function updateStatus(step, i, j, key) {
+                        const statusDisplay = document.getElementById('statusDisplay');
+                        const boxes = document.querySelectorAll('.array-box');
+
+                        // Reset previous status
+                        boxes.forEach(box => box.classList.remove('comparing', 'swapping', 'sorted', 'inserting'));
+
+                        let statusHTML = '';
+                        let activeBoxes = new Map(); // Store box indices and their states
+
+                        switch (step) {
+                            case 'init':
+                                statusHTML = `<div>
+                        <span class="status-comparing">Chọn phần tử <strong>${key}</strong> để chèn</span>
+                    </div>`;
+                                activeBoxes.set(i, 'inserting');  // Highlight key in yellow
+                                break;
+
+                            case 'compare':
+                                statusHTML = `<div>
+                        <span class="status-comparing">So sánh <strong>${key}</strong> với <strong>${array[j]}</strong></span>
+                    </div>`;
+                                // Mark key as inserting
+                                activeBoxes.set(i, 'inserting');
+                                activeBoxes.set(j, 'comparing');
+                                activeBoxes.set(j + 1, 'comparing');
+
+                                // Mark already sorted portion
+                                for (let k = 0; k <= j - 1; k++) {
+                                    activeBoxes.set(k, 'sorted');
+                                }
+                                break;
+
+                            case 'shift':
+                                statusHTML = `<div>
+                        <span class="status-swapping">Di chuyển <strong>${array[j]}</strong> sang phải</span><br>
+                        <span class="status-comparing">So sánh với <strong>${key}</strong></span>
+                    </div>`;
+                                // Keep key yellow while shifting
+                                activeBoxes.set(i, 'inserting');
+                                activeBoxes.set(j, 'swapping');
+                                activeBoxes.set(j + 1, 'swapping');
+
+                                // Mark already sorted portion
+                                for (let k = 0; k <= j - 1; k++) {
+                                    activeBoxes.set(k, 'sorted');
+                                }
+                                break;
+
+                            case 'insert':
+                                statusHTML = `<div>
+                        <span class="status-complete">Chèn <strong>${key}</strong> vào vị trí ${j + 1}</span>
+                    </div>`;
+                                // Mark inserted element and sorted portion
+                                activeBoxes.set(j + 1, 'sorted');
+                                for (let k = 0; k <= j; k++) {
+                                    activeBoxes.set(k, 'sorted');
+                                }
+                                break;
+
+                            case 'complete':
+                                statusHTML = `<div class="status-complete">Sắp xếp hoàn tất!</div>`;
+                                // Mark all elements as sorted
+                                for (let k = 0; k < boxes.length; k++) {
+                                    activeBoxes.set(k, 'sorted');
+                                }
+                                break;
+                        }
+
+                        // Apply the stored states to boxes
+                        activeBoxes.forEach((state, index) => {
+                            if (boxes[index]) {
+                                boxes[index].classList.add(state);
+                            }
+                        });
+
+                        // Update status display
+                        statusDisplay.innerHTML = statusHTML;
+                    }
+
+                    function sortingStep(manualMode = false) {
+                        // Existing sorting step logic, but modify to work better with manual mode
+                        if (!isAnimating) return;
+
+                        if (currentI >= array.length) {
+                            completeSorting();
+                            return;
+                        }
+
+                        const baseDelay = manualMode ? 0 : 2000;
+                        const speedSlider = document.getElementById('speed');
+                        const speedMultiplier = manualMode ? 1 : parseInt(speedSlider.value);
+                        const adjustedDelay = baseDelay / speedMultiplier;
+
+                        const boxes = document.querySelectorAll('.array-box');
+                        boxes.forEach(box => box.classList.remove('comparing', 'swapping', 'inserting'));
+
+                        if (currentJ === undefined) {
+                            key = array[currentI];
+                            currentJ = currentI - 1;
+                            highlightCode('init');
+                            updateStatus('init', currentI, currentJ, key);
+
+                            if (!manualMode) {
+                                currentTimeout = setTimeout(sortingStep, adjustedDelay);
+                            }
+                            return;
+                        }
+
+                        const compareCondition = isSortedIncreasing
+                            ? (currentJ >= 0 && key < array[currentJ])
+                            : (currentJ >= 0 && key > array[currentJ]);
+
+                        if (compareCondition) {
+                            comparisons++;
+                            document.getElementById('compareStats').textContent = comparisons;
+
+                            highlightCode('compare');
+                            updateStatus('compare', currentI, currentJ, key);
+
+                            if (manualMode) {
+                                array[currentJ + 1] = array[currentJ];
+                                swaps++;
+                                document.getElementById('swapStats').textContent = swaps;
+                                renderArray();
+                                currentJ--;
+                            } else {
+                                currentTimeout = setTimeout(() => {
+                                    array[currentJ + 1] = array[currentJ];
+                                    swaps++;
+                                    document.getElementById('swapStats').textContent = swaps;
+
+                                    highlightCode('shift');
+                                    updateStatus('shift', currentI, currentJ, key);
+                                    renderArray();
+
+                                    currentJ--;
+                                    sortingStep();
+                                }, adjustedDelay);
+                            }
+                        } else {
+                            array[currentJ + 1] = key;
+                            renderArray();
+
+                            highlightCode('insert');
+                            updateStatus('insert', currentI, currentJ, key);
+                            currentI++;
+                            currentJ = undefined;
+
+                            if (!manualMode) {
+                                currentTimeout = setTimeout(sortingStep, adjustedDelay);
+                            }
+                        }
+                    }
+                    function initializeSorting() {
+                        const input = document.getElementById('arrayInput').value.trim();
+                        const sortOrderSelect = document.getElementById('sortOrder');
+
+                        // Determine array source
+                        if (!input && (!array || array.length === 0)) {
+                            generateRandomArray();
+                        } else if (input) {
+                            array = parseArrayInput(input);
+                            originalArray = [...array];
+                        }
+
+                        // Reset sorting state
+                        currentI = 1;
+                        currentJ = undefined;
+                        comparisons = 0;
+                        swaps = 0;
+                        isPaused = false;
+                        isAnimating = true;
+
+                        renderArray();
+                        resetStats();
+
+                        // Determine sort order
+                        isSortedIncreasing = sortOrderSelect.value === 'asc';
+
+                        startTime = Date.now();
+                    }
+
+
+                    // Modify manualStep to use speed control
+
+                    function manualStep() {
+                        try {
+                            // If this is the first step, initialize sorting
+                            if (currentI === 0) {
+                                initializeSorting();
+
+                                document.getElementById('startBtn').disabled = true;
+                                document.getElementById('pauseBtn').disabled = true;
+                            }
+
+                            // Ensure manual mode is selected
+                            document.getElementById('mode').value = 'manual';
+
+                            // Perform sorting step
+                            sortingStep(true);
+
+                            // Check and update end state
+                            if (currentI >= array.length) {
+                                document.getElementById('nextStepBtn').disabled = true;
+                                const endTime = Date.now();
+                                const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                                document.getElementById('timeStats').textContent = `${timeTaken}s`;
+                                document.getElementById('startBtn').disabled = false;
+                                completeSorting();
+                            }
+                        } catch (error) {
+                            alert(error.message);
+                            resetArray();
+                        }
+                    }
+
+                    function parseArrayInput(input) {
+                        // Remove all whitespaces
+                        input = input.replace(/\s/g, '');
+
+                        // Check if input is empty
+                        if (!input) {
+                            throw new Error('Mảng không được để trống');
+                        }
+
+                        // Split by comma and filter out empty strings
+                        const parsedArray = input.split(',')
+                            .filter(x => x !== '')
+                            .map(x => {
+                                // Try to parse as integer
+                                const num = parseInt(x, 10);
+
+                                // Validate parsed number
+                                if (isNaN(num)) {
+                                    throw new Error(`Giá trị "${x}" không hợp lệ. Vui lòng chỉ nhập số.`);
+                                }
+
+                                return num;
+                            });
+
+                        // Check if array is empty after parsing
+                        if (parsedArray.length === 0) {
+                            throw new Error('Mảng không hợp lệ');
+                        }
+
+                        return parsedArray;
+                    }
+
+                    function generateRandomArray() {
+                        const arrayLength = 8;// Random length between 5-12
+                        array = Array.from({ length: arrayLength }, () => Math.floor(Math.random() * 100) + 1);
+
+                        // Store the original array for reset
+                        originalArray = [...array];
+
+                        console.log('Mảng ngẫu nhiên:', array);
+                        renderArray();
+                        resetStats();
+                    }
+
+                    function renderArray() {
+                        const container = document.getElementById('arrayContainer');
+                        if (!container) {
+                            console.error('Không tìm thấy container');
+                            return;
+                        }
+
+                        container.innerHTML = '';
+
+                        array.forEach(val => {
+                            const box = document.createElement('div');
+                            box.className = 'array-box';
+                            box.textContent = val;
+                            container.appendChild(box);
+                        });
+                    }
+
+                    // Cập nhật hàm startSort để reset các biến đếm khi bắt đầu sắp xếp mới
+                    function startSort() {
+                        try {
+                            initializeSorting();
+
+                            // UI state management
+                            document.getElementById('startBtn').disabled = true;
+
+                            const mode = document.getElementById('mode').value;
+                            const isManualMode = mode === 'manual';
+
+                            if (isManualMode) {
+                                document.getElementById('nextStepBtn').disabled = false;
+                                document.getElementById('pauseBtn').disabled = true;
+                            } else {
+                                document.getElementById('pauseBtn').disabled = false;
+                                document.getElementById('nextStepBtn').disabled = true;
+                                sortingStep();
+                            }
+                        } catch (error) {
+                            alert(error.message);
+                            resetArray();
+                        }
+                    }
+
+                    // Đánh dấu dòng code đang thực thi
+                    // Sửa lại hàm highlightCode trong <script>
+                    function highlightCode(step) {
+                        const codeLines = document.querySelectorAll('.code-line');
+                        // Xóa highlight cũ
+                        codeLines.forEach(line => line.classList.remove('active'));
+
+                        // Xác định dòng cần highlight dựa trên bước
+                        let lineToHighlight;
+                        switch (step) {
+                            case 'init':
+                                codeLines[2].classList.add('active'); // key = arr[i]
+                                break;
+                            case 'compare':
+                                codeLines[5].classList.add('active'); // while j >= 0 and key comparison
+                                break;
+                            case 'shift':
+                                codeLines[6].classList.add('active'); // arr[j + 1] = arr[j]
+                                codeLines[7].classList.add('active'); // j -= 1
+                                break;
+                            case 'insert':
+                                codeLines[8].classList.add('active'); // arr[j + 1] = key
+                                break;
+                            case 'complete':
+                                codeLines[1].classList.add('active');
+                                break;
+                        }
+
+                        // Đánh dấu dòng nếu hợp lệ
+                        if (lineToHighlight !== undefined && codeLines[lineToHighlight]) {
+                            codeLines[lineToHighlight].classList.add('active');
+                        }
+                    }
+
+                    function togglePause() {
+                        isPaused = !isPaused;
+                        const pauseBtn = document.getElementById('pauseBtn');
+                        pauseBtn.textContent = isPaused ? 'Tiếp tục' : 'Tạm dừng';
+
+                        if (!isPaused) {
+                            sortingStep();
+                        }
+                    }
+
+                    function completeSorting() {
+                        isAnimating = false;
+                        if (currentTimeout) {
+                            clearTimeout(currentTimeout);
+                            currentTimeout = null;
+                        }
+
+                        highlightCode('complete');
+
+                        const boxes = document.querySelectorAll('.array-box');
+                        boxes.forEach(box => {
+                            box.classList.add('sorted');
+                        });
+
+                        const endTime = Date.now();
+                        const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                        document.getElementById('timeStats').textContent = `${timeTaken}s`;
+
+                        document.getElementById('startBtn').disabled = false;
+                        document.getElementById('pauseBtn').disabled = true;
+                        document.getElementById('nextStepBtn').disabled = true;
+                        updateStatus('complete');
+                    }
+
+                    function resetArray() {
+                        isAnimating = false;
+                        isPaused = false;
+                        if (currentTimeout) {
+                            clearTimeout(currentTimeout);
+                            currentTimeout = null;
+                        }
+
+                        // Nếu không có mảng gốc, tạo mảng ngẫu nhiên mới
+                        if (!originalArray || originalArray.length === 0) {
+                            generateRandomArray();
+                        } else {
+                            array = [...originalArray];
+                        }
+
+                        currentI = 1;
+                        currentJ = undefined;
+                        comparisons = 0;
+                        swaps = 0;
+
+                        // Reset UI elements
+                        document.getElementById('arrayInput').value = '';
+                        document.getElementById('mode').value = 'auto';
+                        document.getElementById('sortOrder').value = 'asc';
+                        document.getElementById('speed').value = 3;
+                        document.getElementById('pauseBtn').textContent = 'Tạm dừng';
+
+                        // Reset status display
+                        const statusDisplay = document.getElementById('statusDisplay');
+                        if (statusDisplay) {
+                            statusDisplay.innerHTML = 'Trạng thái sẽ hiển thị tại đây';
+                            statusDisplay.className = 'status-display';
+                        }
+
+                        // Enable start button
+                        document.getElementById('startBtn').disabled = false;
+                        document.getElementById('pauseBtn').disabled = true;
+                        document.getElementById('nextStepBtn').disabled = true;
+
+                        resetStats();
+
+                        const codeLines = document.querySelectorAll('.code-line');
+                        codeLines.forEach(line => line.classList.remove('active'));
+
+                        renderArray();
+                    }
+                    function resetStats() {
+                        comparisons = 0;
+                        swaps = 0;
+                        document.getElementById('timeStats').textContent = '0.00s';
+                        document.getElementById('compareStats').textContent = '0';
+                        document.getElementById('swapStats').textContent = '0';
+                    }
+
+                    // Initialize with a random array on page load
+                    generateRandomArray();
+                </script>
+</body>
+
+</html>

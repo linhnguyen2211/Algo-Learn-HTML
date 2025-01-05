@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - AlgoLearn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --primary-dark: #1a252f;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(44, 62, 80, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(44, 62, 80, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary-light);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .form-footer a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .back-to-home {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .back-to-home:hover {
+            color: var(--secondary);
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .back-to-home {
+                top: 1rem;
+                left: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="Homeweb.html" class="back-to-home">← Quay lại trang chủ</a>
+
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Đăng nhập</h1>
+            <p>Chào mừng bạn đến với AlgoLearn</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="submit-btn">Đăng nhập</button>
+        </form>
+
+        <div class="form-footer">
+            <p>Bạn chưa có tài khoản? <a href="Register.html">Đăng ký ngay</a></p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://873s8t-5000.csb.app';
+        const HOME_PAGE = './Home.html';
+
+        // Helper functions
+        function showError(message) {
+            alert(message);
+        }
+
+        function showSuccess(message) {
+            alert(message);
+        }
+
+        function saveAuthData(token, user) {
+            localStorage.setItem('auth_token', token);
+            localStorage.setItem('auth_user', JSON.stringify(user));
+            localStorage.setItem('username', user.username);
+        }
+
+        function clearAuthData() {
+            localStorage.clear();
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                console.log('Server response:', data);
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Có lỗi xảy ra khi đăng nhập');
+                }
+
+                if (data.token && data.user) {
+                    showSuccess('Đăng nhập thành công!');
+                    saveAuthData(data.token, data.user);
+                    window.location.replace(HOME_PAGE);
+                } else {
+                    throw new Error('Dữ liệu đăng nhập không hợp lệ');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError(error.message);
+            }
+        });
+
+        // Auth check on page load
+        async function checkAuthentication() {
+            const token = localStorage.getItem('auth_token');
+            const isLoginPage = true; // Since we're on Login.html
+
+            if (!token) {
+                console.log('No token found');
+                return false;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/check-auth`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.authenticated) {
+                    throw new Error('Authentication failed');
+                }
+
+                if (isLoginPage) {
+                    console.log('Already authenticated, redirecting to home');
+                    window.location.replace('Home.html');
+                }
+                return true;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                clearAuthData();
+                return false;
+            }
+        }
+
+        // Add this event listener for the login form
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Có lỗi xảy ra khi đăng nhập');
+                }
+
+                if (data.token && data.user) {
+                    saveAuthData(data.token, data.user);
+                    // Use replace instead of href
+                    window.location.replace('Home.html');
+                } else {
+                    throw new Error('Dữ liệu đăng nhập không hợp lệ');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError(error.message);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoLearn - Dashboard</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+            --bg-dark: #2c3e50;
+            --danger: #f44336;
+            --danger-dark: #d32f2f;
+            --success: #4CAF50;
+            --success-dark: #45a049;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --radius-md: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            line-height: 1.5;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-light);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            background: var(--bg-light);
+            transform: translateX(4px);
+        }
+
+        .list-item:not(:last-child) {
+            border-bottom: 1px solid var(--bg-light);
+        }
+
+        .item-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .item-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-light);
+            border-radius: 6px;
+            color: var(--secondary);
+        }
+
+        .status {
+            text-align: center;
+            font-weight: 500;
+            padding: 0.5rem;
+            border-radius: 20px;
+            min-width: 100px;
+        }
+
+        .watched {
+            color: var(--success);
+            background: #ecfdf5;
+        }
+
+        .not-watched {
+            color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .rank {
+            text-align: center;
+            font-weight: 500;
+            padding: 0.5rem;
+            border-radius: 20px;
+            min-width: 100px;
+        }
+
+        .rank-diamond { background: #e0f2fe; color: #0369a1; }
+        .rank-gold { background: #fef3c7; color: #92400e; }
+        .rank-silver { background: #f1f5f9; color: #475569; }
+        .rank-bronze { background: #fff7ed; color: #9a3412; }
+        .rank-none { background: #f3f4f6; color: #4b5563; }
+
+        .btn {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            width: 120px;
+            justify-self: end;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn.disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .reset-container {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--bg-light);
+        }
+
+        .reset-btn {
+            background-color: var(--danger);
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            width: auto;
+            min-width: 200px;
+        }
+
+        .reset-btn:hover {
+            background-color: var(--danger-dark);
+        }
+
+        @media (max-width: 768px) {
+            .list-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .item-name {
+                justify-content: center;
+            }
+
+            .btn {
+                justify-self: center;
+            }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-user {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .progress-section {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="Home.html" class="logo">Algo<span>Learn</span></a>
+            <div class="nav-user">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <span class="user-name" id="userNameDisplay"></span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Hồ sơ người dùng</h1>
+            <p class="welcome-message" id="welcomeMessage"></p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="completedCount">0</div>
+                <div class="stat-label">Bài học đã hoàn thành</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="completionRate">0%</div>
+                <div class="stat-label">Tỷ lệ hoàn thành</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h3 class="section-title">
+                Mô Phỏng Thuật Toán
+                <div class="progress-section">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="simulationProgress"></div>
+                    </div>
+                </div>
+            </h3>
+            <div id="simulationList">
+                <div class="list-item">
+                    <span class="item-name">
+                        <span class="item-icon">🔍</span>
+                        Tìm kiếm nhị phân
+                    </span>
+                    <span id="binarySearchStatus" class="status not-watched">Chưa xem</span>
+                    <button id="binarySearchBtn" class="btn" data-simulation="binarySearch">Xem ngay</button>
+                </div>
+                <div class="list-item">
+                    <span class="item-name">
+                        <span class="item-icon">🔎</span>
+                        Tìm kiếm tuần tự
+                    </span>
+                    <span id="linearSearchStatus" class="status not-watched">Chưa xem</span>
+                    <button id="linearSearchBtn" class="btn" data-simulation="linearSearch">Xem ngay</button>
+                </div>
+                <div class="list-item">
+                    <span class="item-name">
+                        <span class="item-icon">🔄</span>
+                        Sắp xếp nổi bọt
+                    </span>
+                    <span id="bubbleSortStatus" class="status not-watched">Chưa xem</span>
+                    <button id="bubbleSortBtn" class="btn" data-simulation="bubbleSort">Xem ngay</button>
+                </div>
+                <div class="list-item">
+                    <span class="item-name">
+                        <span class="item-icon">📊</span>
+                        Sắp xếp chọn
+                    </span>
+                    <span id="selectionSortStatus" class="status not-watched">Chưa xem</span>
+                    <button id="selectionSortBtn" class="btn" data-simulation="selectionSort">Xem ngay</button>
+                </div>
+                <div class="list-item">
+                    <span class="item-name">
+                        <span class="item-icon">📋</span>
+                        Sắp xếp chèn
+                    </span>
+                    <span id="insertionSortStatus" class="status not-watched">Chưa xem</span>
+                    <button id="insertionSortBtn" class="btn" data-simulation="insertionSort">Xem ngay</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h3 class="section-title">Trò Chơi Học Tập</h3>
+            <div id="gameList">
+                <div class="list-item">
+                    <span class="item-name">
+                        <span class="item-icon">🤖</span>
+                        Robot Escape
+                    </span>
+                    <span id="insertionSortStatus"></span>
+                    <button id="binarySearchGameBtn" class="btn" data-game="binarySearchGame">Chơi ngay</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="reset-container">
+            <button id="resetBtn" class="btn reset-btn">Reset Tất Cả</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUserInterface();
+            setupEventListeners();
+        });
+
+        // Existing event listener setup function remains the same
+        function setupEventListeners() {
+            document.querySelectorAll('.btn').forEach(button => {
+                if (button.id !== 'resetBtn') {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const simulationId = button.getAttribute('data-simulation') || button.getAttribute('data-game');
+                        if (simulationId) {
+                            openSimulation(simulationId);
+                        }
+                    });
+                }
+            });
+
+            document.getElementById('resetBtn').addEventListener('click', resetAllStatuses);
+        }
+
+        function initializeUserInterface() {
+            const username = localStorage.getItem('username');
+            if (!username) {
+                window.location.href = 'Login.html';
+                return;
+            }
+
+            document.getElementById('userNameDisplay').textContent = username;
+            document.getElementById('userAvatar').textContent = getInitials(username);
+            updateWelcomeMessage();
+
+            loadAllStatuses();
+            updateStats();
+        }
+
+    
+        function updateStats() {
+            const simulations = ['binarySearch', 'linearSearch', 'bubbleSort', 'selectionSort', 'insertionSort'];
+            let completed = simulations.filter(sim => localStorage.getItem(`${sim}-watched`) === 'true').length;
+            
+            const completedCount = document.getElementById('completedCount');
+            const completionRate = document.getElementById('completionRate');
+            const progressBar = document.getElementById('simulationProgress');
+            const highestRank = document.getElementById('highestRank');
+
+            const rate = Math.round((completed / simulations.length) * 100);
+            
+            if (completedCount) completedCount.textContent = completed;
+            if (completionRate) completionRate.textContent = `${rate}%`;
+            if (progressBar) progressBar.style.width = `${rate}%`;
+
+            // Update highest rank based on game score
+            const gameScore = parseInt(localStorage.getItem('binarySearchGame-score')) || 0;
+            if (highestRank) highestRank.textContent = getRankText(gameScore);
+        }
+
+        // Định nghĩa đường dẫn các file mô phỏng và trò chơi
+        const simulationFiles = {
+            'binarySearch': 'BinarySearch.html',
+            'linearSearch': 'LinearSearch.html',
+            'bubbleSort': 'BubbleSort.html',
+            'selectionSort': 'SelectionSort.html',
+            'insertionSort': 'InsertionSort.html',
+            'binarySearchGame': 'RobotEscape.html'
+        };
+
+        // Hàm mở mô phỏng hoặc game
+        function openSimulation(simulationId) {
+            const simulationFile = simulationFiles[simulationId];
+            
+            if (!simulationFile) {
+                console.error('Không tìm thấy file:', simulationId);
+                return;
+            }
+
+            // Cập nhật trạng thái nếu là mô phỏng
+            if (!simulationId.includes('Game')) {
+                updateSimulationStatus(simulationId);
+            }
+
+            // Chuyển hướng đến trang mô phỏng hoặc game
+            window.location.href = simulationFile;
+        }
+
+        // Hàm lấy chữ cái đầu của tên người dùng
+        function getInitials(name) {
+            return name
+                .split(' ')
+                .map(word => word[0])
+                .join('')
+                .toUpperCase();
+        }
+
+        // Hàm xác định thời điểm trong ngày
+        function getTimeOfDay() {
+            const hour = new Date().getHours();
+            if (hour < 12) return "buổi sáng";
+            if (hour < 18) return "buổi chiều";
+            return "buổi tối";
+        }
+        
+
+        // Cập nhật thông điệp chào mừng
+        function updateWelcomeMessage() {
+            const username = localStorage.getItem('username');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            welcomeMessage.textContent = `Chào ${username}, chúc bạn một ${getTimeOfDay()} tốt lành!`;
+        }
+
+        // Cập nhật trạng thái mô phỏng
+        function updateSimulationStatus(simulationId) {
+            localStorage.setItem(`${simulationId}-watched`, 'true');
+            loadSimulationStatus(simulationId);
+            updateStats();
+        }
+
+        // Tải trạng thái mô phỏng
+        function loadSimulationStatus(simulationId) {
+            const status = localStorage.getItem(`${simulationId}-watched`);
+            const button = document.getElementById(`${simulationId}Btn`);
+            const statusElement = document.getElementById(`${simulationId}Status`);
+            
+            if (status === 'true') {
+                statusElement.textContent = 'Đã xem';
+                statusElement.className = 'status watched';
+                button.textContent = 'Xem lại';
+            } else {
+                statusElement.textContent = 'Chưa xem';
+                statusElement.className = 'status not-watched';
+                button.textContent = 'Xem ngay';
+            }
+        }
+
+        // Tải tất cả trạng thái
+        function loadAllStatuses() {
+            Object.keys(simulationFiles).forEach(id => {
+                if (id.includes('Game')) {
+                    loadGameRank(id);
+                } else {
+                    loadSimulationStatus(id);
+                }
+            });
+        }
+
+        // Xác định xếp hạng dựa trên điểm số
+        function getRankText(score) {
+            if (score >= 2000) return 'Bậc Thầy Thuật Toán 🏆';
+            if (score >= 1500) return 'Chuyên Gia Thuật Toán 👑';
+            if (score >= 1000) return 'Chiến Binh Thuật Toán 🗡️';
+            if (score >= 500) return 'Học Giả Thuật Toán 📚';
+            return 'Tân Học Viên 🌱';
+        }
+
+        // Cập nhật xếp hạng game
+        function loadGameRank(gameId) {
+            const score = parseInt(localStorage.getItem(`${gameId}-score`)) || 0;
+            const rankElement = document.getElementById(`${gameId}Rank`);
+            if (rankElement) {
+                rankElement.textContent = getRankText(score);
+                rankElement.className = `rank ${getRankClass(score)}`;
+            }
+        }
+
+        // Xác định class CSS cho xếp hạng
+        function getRankClass(score) {
+            if (score >= 2000) return 'rank-diamond';
+            if (score >= 1500) return 'rank-gold';
+            if (score >= 1000) return 'rank-silver';
+            if (score >= 500) return 'rank-bronze';
+            return 'rank-none';
+        }
+
+
+        // Reset tất cả trạng thái
+        function resetAllStatuses() {
+            if (confirm('Bạn có chắc chắn muốn reset tất cả trạng thái và điểm số không?')) {
+                Object.keys(localStorage).forEach(key => {
+                    if (key.includes('-score') || key.includes('-watched')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+                loadAllStatuses();
+                updateStats();
+            }
+        }
+
+        // Hàm đăng xuất
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'Login.html';
+        }
+
+        // API cho các trang khác cập nhật điểm số
+        window.updateGameScore = function(gameId, score) {
+            if (gameId && score != null) {
+                localStorage.setItem(`${gameId}-score`, score);
+                loadGameRank(gameId);
+                updateStats();
+            }
+        };
+        // Hệ thống quản lý tiến độ cho game Escape
+        const EscapeGameProgress = {
+            STORAGE_KEY: 'robotescape1_game_progress',
+            
+            // Lưu tiến độ game
+            saveProgress(gameState) {
+                const username = localStorage.getItem('username');
+                if (!username) return false;
+                
+                try {
+                    const saveData = {
+                        username: username,
+                        currentLevel: gameState.level,
+                        playerPosition: gameState.playerPos,
+                        collectedItems: gameState.collected,
+                        completedLevels: gameState.completed || [],
+                        lastSaved: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem(this.STORAGE_KEY + '_' + username, JSON.stringify(saveData));
+                    console.log('Đã lưu tiến độ:', saveData);
+                    return true;
+                } catch (error) {
+                    console.error('Lỗi khi lưu tiến độ:', error);
+                    return false;
+                }
+            },
+            
+            // Cập nhật khi hoàn thành level
+            completeLevel(level) {
+                const progress = this.loadProgress();
+                if (!progress) return false;
+                
+                if (!progress.completedLevels.includes(level)) {
+                    progress.completedLevels.push(level);
+                    progress.currentLevel = Math.max(progress.currentLevel, level + 1);
+                    return this.saveProgress(progress);
+                }
+                return true;
+            },
+            
+            // Xóa tiến độ (để test)
+            resetProgress() {
+                const username = localStorage.getItem('username');
+                if (username) {
+                    localStorage.removeItem(this.STORAGE_KEY + '_' + username);
+                    console.log('Đã xóa tiến độ game');
+                    return true;
+                }
+                return false;
+            }
+        };
+                
+    </script>
+</body>
+</html>

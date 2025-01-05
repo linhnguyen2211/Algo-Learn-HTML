@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoLearn - Nền tảng học thuật toán trực tuyến</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --primary-dark: #1a252f;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+            --bg-dark: #2c3e50;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+         /* Rest of the previous styles remain the same */
+         .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(44, 62, 80, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center; /* Căn giữa toàn bộ nav-content */
+            align-items: center;
+            gap: 2rem; /* Thêm khoảng cách giữa logo và nav-links */
+        }
+
+        .logo {
+            color: #16a085;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: absolute; /* Đặt logo ở vị trí tuyệt đối */
+            left: 2rem; /* Cách lề trái 2rem */
+        }
+
+        .logo span {
+            color: #1abc9c;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center; /* Căn giữa các menu items */
+            margin: 0 auto; /* Căn giữa nav-links */
+        }
+
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            position: relative;
+            text-align: center; /* Căn giữa text trong mỗi link */
+            min-width: 120px; /* Đặt chiều rộng tối thiểu cho mỗi menu item */
+        }
+
+        /* Hiệu ứng hover */
+        .nav-links a:hover {
+            background: #16a085;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Hiệu ứng khi click */
+        .nav-links a:active {
+            background: #1abc9c;
+            transform: translateY(1px);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 10rem 2rem 6rem;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2.5rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid var(--secondary-light);
+            color: white;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: var(--secondary-light);
+        }
+
+        .learning-path {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .path-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .path-step {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(44, 62, 80, 0.05);
+            position: relative;
+            transition: all 0.3s;
+            border: 1px solid rgba(44, 62, 80, 0.1);
+        }
+
+        .path-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(44, 62, 80, 0.1);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 6px rgba(22, 160, 133, 0.2);
+        }
+
+        .features {
+            background: white;
+            padding: 6rem 2rem;
+            margin: 4rem 0;
+            border-top: 1px solid rgba(44, 62, 80, 0.1);
+            border-bottom: 1px solid rgba(44, 62, 80, 0.1);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            border-radius: 16px;
+            transition: all 0.3s;
+            background: var(--bg-light);
+            border: 1px solid rgba(44, 62, 80, 0.1);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: var(--primary);
+            color: white;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card:hover .feature-icon,
+        .feature-card:hover h3,
+        .feature-card:hover p {
+            color: white;
+        }
+
+        .stats {
+            background: var(--primary);
+            padding: 6rem 2rem;
+            color: white;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            color: var(--secondary-light);
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .stat-item p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .centered-container {
+            display: grid;
+            place-items: center;
+            height: 20vh;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .path-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+        .nav-links .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 176px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            border-radius: 8px;
+            padding: 10px 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #16a085;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="#" class="logo">Algo<span>Learn</span></a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Học Thuật Toán Dễ Dàng</h1>
+            <p>Khám phá thế giới thuật toán qua các bài học tương tác, mô phỏng trực quan và ôn tập kiến thức thông qua trò chơi.</p>
+            <div class="cta-buttons">
+                <a href="Login.html" class="cta-button secondary">Đăng nhập</a>
+                <a href="Register.html" class="cta-button secondary">Đăng ký</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="learning-path" id="learning-path">
+        <h1>Các thuật toán chính</h1>
+        <div class="path-steps">
+            <div class="path-step">
+                <div class="step-number">1</div>
+                <h3>Thuật toán tìm kiếm</h3>
+                <ul>Tìm kiếm tuần tự</ul>
+                <ul>Tìm kiếm nhị phân</ul>
+            </div>
+            <div class="path-step">
+                <div class="step-number">2</div>
+                <h3>Thuật toán sắp xếp</h3>
+                <ul>Sắp xếp nổi bọt</ul>
+                <ul>Sắp xếp chèn</ul>
+                <ul>Sắp xếp nhanh</ul>
+            </div>
+            <div class="path-step">
+                <div class="step-number">3</div>
+                <h3>Trò chơi</h3>
+                <ul>Robot Escape</ul>
+                <ul>Thử thách tốc độ</ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="centered-container">
+            <h1>Tính năng nổi bật</h1>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h2>Học Theo Trình Độ</h2>
+                <p>Nội dung phù hợp với người mới bắt đầu học</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h2>Trực Quan</h2>
+                <p>Mô phỏng sinh động, dễ hiểu</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h2>Trò chơi</h2>
+                <p>Trò chơi thực hành lôi cuốn hấp dẫn</p>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-content"></div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Robot X-42 - Cuộc Phiêu Lưu</title>
+    <style>
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px #00ff88;
+            }
+
+            50% {
+                box-shadow: 0 0 20px #00ff88;
+            }
+
+            100% {
+                box-shadow: 0 0 5px #00ff88;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: calc(72px + 20px);
+            /* Thêm padding-top bằng chiều cao navbar + padding gốc */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Phần CSS còn lại giữ nguyên */
+        .game-container {
+            max-width: 800px;
+            width: 95%;
+            background: rgba(22, 33, 62, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-container {
+            max-width: 800px;
+            width: 95%;
+            background: rgba(22, 33, 62, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 3em;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .story {
+            background: rgba(15, 52, 96, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .level {
+            background: rgba(26, 26, 46, 0.9);
+            border: 2px solid #00ff88;
+            border-radius: 12px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .level:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .level.locked {
+            border-color: #444;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .level.locked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #16213e, #1a1a2e);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: #1a1a2e;
+        }
+
+        .question-type.essay {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: rgba(0, 255, 136, 0.3);
+            border-color: #00ff88;
+        }
+
+        .essay-answer {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 255, 136, 0.5);
+            border-radius: 15px;
+            padding: 15px;
+            color: #fff;
+            font-size: 1.1em;
+            margin: 20px 0;
+            resize: vertical;
+        }
+
+        .essay-answer:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .word-counter {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .progress-container {
+            margin-top: 30px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            transition: width 0.3s ease;
+        }
+
+        .status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(15, 52, 96, 0.8);
+            border-radius: 15px;
+        }
+
+        .badge {
+            padding: 8px 20px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: #1a1a2e;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+            --bg-dark: #2c3e50;
+            --danger: #f44336;
+            --danger-dark: #d32f2f;
+            --success: #4CAF50;
+            --success-dark: #45a049;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-md: 8px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-light);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .status {
+            background: rgba(15, 52, 96, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .game-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        .badge,
+        .current-level {
+            font-size: 1.3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFF3B0, #FFE66D, #FFD93D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 25px rgba(255, 217, 61, 0.5);
+            letter-spacing: 0.5px;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -100% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .badge-container {
+            padding: 15px 25px;
+            background: rgba(255, 217, 61, 0.08);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 217, 61, 0.2);
+            min-width: 180px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .badge-container.glow {
+            animation: goldGlow 3s infinite;
+        }
+
+        @keyframes goldGlow {
+            0% {
+                box-shadow: 0 0 15px rgba(255, 217, 61, 0.15);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(255, 217, 61, 0.3);
+            }
+
+            100% {
+                box-shadow: 0 0 15px rgba(255, 217, 61, 0.15);
+            }
+        }
+
+        .badge-label {
+            color: rgba(255, 255, 255, 0.95);
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #00ff88, #00ccff);
+            color: #1a1a2e;
+        }
+
+        .restart-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-control:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .status-content {
+                flex-direction: column;
+            }
+
+            .game-info {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .badge-container {
+                width: 100%;
+            }
+
+            .game-controls {
+                width: 100%;
+            }
+
+            .btn-control {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px #00ff88;
+            }
+
+            50% {
+                box-shadow: 0 0 20px #00ff88;
+            }
+
+            100% {
+                box-shadow: 0 0 5px #00ff88;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: calc(72px + 20px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-container {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .feedback-correct {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+
+        .feedback-incorrect {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        .feedback-essay {
+            background: rgba(0, 204, 255, 0.1);
+            border: 2px solid rgba(0, 204, 255, 0.3);
+            color: #00ccff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .feedback-content {
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+        }
+
+        /* Existing styles remain the same... */
+        .game-container {
+            max-width: 800px;
+            width: 95%;
+            background: rgba(22, 33, 62, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 3em;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Add all other existing styles... */
+
+        .next-btn {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="Home.html" class="logo">Algo<span>Learn</span></a>
+            <div class="nav-user">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <span class="user-name" id="userNameDisplay"></span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+    </nav>
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">🤖 Robot X-42</h1>
+            <h2>Cuộc Phiêu Lưu Kỳ Thú</h2>
+        </div>
+
+        <div class="story">
+            <p>Robot X-42, một cỗ máy thông minh vượt thời đại, đang trên hành trình khám phá những bí ẩn của thế giới.
+                Mỗi thử thách là một cơ hội để chứng minh trí tuệ và sự nhanh nhạy của bạn. Hãy giúp X-42 vượt qua các
+                câu đố để tiến lên level cao hơn!</p>
+        </div>
+
+        <div class="levels">
+            <div class="level" onclick="startLevel(1)">
+                <div class="level-icon">🌱</div>
+                Level 1
+            </div>
+            <div class="level locked">
+                <div class="level-icon">📚</div>
+                Level 2
+            </div>
+            <div class="level locked">
+                <div class="level-icon">🗡️</div>
+                Level 3
+            </div>
+            <div class="level locked">
+                <div class="level-icon">👑</div>
+                Level 4
+            </div>
+            <div class="level locked">
+                <div class="level-icon">🏆</div>
+                Level 5
+            </div>
+        </div>
+        <div class="status">
+            <div class="status-content">
+                <div class="game-info">
+                    <div class="badge-container">
+                        <div class="badge-label">Danh hiệu:</div>
+                        <div class="badge">🌱 Tân thủ</div>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button class="btn-control save-btn" onclick="saveGame()">
+                        <span class="btn-icon">💾</span>
+                        <span class="btn-text">Lưu game</span>
+                    </button>
+                    <button class="btn-control restart-btn" onclick="restartGame()">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Chơi lại</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="levelModal">
+        <div class="modal-content">
+            <div class="question-type">Trắc nghiệm</div>
+            <h2 class="question-title">Level 1 - Câu hỏi 1</h2>
+            <p class="question-text"></p>
+            <div id="answerContainer"></div>
+            <div class="word-counter" id="wordCounter"></div>
+            <button class="btn" onclick="checkAnswer()">Kiểm tra</button>
+            <div id="feedbackContainer" class="feedback-container">
+                <div class="feedback-content">
+                    <span class="feedback-icon"></span>
+                    <span class="feedback-text"></span>
+                </div>
+            </div>
+            <button class="next-btn" onclick="nextQuestion()" id="nextButton">Câu tiếp theo ➔</button>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <div id="questionCounter">Câu hỏi 1/5</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API configuration
+        const API_URL = 'https://873s8t-5000.csb.app';
+
+        // Get initials from username
+        function getInitials(username) {
+            if (!username) return 'U';
+
+            // Split the username by spaces or special characters
+            const words = username.split(/[\s_-]+/);
+
+            // Get first letter of each word and convert to uppercase
+            const initials = words
+                .map(word => word.charAt(0).toUpperCase())
+                .join('')
+                .slice(0, 2); // Limit to 2 characters
+
+            return initials || 'U';
+        }
+
+        // Authentication check function
+        async function checkAuthentication() {
+            const token = localStorage.getItem('auth_token');
+
+            if (!token) {
+                console.log('No token found, redirecting to login');
+                window.location.href = 'Login.html';
+                return false;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/check-auth`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.authenticated) {
+                    throw new Error('Authentication failed');
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                clearAuthData();
+                window.location.href = 'Login.html';
+                return false;
+            }
+        }
+
+        // Clear auth data function
+        function clearAuthData() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            localStorage.removeItem('username');
+        }
+
+        // Updated logout function
+        function logout() {
+            clearAuthData();
+            // Use replace instead of href to prevent back button issues
+            window.location.replace('Login.html');
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', async function () {
+            const isAuthenticated = await checkAuthentication();
+
+            if (isAuthenticated) {
+                const username = localStorage.getItem('username');
+                if (username) {
+                    document.getElementById('userNameDisplay').textContent = username;
+                    document.getElementById('userAvatar').textContent = getInitials(username);
+                } else {
+                    document.getElementById('userNameDisplay').textContent = 'User';
+                    document.getElementById('userAvatar').textContent = 'U';
+                }
+            }
+        });
+        const questions = {
+            1: [
+                {
+                    type: 'multiple-choice',
+                    question: "Thuật toán tìm kiếm tuần tự hoạt động như thế nào?",
+                    options: ["Tìm kiếm một phần tử bằng cách chia đôi danh sách liên tục.", "Duyệt qua từng phần tử trong danh sách từ đầu đến cuối để tìm giá trị cần tìm.", "Sử dụng một cây nhị phân để tìm kiếm phần tử.", "Sắp xếp danh sách trước khi tìm kiếm phần tử."],
+                    answer: "Duyệt qua từng phần tử trong danh sách từ đầu đến cuối để tìm giá trị cần tìm.",
+                    explanation: "Thuật toán tìm kiếm tuần tự là thuật toán duyệt qua từng phần tử của danh sách theo thứ tự từ đầu đến cuối để tìm phần tử có giá trị khớp với giá trị cần tìm. Nó hiệu quả với danh sách nhỏ nhưng kém hiệu quả khi danh sách lớn."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Thuật toán tìm kiếm tuần tự phù hợp nhất để áp dụng trong trường hợp nào?",
+                    options: ["Danh sách đã được sắp xếp theo thứ tự tăng dần.", " Danh sách rất lớn và yêu cầu tìm kiếm nhanh.", "Danh sách nhỏ và không được sắp xếp.", "Danh sách là một cây nhị phân cân bằng."],
+                    answer: "Danh sách nhỏ và không được sắp xếp.",
+                    explanation: "Thuật toán tìm kiếm tuần tự không yêu cầu danh sách phải sắp xếp trước, nên rất hữu ích cho danh sách nhỏ. Đối với danh sách lớn, phương pháp này chậm và không hiệu quả so với các thuật toán khác như tìm kiếm nhị phân."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Trong tìm kiếm tuần tự, nếu không tìm thấy phần tử cần tìm trong danh sách, điều gì sẽ xảy ra?",
+                    options: ["Trả về chỉ số của phần tử cuối cùng.", "Trả về giá trị −1 hoặc một giá trị không hợp lệ.", "Trả về phần tử có giá trị gần đúng.", "Tiếp tục tìm kiếm từ đầu danh sách."],
+                    answer: "Trả về giá trị −1 hoặc một giá trị không hợp lệ.",
+                    explanation: "Khi không tìm thấy phần tử trong danh sách, thuật toán tìm kiếm tuần tự thường trả về giá trị đặc biệt như -1 để biểu thị rằng phần tử không tồn tại trong danh sách."
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Tìm kiếm tuần tự có thể được áp dụng trên kiểu dữ liệu nào?",
+                    options: ["Chỉ trên mảng một chiều.", " Chỉ trên danh sách liên kết.", "Chỉ trên các cấu trúc dữ liệu đã được sắp xếp.", "Trên bất kỳ kiểu dữ liệu nào hỗ trợ duyệt qua các phần tử."],
+                    answer: "Trên bất kỳ kiểu dữ liệu nào hỗ trợ duyệt qua các phần tử.",
+                    explanation: "Thuật toán tìm kiếm tuần tự có thể áp dụng trên bất kỳ kiểu dữ liệu nào, miễn là có thể duyệt qua các phần tử. Điều này bao gồm mảng, danh sách liên kết, hoặc bất kỳ cấu trúc dữ liệu nào hỗ trợ việc lặp."
+                },
+                {
+                    type: 'fill-in-the-code',
+                    question: "Viết hàm tìm kiếm tuần tự trong JavaScript để tìm một phần tử trong mảng. Nếu tìm thấy, trả về chỉ số; nếu không, trả về -1.",
+                    sampleCode: `
+                    function linearSearch(arr, target) {
+                        for (let i = 0; i < arr.length; i++) {
+                            if (arr[i] === target) {
+                                return i;
+                            }
+                        }
+                        return -1;
+                    }
+                    `
+                },
+            ],
+            2: [
+                {
+                    type: 'multiple-choice',
+                    question: "Trong dãy số: 2, 4, 6, 8, số tiếp theo là gì?",
+                    options: ["9", "10", "11", "12"],
+                    answer: "10"
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Robot X-42 di chuyển theo quy luật: Bắc 2 bước, Đông 3 bước. Tổng quãng đường là?",
+                    options: ["4 bước", "5 bước", "6 bước", "7 bước"],
+                    answer: "5 bước"
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Nếu mỗi bước Robot tiêu tốn 2 đơn vị năng lượng, để di chuyển 10 bước cần bao nhiêu năng lượng?",
+                    options: ["15", "18", "20", "22"],
+                    answer: "20"
+                },
+                {
+                    type: 'multiple-choice',
+                    question: "Nếu mỗi bước Robot tiêu tốn 2 đơn vị năng lượng, để di chuyển 10 bước cần bao nhiêu năng lượng?",
+                    options: ["15", "18", "20", "22"],
+                    answer: "20"
+                },
+                {
+                    type: 'essay',
+                    question: "Hãy giải thích quy luật của dãy số trên và ứng dụng thực tế của nó.",
+                    minWords: 30,
+                    sampleAnswer: "Dãy số này tăng đều với bước nhảy là 2 đơn vị. Quy luật này có thể áp dụng trong việc dự đoán các chu kỳ, lập lịch định kỳ, hoặc trong việc tính toán khoảng cách đều nhau."
+                },
+            ],
+        }
+
+        function saveGame() {
+            const gameData = {
+                currentLevel,
+                unlockedLevels: Array.from(document.querySelectorAll('.level:not(.locked)')).map((_, i) => i + 1),
+                currentBadge: document.querySelector('.badge').textContent,
+                levelProgress: {
+                    currentQuestion,
+                    levelScores
+                }
+            };
+
+            localStorage.setItem('robotX42SavedGame', JSON.stringify(gameData));
+            alert('Trò chơi đã được lưu! 💾');
+        }
+
+        function restartGame() {
+            if (confirm('Bạn có chắc muốn chơi lại từ đầu? Tiến độ hiện tại sẽ bị mất.')) {
+                // Reset game state
+                localStorage.removeItem('robotX42SavedGame');
+                currentLevel = 1;
+                currentQuestion = 1;
+                levelScores = { multipleChoice: 0, essay: 0 };
+
+                // Reset UI
+                document.querySelectorAll('.level').forEach((level, index) => {
+                    if (index > 0) {
+                        level.classList.add('locked');
+                        level.onclick = null;
+                    }
+                });
+
+                document.querySelector('.badge').textContent = '🌱 Tân thủ';
+                closeModal();
+                alert('Trò chơi đã được khởi động lại! 🔄');
+            }
+        }
+
+        // Add to window.onload
+        window.addEventListener('load', () => {
+            const savedGame = localStorage.getItem('robotX42SavedGame');
+            if (savedGame) {
+                const gameData = JSON.parse(savedGame);
+                currentLevel = gameData.currentLevel;
+                currentQuestion = gameData.levelProgress.currentQuestion;
+                levelScores = gameData.levelProgress.levelScores;
+
+                // Restore unlocked levels
+                gameData.unlockedLevels.forEach(level => {
+                    const levelElement = document.querySelectorAll('.level')[level - 1];
+                    levelElement.classList.remove('locked');
+                    levelElement.onclick = () => startLevel(level);
+                });
+
+                document.querySelector('.badge').textContent = gameData.currentBadge;
+            }
+        });
+        let gameState = {
+            currentLevel: 1,
+            unlockedLevels: [1],
+            currentBadge: "🌱 Tân thủ",
+            levelProgress: {},
+            lastQuestionAnswered: {}
+        };
+
+        // Hàm lưu trạng thái game
+        function saveGameState() {
+            localStorage.setItem('robotX42GameState', JSON.stringify(gameState));
+        }
+
+        // Hàm tải trạng thái game
+        function loadGameState() {
+            const savedState = localStorage.getItem('robotX42GameState');
+            if (savedState) {
+                gameState = JSON.parse(savedState);
+                // Khôi phục trạng thái trò chơi
+                restoreGameState();
+            }
+        }
+
+        // Hàm khôi phục trạng thái trò chơi
+        function restoreGameState() {
+            // Khôi phục các level đã mở khóa
+            const levelElements = document.getElementsByClassName('level');
+            for (let i = 0; i < levelElements.length; i++) {
+                const level = i + 1;
+                if (gameState.unlockedLevels.includes(level)) {
+                    levelElements[i].classList.remove('locked');
+                    levelElements[i].onclick = () => startLevel(level);
+                }
+            }
+
+            // Khôi phục danh hiệu hiện tại
+            document.querySelector('.badge').textContent = gameState.currentBadge;
+
+            // Khôi phục tiến độ level nếu đang trong level
+            if (gameState.levelProgress[gameState.currentLevel]) {
+                currentLevel = gameState.currentLevel;
+                currentQuestion = gameState.levelProgress[currentLevel].currentQuestion;
+                levelScores = gameState.levelProgress[currentLevel].scores;
+
+                // Nếu đang mở modal, cập nhật nội dung
+                const modal = document.getElementById('levelModal');
+                if (modal.style.display === 'flex') {
+                    updateModalContent();
+                }
+            }
+        }
+
+        let currentLevel = 1;
+        let currentQuestion = 1;
+        let selectedOption = null;
+        let essayAnswer = "";
+        let levelScores = {
+            multipleChoice: 0,
+            essay: 0
+        };
+
+        // Định nghĩa các danh hiệu theo level
+        const badges = {
+            1: "🌱 Tân thủ",
+            2: "📚 Học giả robot",
+            3: "🗡️ Chiến binh công nghệ",
+            4: "👑 Bậc thầy trí tuệ",
+            5: "🏆 Siêu sao robot"
+        };
+
+        function startLevel(level) {
+            currentLevel = level;
+            currentQuestion = 1;
+            levelScores = {
+                multipleChoice: 0,
+                essay: 0
+            };
+            selectedOption = null;
+            essayAnswer = "";
+
+            const modal = document.getElementById('levelModal');
+            modal.style.display = 'flex';
+            updateModalContent();
+        }
+
+
+        function updateProgress() {
+            const progress = ((currentQuestion - 1) / questions[currentLevel].length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('questionCounter').textContent =
+                `Câu hỏi ${currentQuestion}/${questions[currentLevel].length}`;
+        }
+
+        function updateWordCount(text) {
+            const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+            const currentQuestionData = questions[currentLevel][currentQuestion - 1];
+            const wordCounter = document.getElementById('wordCounter');
+            wordCounter.textContent = `Số từ: ${wordCount}/${currentQuestionData.minWords}`;
+
+            if (wordCount < currentQuestionData.minWords) {
+                wordCounter.style.color = '#ff6b6b';
+            } else {
+                wordCounter.style.color = '#00ff88';
+            }
+        }
+
+        function selectOption(option) {
+            if (selectedOption) {
+                selectedOption.classList.remove('selected');
+            }
+            option.classList.add('selected');
+            selectedOption = option;
+        }
+
+        function finishLevel() {
+            const totalQuestions = questions[currentLevel].length; // Tổng số câu hỏi
+            const correctAnswers = levelScores.multipleChoice + levelScores.essay; // Tổng số câu trả lời đúng
+
+            // Kiểm tra nếu chưa hoàn thành tất cả các câu hỏi
+            if (currentQuestion < totalQuestions) {
+                alert("Bạn cần hoàn thành tất cả các câu hỏi trước khi kết thúc level! ⏳");
+                return;
+            }
+
+            // Tính điểm tổng
+            const totalScore = (correctAnswers / totalQuestions) * 100;
+
+            // Tạo thông báo kết quả
+            let message = `Kết quả level ${currentLevel}:\n\n`;
+            message += `Tổng số câu hỏi: ${totalQuestions}\n`;
+            message += `Số câu trả lời đúng: ${correctAnswers}/${totalQuestions}\n`;
+            message += `Tổng điểm: ${totalScore.toFixed(1)}%\n\n`;
+
+            if (totalScore >= 70) {
+                message += "Chúc mừng! Bạn đã vượt qua level này! 🎉";
+                unlockNextLevel(); // Mở khóa level tiếp theo
+            } else {
+                message += "Bạn cần đạt ít nhất 70% để vượt qua level. Hãy thử lại! 💪";
+            }
+
+            alert(message);
+            closeModal();
+        }
+
+        function unlockNextLevel() {
+            if (currentLevel < 5) {
+                const nextLevel = currentLevel + 1;
+                const levelElements = document.getElementsByClassName('level');
+                levelElements[nextLevel - 1].classList.remove('locked');
+                levelElements[nextLevel - 1].onclick = () => startLevel(nextLevel);
+
+                // Cập nhật danh hiệu
+                document.querySelector('.badge').textContent = badges[nextLevel];
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('levelModal');
+            modal.style.display = 'none';
+        }
+
+        // Khởi tạo sự kiện đóng modal khi click ngoài
+        window.onclick = function (event) {
+            const modal = document.getElementById('levelModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Khởi tạo level đầu tiên
+        document.addEventListener('DOMContentLoaded', () => {
+            // Gắn sự kiện cho các level
+            const levelElements = document.getElementsByClassName('level');
+            for (let i = 0; i < levelElements.length; i++) {
+                const level = i + 1;
+                if (level === 1) {
+                    levelElements[i].onclick = () => startLevel(level);
+                } else {
+                    levelElements[i].onclick = () => {
+                        if (levelElements[i].classList.contains('locked')) {
+                            alert('Bạn cần hoàn thành các level trước để mở khóa level này!');
+                        } else {
+                            startLevel(level);
+                        }
+                    };
+                }
+            }
+        });
+        function checkAnswer() {
+            const currentQuestionData = questions[currentLevel][currentQuestion - 1];
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            const feedbackIcon = feedbackContainer.querySelector('.feedback-icon');
+            const feedbackText = feedbackContainer.querySelector('.feedback-text');
+            const nextButton = document.getElementById('nextButton');
+            const checkButton = document.querySelector('.btn');
+
+            if (currentQuestionData.type === 'multiple-choice') {
+                // Kiểm tra câu hỏi trắc nghiệm
+                if (!selectedOption) {
+                    feedbackContainer.className = 'feedback-container feedback-incorrect';
+                    feedbackIcon.textContent = '⚠️';
+                    feedbackText.textContent = 'Vui lòng chọn một đáp án!';
+                    feedbackContainer.style.display = 'block';
+                    return;
+                }
+
+                if (selectedOption.textContent.trim() === currentQuestionData.answer.trim()) {
+                    levelScores.multipleChoice++;
+                    feedbackContainer.className = 'feedback-container feedback-correct';
+                    feedbackIcon.textContent = '🎉';
+                    feedbackText.innerHTML = `Chính xác! Bạn đã trả lời đúng. <br>${currentQuestionData.explanation || ''}`;
+                } else {
+                    feedbackContainer.className = 'feedback-container feedback-incorrect';
+                    feedbackIcon.textContent = '❌';
+                    feedbackText.innerHTML = `Sai rồi! Đáp án đúng là: <b>${currentQuestionData.answer}</b>. <br>${currentQuestionData.explanation || ''}`;
+                }
+
+            } else if (currentQuestionData.type === 'fill-in-the-code') {
+                // Kiểm tra câu hỏi lập trình
+                const userCode = document.querySelector('.essay-answer').value.trim();
+                const correctCode = currentQuestionData.sampleCode.trim();
+
+                if (userCode === correctCode) {
+                    levelScores.essay++;
+                    feedbackContainer.className = 'feedback-container feedback-correct';
+                    feedbackIcon.textContent = '🎉';
+                    feedbackText.textContent = `Chính xác! Mã của bạn hoạt động đúng.`;
+                } else {
+                    feedbackContainer.className = 'feedback-container feedback-incorrect';
+                    feedbackIcon.textContent = '❌';
+                    feedbackText.innerHTML = `Sai rồi! Hãy kiểm tra lại mã của bạn. <br><b>Mẫu đúng:</b><pre>${correctCode}</pre>`;
+                }
+            }
+            feedbackContainer.style.display = 'block';
+            checkButton.style.display = 'none';
+
+            if (currentQuestion < questions[currentLevel].length) {
+                nextButton.style.display = 'block';
+            } else {
+                nextButton.textContent = 'Kết thúc level';
+                nextButton.style.display = 'block';
+            }
+        }
+
+
+        function nextQuestion() {
+            const totalQuestions = questions[currentLevel].length;
+
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                selectedOption = null;
+                essayAnswer = "";
+                updateModalContent(); // Hiển thị câu hỏi tiếp theo
+            } else {
+                // Khi tất cả câu hỏi đã được trả lời, hiển thị nút kết thúc
+                document.getElementById('nextButton').style.display = 'none';
+                document.querySelector('.btn').textContent = 'Kết thúc level';
+                finishLevel();
+            }
+        }
+
+        function updateModalContent() {
+            const currentQuestionData = questions[currentLevel][currentQuestion - 1];
+            const questionType = document.querySelector('.question-type');
+            const questionTitle = document.querySelector('.question-title');
+            const questionText = document.querySelector('.question-text');
+            const answerContainer = document.getElementById('answerContainer');
+            const wordCounter = document.getElementById('wordCounter');
+            const checkButton = document.querySelector('.btn');
+            const nextButton = document.getElementById('nextButton');
+            const feedbackContainer = document.getElementById('feedbackContainer');
+
+            // Reset giao diện
+            checkButton.style.display = 'block';
+            nextButton.style.display = 'none';
+            feedbackContainer.style.display = 'none';
+            answerContainer.innerHTML = '';
+            wordCounter.textContent = '';
+
+            // Cập nhật tiêu đề câu hỏi
+            questionTitle.textContent = `Level ${currentLevel} - Câu hỏi ${currentQuestion}`;
+            questionType.textContent = currentQuestionData.type === 'multiple-choice' ? 'Trắc nghiệm'
+                : currentQuestionData.type === 'essay' ? 'Tự luận'
+                    : 'Viết mã';
+            questionType.className = `question-type ${currentQuestionData.type === 'essay' ? 'essay' : ''}`;
+            questionText.textContent = currentQuestionData.question;
+
+            // Xử lý nội dung câu trả lời tùy loại câu hỏi
+            if (currentQuestionData.type === 'multiple-choice') {
+                // Tạo giao diện trắc nghiệm
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'options-container';
+
+                currentQuestionData.options.forEach(optionText => {
+                    const option = document.createElement('div');
+                    option.className = 'option';
+                    option.textContent = optionText;
+                    option.onclick = () => selectOption(option);
+                    optionsContainer.appendChild(option);
+                });
+
+                answerContainer.appendChild(optionsContainer);
+                checkButton.textContent = 'Kiểm tra đáp án';
+            } else if (currentQuestionData.type === 'essay') {
+                // Tạo giao diện tự luận
+                const textarea = document.createElement('textarea');
+                textarea.className = 'essay-answer';
+                textarea.placeholder = `Hãy viết ít nhất ${currentQuestionData.minWords} từ...`;
+                textarea.value = essayAnswer;
+                textarea.oninput = (e) => {
+                    essayAnswer = e.target.value;
+                    updateWordCount(e.target.value);
+                };
+                answerContainer.appendChild(textarea);
+                checkButton.textContent = 'Nộp bài';
+            } else if (currentQuestionData.type === 'fill-in-the-code') {
+                // Tạo giao diện lập trình
+                const textarea = document.createElement('textarea');
+                textarea.className = 'essay-answer';
+                textarea.style.minHeight = '200px'; // Chiều cao lớn hơn để dễ nhập mã
+                textarea.placeholder = 'Viết mã của bạn ở đây...';
+                textarea.value = essayAnswer;
+                textarea.oninput = (e) => {
+                    essayAnswer = e.target.value;
+                };
+                answerContainer.appendChild(textarea);
+                checkButton.textContent = 'Nộp mã';
+            }
+
+            // Cập nhật tiến độ
+            updateProgress();
+        }
+
+    </script>
+</body>
+
+</html>

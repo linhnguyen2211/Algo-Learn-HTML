@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mô phỏng thuật toán tìm kiếm tuần tự</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            /* Căn giữa các menu items */
+            margin: 0 auto;
+            /* Căn giữa nav-links */
+        }
+
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            position: relative;
+            text-align: center;
+            /* Căn giữa text trong mỗi link */
+            min-width: 120px;
+            /* Đặt chiều rộng tối thiểu cho mỗi menu item */
+        }
+
+        /* Hiệu ứng hover */
+        .nav-links a:hover {
+            background: #16a085;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links .dropdown {
+            position: relative;
+        }
+
+        /* Hiệu ứng khi click */
+        .nav-links a:active {
+            background: #1abc9c;
+            transform: translateY(1px);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 10rem 2rem 6rem;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .centered-container {
+            display: grid;
+            place-items: center;
+            height: 20vh;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .path-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .nav-links .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 176px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            border-radius: 8px;
+            padding: 10px 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #16a085;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+
+
+
+        @keyframes highlight {
+            0% {
+                background-color: #ffd700;
+                transform: scale(1.05);
+            }
+
+            100% {
+                background-color: #e2e8f0;
+                transform: scale(1);
+            }
+        }
+
+        .search-item {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .current-search {
+            animation: highlight 0.5s;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+            z-index: 10;
+        }
+
+        .found-item {
+            background-color: #48bb78 !important;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .not-found-item {
+            opacity: 0.6;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .array-element {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .array-element.current {
+            background-color: #ffd700;
+            animation: pulse 1s infinite;
+        }
+
+        .array-element.found {
+            background-color: #48bb78;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .array-element.not-found {
+            opacity: 0.6;
+            background-color: red;
+            border-color: #880000;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .active-line {
+            background-color: #e0f2fe;
+            font-weight: bold;
+        }
+
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            padding: 0 2rem;
+            font-size: 2rem;
+            color: #16a085;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 70%;
+            max-width: 800px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .code-execution-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .code-execution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f4f8;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .code-execution-content {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .minimize-btn {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .hidden-content {
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 176px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            border-radius: 8px;
+            padding: 10px 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #16a085;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        details {
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        summary {
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2c3e50;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        summary:hover {
+            background-color: #e9ecef;
+        }
+
+        details[open] summary {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* Main Layout */
+        .container {
+            margin-top: 80px;
+            /* Add top margin to push content down */
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .main-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Left Column */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .array-container,
+        .step-display {
+            text-align: center;
+        }
+
+        .step-display {
+            font-weight: bold;
+        }
+
+        /* Input Section */
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+        }
+
+        /* Button Section */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            transition: background-color 0.15s ease;
+        }
+
+        .btn-taomang {
+            background-color: #16a085;
+        }
+
+        .btn-taomang:hover {
+            background-color: #1abc9c;
+        }
+
+        .btn-batdau {
+            background-color: #16a085;
+        }
+
+        .btn-batdau:hover {
+            background-color: #1abc9c;
+        }
+
+        .btn-tamdung {
+            background-color: #16a085;
+        }
+
+        .btn-tamdung:hover {
+            background-color: #1abc9c;
+        }
+
+        .btn-buoctiep {
+            background-color: #16a085;
+        }
+
+        .btn-buoctiep:hover {
+            background-color: #1abc9c;
+        }
+
+        /* Speed Control */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .speed-control label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .speed-control select {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+        }
+
+        /* Code Panel */
+        .code-panel {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-header {
+            background-color: #ddd6fe;
+            padding: 0.5rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header span {
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .panel-content {
+            padding: 1rem;
+        }
+
+        .code-section,
+        .execution-section {
+            margin-bottom: 1rem;
+        }
+
+        .code-section h3,
+        .execution-section h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-container {
+            background-color: #fce7f3;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .execution-log {
+            background-color: #e0f2fe;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            min-height: 100px;
+        }
+
+        .variable-display {
+            margin-top: 0.25rem;
+            background-color: #d1fae5;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+
+        .theory-content,
+        .code-content,
+        .visualization-content {
+            padding: 15px;
+        }
+
+        /* Code Line Styles */
+        .code-line {
+            font-family: monospace;
+        }
+
+        .array-element {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 15px;
+            border: 2px solid #737373;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            background-color: #d4d4d4;
+        }
+
+        /* Search state styles */
+        .array-element.mid {
+            background-color: #ffd700;
+            border-color: #b8860b;
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        .array-element.found {
+            background-color: #4ade80;
+            border-color: #16a34a;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .array-element.not-found {
+            background-color: #f87171;
+            border-color: #dc2626;
+            color: white;
+        }
+
+        .array-element.low {
+            background-color: #93c5fd;
+            border-color: #2563eb;
+        }
+
+        .array-element.high {
+            background-color: #c4b5fd;
+            border-color: #7c3aed;
+        }
+
+        /* Hộp nổi bật cho mảng đầu vào và kết quả */
+        .highlighted-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #16a085;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Bảng minh họa ví dụ */
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .example-table th,
+        .example-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .example-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .example-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .example-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+
+        @media (max-width: 768px) {
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-user {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+            --bg-dark: #2c3e50;
+            --danger: #f44336;
+            --danger-dark: #d32f2f;
+            --success: #4CAF50;
+            --success-dark: #45a049;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-md: 8px;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            line-height: 1.5;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-light);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            background: var(--bg-light);
+            transform: translateX(4px);
+        }
+
+        .list-item:not(:last-child) {
+            border-bottom: 1px solid var(--bg-light);
+        }
+
+        .btn {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            width: 120px;
+            justify-self: end;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn.disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .reset-container {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--bg-light);
+        }
+
+        .reset-btn {
+            background-color: var(--danger);
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            width: auto;
+            min-width: 200px;
+        }
+
+        .reset-btn:hover {
+            background-color: var(--danger-dark);
+        }
+
+        @media (max-width: 768px) {
+            .list-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .item-name {
+                justify-content: center;
+            }
+
+            .btn {
+                justify-self: center;
+            }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-user {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .progress-section {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 pt-24">
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="Home.html" class="logo">Algo<span>Learn</span></a>
+            <div class="nav-user">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <span class="user-name" id="userNameDisplay"></span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="p-3">
+            <h1 class="text-3xl font-bold text-center text-emerald-500">Thuật Toán Tìm Kiếm Tuần Tự (Linear Search)</h1>
+        </div>
+
+        <details>
+            <summary>I. Lý thuyết</summary>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">1. Định nghĩa</h3>
+                    <p class="text-gray-700">Tìm kiếm tuần tự (Linear Search) là thuật toán tìm kiếm đơn giản nhất,
+                        duyệt qua từng phần tử trong mảng theo thứ tự từ đầu đến cuối cho đến khi tìm thấy phần tử cần
+                        tìm.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">2. Nguyên Lý Hoạt Động</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Bắt đầu từ phần tử đầu tiên của mảng</li>
+                        <li>So sánh từng phần tử với giá trị cần tìm</li>
+                        <li>Nếu tìm thấy, trả về vị trí của phần tử</li>
+                        <li>Nếu duyệt hết mảng mà không tìm thấy, trả về -1</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">3. Độ Phức Tạp</h3>
+                    <p class="text-gray-700">
+                        <strong>Thời gian:</strong> O(n) - Trong trường hợp xấu nhất phải duyệt toàn bộ mảng<br>
+                        <strong>Không gian:</strong> O(1) - Chỉ sử dụng thêm một vài biến để lưu trữ
+                    </p>
+                </div>
+            </div>
+        </details>
+        <details>
+            <summary>II. Minh họa bằng ví dụ</summary>
+            <div class="example-content">
+                <h3>1. Mảng đầu vào</h3>
+                <p>Giả sử chúng ta cần tìm phần tử <strong>4</strong> trong mảng sau:</p>
+                <div class="highlighted-box">
+                    <strong>Mảng ban đầu:</strong> [5, 3, 8, 4, 2]
+                </div>
+                <h3>2. Các bước thực hiện</h3>
+                <p>Thuật toán sẽ duyệt tuần tự qua từng phần tử của mảng từ trái sang phải, so sánh từng phần tử với giá
+                    trị cần tìm.</p>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Lần duyệt</th>
+                            <th>Phần tử kiểm tra</th>
+                            <th>Kết quả</th>
+                            <th>Mô tả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>5</td>
+                            <td>Không khớp</td>
+                            <td>So sánh 5 với 4, không tìm thấy.</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>Không khớp</td>
+                            <td>So sánh 3 với 4, không tìm thấy.</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>8</td>
+                            <td>Không khớp</td>
+                            <td>So sánh 8 với 4, không tìm thấy.</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>4</td>
+                            <td>Khớp</td>
+                            <td>So sánh 4 với 4, tìm thấy giá trị cần tìm.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>3. Kết quả cuối cùng</h3>
+                <div class="highlighted-box">
+                    <strong>Kết quả:</strong> Phần tử 4 được tìm thấy tại vị trí thứ 4 (index = 3, nếu tính từ 0).
+                </div>
+                <h3>4. Giải thích</h3>
+                <p>Thuật toán **tìm kiếm tuần tự** hoạt động bằng cách:
+                    1. Duyệt qua từng phần tử của mảng từ đầu đến cuối.
+                    2. So sánh phần tử hiện tại với giá trị cần tìm.
+                    3. Nếu phần tử khớp, trả về vị trí.
+                    4. Nếu duyệt hết mảng mà không tìm thấy, kết luận giá trị không tồn tại trong mảng.
+                </p>
+                <p>Phương pháp này có độ phức tạp **O(n)** vì cần kiểm tra tối đa tất cả các phần tử của mảng.</p>
+            </div>
+        </details>
+        <details open>
+            <summary>III. Mô phỏng</summary>
+            <div class="container">
+                <div class="main-grid">
+                    <div class="left-column">
+                        <div class="array-container" id="arrayContainer"></div>
+                        <div class="step-display" id="stepDisplay"></div>
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label>Nhập Mảng Số:</label>
+                                <input type="text" id="arrayInput" placeholder="Ví dụ: 5, 12, 8, 19, 3, 26">
+                            </div>
+                            <div class="input-group">
+                                <label>Phần Tử Cần Tìm:</label>
+                                <input type="number" id="targetInput">
+                            </div>
+                        </div>
+
+                        <div class="button-container">
+                            <button onclick="generateCustomArray()" class="btn btn-taomang">
+                                🎲 Tạo Mảng</button>
+                            <button onclick="startSearch()" class="btn btn-batdau">
+                                🔎 Bắt Đầu</button>
+                            <button onclick="togglePause()" id="pauseResumeBtn" class="btn btn-tamdung">
+                                ⏸️ Tạm Dừng
+                            </button>
+                            <button onclick="nextStep()" id="nextStepBtn" class="btn btn-buoctiep">
+                                ⏭️ Bước Tiếp
+                            </button>
+                            <div class="speed-control">
+                                <label>Tốc độ:</label>
+                                <select id="speedSelect" onchange="updateSpeed(this.value)">
+                                    <option value="0.5">0.5x</option>
+                                    <option value="1" selected>1x</option>
+                                    <option value="1.5">1.5x</option>
+                                    <option value="2">2x</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>Mã Nguồn & Thực Thi</span>
+                        </div>
+                        <div class="panel-content">
+                            <div class="code-section">
+                                <h3>Mã nguồn Python</h3>
+                                <div id="codeContainer" class="code-container">
+                                    <div class="code-line" data-line="1">def linear_search(arr, target):</div>
+                                    <div class="code-line" data-line="2"> for i in range(len(arr)):</div>
+                                    <div class="code-line" data-line="3"> if arr[i] == target:</div>
+                                    <div class="code-line" data-line="4"> return i</div>
+                                    <div class="code-line" data-line="5"> return -1</div>
+                                </div>
+                            </div>
+
+                            <div class="execution-section">
+                                <h3>Thực thi</h3>
+                                <div id="executionLog" class="execution-log"></div>
+                                <div id="variableDisplay"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <script>
+        // API configuration
+        const API_URL = 'https://873s8t-5000.csb.app';
+
+        // Get initials from username
+        function getInitials(username) {
+            if (!username) return 'U';
+
+            // Split the username by spaces or special characters
+            const words = username.split(/[\s_-]+/);
+
+            // Get first letter of each word and convert to uppercase
+            const initials = words
+                .map(word => word.charAt(0).toUpperCase())
+                .join('')
+                .slice(0, 2); // Limit to 2 characters
+
+            return initials || 'U';
+        }
+
+        // Authentication check function
+        async function checkAuthentication() {
+            const token = localStorage.getItem('auth_token');
+
+            if (!token) {
+                console.log('No token found, redirecting to login');
+                window.location.href = 'Login.html';
+                return false;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/check-auth`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.authenticated) {
+                    throw new Error('Authentication failed');
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                clearAuthData();
+                window.location.href = 'Login.html';
+                return false;
+            }
+        }
+
+        // Clear auth data function
+        function clearAuthData() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            localStorage.removeItem('username');
+        }
+
+        // Updated logout function
+        function logout() {
+            clearAuthData();
+            // Use replace instead of href to prevent back button issues
+            window.location.replace('Login.html');
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', async function () {
+            const isAuthenticated = await checkAuthentication();
+
+            if (isAuthenticated) {
+                const username = localStorage.getItem('username');
+                if (username) {
+                    document.getElementById('userNameDisplay').textContent = username;
+                    document.getElementById('userAvatar').textContent = getInitials(username);
+                } else {
+                    document.getElementById('userNameDisplay').textContent = 'User';
+                    document.getElementById('userAvatar').textContent = 'U';
+                }
+            }
+        });
+        let array = [];
+        let currentIndex = -1;
+        let searchInterval;
+        let executionSteps = [];
+        let currentStep = -1;
+        let animationSpeed = 1000;
+        let isPaused = false;
+
+        function generateNewArray() {
+            array = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
+            displayArray();
+            resetExecution();
+        }
+
+        function generateCustomArray() {
+            const input = document.getElementById('arrayInput').value.trim();
+            if (input) {
+                array = input.split(',')
+                    .map(num => parseInt(num.trim()))
+                    .filter(num => !isNaN(num));
+                displayArray();
+                resetExecution();
+            } else {
+                generateNewArray();
+            }
+        }
+
+        function displayArray() {
+            const container = document.getElementById('arrayContainer');
+            container.innerHTML = '';
+            array.forEach((num, index) => {
+                const element = document.createElement('div');
+                element.className = 'array-element';
+                element.textContent = num;
+                container.appendChild(element);
+            });
+        }
+
+        function resetExecution() {
+            document.getElementById('stepDisplay').textContent = '';
+            document.getElementById('executionLog').innerHTML = '';
+            document.getElementById('variableDisplay').innerHTML = '';
+            clearInterval(searchInterval);
+            currentIndex = -1;
+            executionSteps = [];
+            currentStep = -1;
+            isPaused = false;
+            document.getElementById('pauseResumeBtn').textContent = '⏸️ Tạm Dừng';
+
+            document.querySelectorAll('.code-line').forEach(line => {
+                line.classList.remove('active-line');
+            });
+            document.querySelectorAll('.array-element').forEach(el => {
+                el.classList.remove('current', 'found', 'not-found', 'checked');
+            });
+        }
+
+        function startSearch() {
+            resetExecution();
+            const target = parseInt(document.getElementById('targetInput').value);
+            if (isNaN(target)) {
+                alert('Vui lòng nhập số cần tìm!');
+                return;
+            }
+
+            addExecutionStep(1, 'Bắt đầu tìm kiếm tuần tự', { target });
+
+            for (let i = 0; i < array.length; i++) {
+                addExecutionStep(2, `Kiểm tra phần tử tại vị trí ${i}: ${array[i]}`, { i, current: array[i], target });
+
+                if (array[i] === target) {
+                    addExecutionStep(3, `Tìm thấy ${target} tại vị trí ${i}`, { i, found: true });
+                    addExecutionStep(4, `Trả về vị trí ${i}`, { i, found: true });
+                    break;
+                }
+
+                if (i === array.length - 1) {
+                    addExecutionStep(5, `Không tìm thấy ${target} trong mảng`, { notFound: true });
+                }
+            }
+
+            currentStep = 0;
+            searchInterval = setInterval(() => {
+                if (!isPaused && currentStep < executionSteps.length) {
+                    displayExecutionStep(executionSteps[currentStep]);
+                    currentStep++;
+                } else if (currentStep >= executionSteps.length) {
+                    clearInterval(searchInterval);
+                }
+            }, animationSpeed);
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const pauseBtn = document.getElementById('pauseResumeBtn');
+            pauseBtn.textContent = isPaused ? '▶️ Tiếp Tục' : '⏸️ Tạm Dừng';
+        }
+
+        function updateSpeed(speed) {
+            animationSpeed = 1000 / speed;
+            if (searchInterval) {
+                clearInterval(searchInterval);
+                if (currentStep < executionSteps.length) {
+                    searchInterval = setInterval(() => {
+                        if (!isPaused && currentStep < executionSteps.length) {
+                            displayExecutionStep(executionSteps[currentStep]);
+                            currentStep++;
+                        } else if (currentStep >= executionSteps.length) {
+                            clearInterval(searchInterval);
+                        }
+                    }, animationSpeed);
+                }
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < executionSteps.length) {
+                displayExecutionStep(executionSteps[currentStep]);
+                currentStep++;
+            }
+        }
+
+        function addExecutionStep(lineNumber, description, variables) {
+            executionSteps.push({
+                lineNumber,
+                description,
+                variables: { ...variables }
+            });
+        }
+
+        function displayExecutionStep(step) {
+            // Highlight code line
+            document.querySelectorAll('.code-line').forEach(line => {
+                line.classList.remove('active-line');
+            });
+            document.querySelector(`.code-line[data-line="${step.lineNumber}"]`).classList.add('active-line');
+
+            // Update execution log
+            const executionLog = document.getElementById('executionLog');
+            const stepElement = document.createElement('div');
+            stepElement.textContent = step.description;
+            executionLog.innerHTML = '';
+            executionLog.appendChild(stepElement);
+
+            // Update variable display
+            const variableDisplay = document.getElementById('variableDisplay');
+            variableDisplay.innerHTML = Object.entries(step.variables)
+                .filter(([key]) => key !== 'found' && key !== 'notFound')
+                .map(([key, value]) => `${key} = ${JSON.stringify(value)}`)
+                .join('<br>');
+
+            // Update array visualization
+            const elements = document.getElementsByClassName('array-element');
+            Array.from(elements).forEach((el, idx) => {
+                el.classList.remove('current', 'found', 'not-found', 'checked');
+
+                if (typeof step.variables.i !== 'undefined') {
+                    if (idx < step.variables.i) {
+                        el.classList.add('checked');
+                    }
+                    if (idx === step.variables.i) {
+                        el.classList.add('current');
+                    }
+                }
+
+                if (step.variables.found && idx === step.variables.i) {
+                    el.classList.add('found');
+                }
+
+                if (step.variables.notFound) {
+                    el.classList.add('not-found');
+                }
+            });
+
+            // Update step display
+            document.getElementById('stepDisplay').textContent = step.description;
+        }
+
+        // Initialize with a random array
+        generateNewArray();
+
+        // User authentication related functions
+        window.addEventListener('load', function () {
+            const username = localStorage.getItem('username');
+            if (!username) {
+                alert('Bạn chưa đăng nhập. Đang chuyển về trang đăng nhập...');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update UI to show logged in user
+            const userDisplay = document.createElement('div');
+            userDisplay.className = 'absolute top-4 right-4 text-gray-700';
+            userDisplay.innerHTML = `
+                <span>Xin chào, ${username}</span>
+                <button onclick="logout()" class="ml-4 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                    Đăng xuất
+                </button>
+            `;
+            document.body.appendChild(userDisplay);
+        });
+
+        function logout() {
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function (event) {
+            if (event.code === 'Space') {
+                // Space bar to toggle pause/resume
+                togglePause();
+                event.preventDefault();
+            } else if (event.code === 'ArrowRight') {
+                // Right arrow for next step
+                nextStep();
+                event.preventDefault();
+            }
+        });
+
+        // Add responsive design handlers
+        window.addEventListener('resize', function () {
+            const container = document.querySelector('.container');
+            if (window.innerWidth < 768) {
+                container.classList.add('mobile-view');
+            } else {
+                container.classList.remove('mobile-view');
+            }
+        });
+
+    </script>
+</body>
+
+</html>

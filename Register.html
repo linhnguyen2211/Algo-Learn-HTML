@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - AlgoLearn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Giữ nguyên các styles cũ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --primary-dark: #1a252f;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+        }
+
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--primary);
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .password-toggle:hover {
+            opacity: 1;
+        }
+
+        /* Style cho input trong password container */
+        .password-container input {
+            padding-right: 40px;
+        }
+
+        /* Giữ nguyên các styles khác... */
+        body {
+            background-color: var(--bg-light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signup-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(44, 62, 80, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem;
+            position: relative;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .signup-header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .signup-header p {
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(44, 62, 80, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary-light);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .form-footer a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .success-message p {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+        }
+
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            z-index: 1000;
+            min-width: 300px;
+        }
+
+        .back-to-home {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .back-to-home:hover {
+            color: var(--secondary);
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .back-to-home {
+                top: 1rem;
+                left: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay" id="overlay"></div>
+    <div class="success-message" id="successMessage">
+        <h2>Đăng ký thành công! 🎉</h2>
+        <p>Tài khoản của bạn đã được tạo thành công.</p>
+        <button href="Login.html" class="submit-btn" style="margin-top: 1rem;">Đăng nhập ngay</button>
+    </div>
+
+    <a href="Homeweb.html" class="back-to-home">← Quay lại trang chủ</a>
+
+    <div class="signup-container">
+        <div class="signup-header">
+            <h1>Đăng ký</h1>
+            <p>Tạo tài khoản AlgoLearn mới</p>
+        </div>
+
+        <form id="signupForm" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="username">Họ và tên</label>
+                <input type="text" id="username" name="username" required placeholder="Nhập họ và tên của bạn">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="Nhập email của bạn">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required placeholder="Nhập mật khẩu">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Xác nhận mật khẩu</label>
+                <input type="password" id="confirm-password" name="confirm-password" required
+                    placeholder="Nhập lại mật khẩu">
+            </div>
+
+            <button type="submit" class="submit-btn">Đăng ký</button>
+
+            <div class="form-footer">
+                <p>Đã có tài khoản? <a href="Login.html">Đăng nhập</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function showSuccessMessage() {
+            const overlay = document.getElementById('overlay');
+            const successMessage = document.getElementById('successMessage');
+
+            overlay.style.display = 'block';
+            successMessage.style.display = 'block';
+
+            // Prevent overlay click from closing the message
+            overlay.onclick = null;
+
+            // Only close when clicking login button
+            const loginButton = document.querySelector('#successMessage .submit-btn');
+            loginButton.onclick = function () {
+                overlay.style.display = 'none';
+                successMessage.style.display = 'none';
+                window.location.href = 'Login.html';
+            };
+        }
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        function showError(inputId, message) {
+            const input = document.getElementById(inputId);
+            let errorSpan = input.nextElementSibling;
+
+            if (!errorSpan || !errorSpan.classList.contains('error-message')) {
+                errorSpan = document.createElement('span');
+                errorSpan.classList.add('error-message');
+                errorSpan.style.color = 'red';
+                input.parentNode.appendChild(errorSpan);
+            }
+
+            errorSpan.textContent = message;
+            errorSpan.style.display = 'block';
+        }
+
+        function clearError(inputId) {
+            const input = document.getElementById(inputId);
+            const errorSpan = input.nextElementSibling;
+
+            if (errorSpan && errorSpan.classList.contains('error-message')) {
+                errorSpan.textContent = '';
+                errorSpan.style.display = 'none';
+            }
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+
+            if (!username || !email || password !== confirmPassword) {
+                !username && showError('username', 'Họ và tên không được để trống.');
+                !email && showError('email', 'Email không được để trống.');
+                password !== confirmPassword && showError('confirm-password', 'Mật khẩu không khớp.');
+                return;
+            }
+
+            fetch('https://873s8t-5000.csb.app/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            })
+                .then(response => {
+                    if (response.status === 201) {
+                        showSuccessMessage();
+                    } else {
+                        throw new Error('Email đã được đăng ký');
+                    }
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+        function redirectToLogin() {
+            window.location.href = 'Register.html';
+        }
+
+    </script>
+</body>
+
+</html>

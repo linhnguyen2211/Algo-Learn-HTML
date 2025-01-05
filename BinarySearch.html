@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mô phỏng thuật toán tìm kiếm tuần tự</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+            --bg-dark: #2c3e50;
+            --danger: #f44336;
+            --danger-dark: #d32f2f;
+            --success: #4CAF50;
+            --success-dark: #45a049;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-md: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            line-height: 1.5;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-light);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            width: 120px;
+            justify-self: end;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn.disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .reset-container {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--bg-light);
+        }
+
+        .reset-btn {
+            background-color: var(--danger);
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            width: auto;
+            min-width: 200px;
+        }
+
+        .reset-btn:hover {
+            background-color: var(--danger-dark);
+        }
+
+        @media (max-width: 768px) {
+            .list-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .item-name {
+                justify-content: center;
+            }
+
+            .btn {
+                justify-self: center;
+            }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-user {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @keyframes highlight {
+            0% {
+                background-color: #ffd700;
+                transform: scale(1.05);
+            }
+
+            100% {
+                background-color: #e2e8f0;
+                transform: scale(1);
+            }
+        }
+
+        .search-item {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .current-search {
+            animation: highlight 0.5s;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+            z-index: 10;
+        }
+
+        .found-item {
+            background-color: #48bb78 !important;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .not-found-item {
+            opacity: 0.6;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --primary-dark: #1a252f;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+            --bg-dark: #2c3e50;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .array-element {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .array-element.current {
+            background-color: #ffd700;
+            animation: pulse 1s infinite;
+        }
+
+        .array-element.found {
+            background-color: #48bb78;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .array-element.not-found {
+            opacity: 0.6;
+            background-color: red;
+            border-color: #880000;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .active-line {
+            background-color: #e0f2fe;
+            font-weight: bold;
+        }
+
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            padding: 0 2rem;
+            font-size: 2rem;
+            color: #16a085;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 70%;
+            max-width: 800px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .code-execution-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .code-execution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f4f8;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .code-execution-content {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .minimize-btn {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .hidden-content {
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            /* Căn giữa các menu items */
+            margin: 0 auto;
+            /* Căn giữa nav-links */
+        }
+
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            position: relative;
+            text-align: center;
+            /* Căn giữa text trong mỗi link */
+            min-width: 120px;
+            /* Đặt chiều rộng tối thiểu cho mỗi menu item */
+        }
+
+        /* Hiệu ứng hover */
+        .nav-links a:hover {
+            background: #16a085;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links .dropdown {
+            position: relative;
+        }
+
+        /* Hiệu ứng khi click */
+        .nav-links a:active {
+            background: #1abc9c;
+            transform: translateY(1px);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 176px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            border-radius: 8px;
+            padding: 10px 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #16a085;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        details {
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        summary {
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2c3e50;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        summary:hover {
+            background-color: #e9ecef;
+        }
+
+        details[open] summary {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* Main Layout */
+        .container {
+            margin-top: 80px;
+            /* Add top margin to push content down */
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .main-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Left Column */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .array-container,
+        .step-display {
+            text-align: center;
+        }
+
+        .step-display {
+            font-weight: bold;
+        }
+
+        /* Input Section */
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+        }
+
+        /* Button Section */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            transition: background-color 0.15s ease;
+        }
+
+        .btn-taomang {
+            background-color: #16a085;
+        }
+
+        .btn-taomang:hover {
+            background-color: #1abc9c;
+        }
+
+        .btn-batdau {
+            background-color: #16a085;
+        }
+
+        .btn-batdau:hover {
+            background-color: #1abc9c;
+        }
+
+        .btn-tamdung {
+            background-color: #16a085;
+        }
+
+        .btn-tamdung:hover {
+            background-color: #1abc9c;
+        }
+
+        .btn-buoctiep {
+            background-color: #16a085;
+        }
+
+        .btn-buoctiep:hover {
+            background-color: #1abc9c;
+        }
+
+        /* Speed Control */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .speed-control label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .speed-control select {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+        }
+
+        /* Code Panel */
+        .code-panel {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel-header {
+            background-color: #ddd6fe;
+            padding: 0.5rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header span {
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .panel-content {
+            padding: 1rem;
+        }
+
+        .code-section,
+        .execution-section {
+            margin-bottom: 1rem;
+        }
+
+        .code-section h3,
+        .execution-section h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-container {
+            background-color: #fce7f3;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .execution-log {
+            background-color: #e0f2fe;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            min-height: 100px;
+        }
+
+        .variable-display {
+            margin-top: 0.25rem;
+            background-color: #d1fae5;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+
+        .theory-content,
+        .code-content,
+        .visualization-content {
+            padding: 15px;
+        }
+
+        /* Code Line Styles */
+        .code-line {
+            font-family: monospace;
+        }
+
+        .array-element {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 15px;
+            border: 2px solid #737373;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            background-color: #d4d4d4;
+        }
+
+        /* Search state styles */
+        .array-element.mid {
+            background-color: #ffd700;
+            border-color: #b8860b;
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        .array-element.found {
+            background-color: #4ade80;
+            border-color: #16a34a;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .array-element.not-found {
+            background-color: #f87171;
+            border-color: #dc2626;
+            color: white;
+        }
+
+        .array-element.low {
+            background-color: #93c5fd;
+            border-color: #2563eb;
+        }
+
+        .array-element.high {
+            background-color: #c4b5fd;
+            border-color: #7c3aed;
+        }
+
+        /* Hộp nổi bật cho mảng đầu vào và kết quả */
+        .highlighted-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #16a085;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Bảng minh họa ví dụ */
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .example-table th,
+        .example-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .example-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .example-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .example-table tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 pt-24">
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="Home.html" class="logo">Algo<span>Learn</span></a>
+            <div class="nav-user">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <span class="user-name" id="userNameDisplay"></span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="p-3">
+            <h1 class="text-3xl font-bold text-center text-emerald-500">Thuật Toán Tìm Kiếm Nhị Phân (Binary Search)
+            </h1>
+        </div>
+        <details>
+            <summary>I. Lý thuyết</summary>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">1. Định nghĩa</h3>
+                    <p class="text-gray-700">Tìm kiếm nhị phân (Binary Search) là một thuật toán tìm kiếm hiệu quả áp
+                        dụng trên mảng đã được sắp xếp. Thuật toán hoạt động bằng cách chia đôi mảng để giảm không gian
+                        tìm kiếm.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">2. Nguyên Lý Hoạt Động</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Xác định phần tử giữa mảng (mid).</li>
+                        <li>So sánh phần tử giữa với giá trị cần tìm (target):
+                            <ul class="list-decimal list-inside pl-4">
+                                <li>Nếu bằng, trả về vị trí phần tử.</li>
+                                <li>Nếu nhỏ hơn, tìm trong nửa phải của mảng.</li>
+                                <li>Nếu lớn hơn, tìm trong nửa trái của mảng.</li>
+                            </ul>
+                        </li>
+                        <li>Lặp lại cho đến khi tìm thấy hoặc không còn phần tử nào.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">3. Độ Phức Tạp</h3>
+                    <p class="text-gray-700">
+                        <strong>Thời gian:</strong> O(log n) - Mỗi lần lặp giảm không gian tìm kiếm một nửa.<br>
+                        <strong>Không gian:</strong> O(1) - Chỉ sử dụng thêm một vài biến để lưu trữ.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">4. Ưu và Nhược Điểm</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-green-700">Ưu Điểm</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                <li>Nhanh và hiệu quả trên mảng lớn đã được sắp xếp.</li>
+                                <li>Độ phức tạp thấp hơn so với tìm kiếm tuần tự.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-red-700">Nhược Điểm</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                <li>Chỉ áp dụng được trên mảng đã được sắp xếp.</li>
+                                <li>Phức tạp hơn khi cài đặt so với tìm kiếm tuần tự.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Mã nguồn section -->
+        <details>
+            <summary>II. Minh họa bằng ví dụ</summary>
+            <div class="example-content">
+                <h3>1. Mảng đầu vào</h3>
+                <p>Giả sử chúng ta cần tìm phần tử
+                    <strong>4</strong> trong mảng đã **sắp xếp tăng dần** sau:
+                </p>
+                <div class="highlighted-box">
+                    <strong>Mảng ban đầu:</strong> [2, 3, 4, 5, 8]
+                </div>
+                <h3>2. Các bước thực hiện</h3>
+                <p>Thuật toán sẽ sử dụng phương pháp chia đôi mảng. Các bước thực hiện như sau:</p>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Lần duyệt</th>
+                            <th>Chỉ số giữa</th>
+                            <th>Phần tử kiểm tra</th>
+                            <th>Kết quả</th>
+                            <th>Mô tả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>4</td>
+                            <td>Khớp</td>
+                            <td>Phần tử giữa là 4, so sánh với 4, tìm thấy giá trị cần tìm.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>3. Kết quả cuối cùng</h3>
+                <div class="highlighted-box">
+                    <strong>Kết quả:</strong> Phần tử 4 được tìm thấy tại vị trí thứ 3 (index = 2, nếu tính từ 0).
+                </div>
+                <h3>4. Giải thích</h3>
+                <p>Thuật toán tìm kiếm nhị phân chia mảng đã sắp xếp thành hai nửa, so sánh giá trị cần tìm với phần tử
+                    giữa. Nếu khớp, trả về vị trí, nếu không, tiếp tục tìm trong nửa trái hoặc phải. Quá trình lặp lại
+                    cho đến khi tìm thấy giá trị hoặc mảng trống. Thuật toán có độ phức tạp O(log n).</p>
+            </div>
+        </details>
+
+        <details open>
+            <summary>III. Mô phỏng</summary>
+            <!-- Left Column -->
+            <div class="container">
+                <div class="main-grid">
+                    <!-- Left Column -->
+                    <div class="left-column">
+                        <div class="array-container" id="arrayContainer"></div>
+                        <div class="step-display" id="stepDisplay"></div>
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label>Nhập Mảng Số:</label>
+                                <input type="text" id="arrayInput" placeholder="Ví dụ: 5, 12, 8, 19, 3, 26">
+                            </div>
+                            <div class="input-group">
+                                <label>Phần Tử Cần Tìm:</label>
+                                <input type="number" id="targetInput">
+                            </div>
+                        </div>
+
+                        <div class="button-container">
+                            <button onclick="generateCustomArray()" class="btn btn-taomang">
+                                🎲 Tạo Mảng</button>
+                            <button onclick="startSearch()" class="btn btn-batdau">
+                                🔎 Bắt Đầu </button>
+                            <button onclick="togglePause()" id="pauseResumeBtn" class="btn btn-tamdung">
+                                ⏸️ Tạm Dừng
+                            </button>
+                            <button onclick="nextStep()" id="nextStepBtn" class="btn btn-buoctiep">
+                                ⏭️ Bước Tiếp
+                            </button>
+                            <div class="speed-control">
+                                <label>Tốc độ:</label>
+                                <select id="speedSelect" onchange="updateSpeed(this.value)">
+                                    <option value="0.5">0.5x</option>
+                                    <option value="1" selected>1x</option>
+                                    <option value="1.5">1.5x</option>
+                                    <option value="2">2x</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="code-panel">
+                        <div class="panel-header">
+                            <span>Mã Nguồn & Thực Thi</span>
+                        </div>
+                        <div class="panel-content">
+                            <div class="code-section">
+                                <h3>Mã nguồn Python</h3>
+                                <div id="codeContainer" class="code-container">
+                                    <div class="code-line" data-line="1">def binary_search(arr, target):</div>
+                                    <div class="code-line" data-line="2"> left = 0</div>
+                                    <div class="code-line" data-line="3"> right = len(arr) - 1</div>
+                                    <div class="code-line" data-line="4"> </div>
+                                    <div class="code-line" data-line="5"> while left <= right:</div>
+                                            <div class="code-line" data-line="6"> mid = (left + right) // 2</div>
+                                            <div class="code-line" data-line="7"> if arr[mid] == target:</div>
+                                            <div class="code-line" data-line="8"> return mid</div>
+                                            <div class="code-line" data-line="9"> elif arr[mid] < target:</div>
+                                                    <div class="code-line" data-line="10"> left = mid + 1</div>
+                                                    <div class="code-line" data-line="11"> else:</div>
+                                                    <div class="code-line" data-line="12"> right = mid - 1</div>
+                                                    <div class="code-line" data-line="13"> </div>
+                                                    <div class="code-line" data-line="14"> return -1</div>
+                                            </div>
+                                    </div>
+
+                                    <div class="execution-section">
+                                        <h3>Thực thi</h3>
+                                        <div id="executionLog" class="execution-log"></div>
+                                        <div id="variableDisplay"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </details>
+
+        <script>
+            // API configuration
+            const API_URL = 'https://873s8t-5000.csb.app';
+
+            // Get initials from username
+            function getInitials(username) {
+                if (!username) return 'U';
+
+                // Split the username by spaces or special characters
+                const words = username.split(/[\s_-]+/);
+
+                // Get first letter of each word and convert to uppercase
+                const initials = words
+                    .map(word => word.charAt(0).toUpperCase())
+                    .join('')
+                    .slice(0, 2); // Limit to 2 characters
+
+                return initials || 'U';
+            }
+
+            // Authentication check function
+            async function checkAuthentication() {
+                const token = localStorage.getItem('auth_token');
+
+                if (!token) {
+                    console.log('No token found, redirecting to login');
+                    window.location.href = 'Login.html';
+                    return false;
+                }
+
+                try {
+                    const response = await fetch(`${API_URL}/check-auth`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok || !data.authenticated) {
+                        throw new Error('Authentication failed');
+                    }
+
+                    return true;
+                } catch (error) {
+                    console.error('Auth check failed:', error);
+                    clearAuthData();
+                    window.location.href = 'Login.html';
+                    return false;
+                }
+            }
+
+            // Clear auth data function
+            function clearAuthData() {
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('auth_user');
+                localStorage.removeItem('username');
+            }
+
+            // Updated logout function
+            function logout() {
+                clearAuthData();
+                // Use replace instead of href to prevent back button issues
+                window.location.replace('Login.html');
+            }
+
+            // Initialize on page load
+            window.addEventListener('DOMContentLoaded', async function () {
+                const isAuthenticated = await checkAuthentication();
+
+                if (isAuthenticated) {
+                    const username = localStorage.getItem('username');
+                    if (username) {
+                        document.getElementById('userNameDisplay').textContent = username;
+                        document.getElementById('userAvatar').textContent = getInitials(username);
+                    } else {
+                        document.getElementById('userNameDisplay').textContent = 'User';
+                        document.getElementById('userAvatar').textContent = 'U';
+                    }
+                }
+            });
+            let isPaused = false;
+            let pauseInterval = null;
+
+            function togglePause() {
+                const pauseBtn = document.getElementById('pauseResumeBtn');
+
+                // If no search is in progress, do nothing
+                if (!searchInterval) return;
+
+                if (!isPaused) {
+                    // Pause the animation
+                    clearInterval(searchInterval);
+                    isPaused = true;
+                    pauseBtn.textContent = '▶️ Tiếp Tục';
+                    pauseBtn.classList.remove;
+                    pauseBtn.classList.add;
+                    document.getElementById('stepDisplay').textContent += ' (Đã Tạm Dừng)';
+                } else {
+                    // Resume the animation
+                    isPaused = false;
+                    pauseBtn.textContent = '⏸️ Tạm Dừng';
+                    pauseBtn.classList.remove;
+                    pauseBtn.classList.add;
+
+                    // Restart the interval
+                    searchInterval = setInterval(() => {
+                        if (currentStep < executionSteps.length) {
+                            displayExecutionStep(executionSteps[currentStep]);
+                            currentStep++;
+                        } else {
+                            clearInterval(searchInterval);
+                            // Reset pause button
+                            pauseBtn.textContent = '⏸️ Tạm Dừng';
+                            pauseBtn.classList.remove;
+                            pauseBtn.classList.add;
+                        }
+                    }, animationSpeed);
+                }
+            }
+            // Progress Tracking Functionality
+            class ProgressTracker {
+                constructor() {
+                    this.initializeProgress();
+                }
+
+                initializeProgress() {
+                    if (!localStorage.getItem('binarySearchProgress')) {
+                        localStorage.setItem('binarySearchProgress', JSON.stringify({
+                            theoryRead: false,
+                            arrayGenerated: false,
+                            searchPerformed: false,
+                            totalSearches: 0,
+                            successfulSearches: 0
+                        }));
+                    }
+                }
+
+                updateProgress(key, value) {
+                    const progress = this.getProgress();
+                    progress[key] = value;
+                    localStorage.setItem('binarySearchProgress', JSON.stringify(progress));
+                    this.updateProgressDisplay();
+                }
+
+                incrementSearchCount(success) {
+                    const progress = this.getProgress();
+                    progress.totalSearches++;
+                    if (success) {
+                        progress.successfulSearches++;
+                    }
+                    localStorage.setItem('binarySearchProgress', JSON.stringify(progress));
+                    this.updateProgressDisplay();
+                }
+
+                getProgress() {
+                    return JSON.parse(localStorage.getItem('binarySearchProgress')) || {};
+                }
+
+                resetProgress() {
+                    localStorage.removeItem('binarySearchProgress');
+                    this.initializeProgress();
+                    this.updateProgressDisplay();
+                    closeProgressModal();
+                }
+            }
+
+            // Global progress tracker
+            const progressTracker = new ProgressTracker();
+
+            // Update navigation to include progress tracking
+            function addProgressTrackingToNavbar() {
+                const navLinks = document.querySelector('.nav-links');
+                if (navLinks) {
+                    const progressLink = document.createElement('a');
+                    progressLink.href = '#';
+                    progressLink.onclick = openProgressModal;
+                    progressLink.classList.add('cursor-pointer');
+                    navLinks.appendChild(progressLink);
+                }
+            }
+
+            // Modal functions
+            function openProgressModal() {
+                document.getElementById('progressModal').style.display = 'block';
+                progressTracker.updateProgressDisplay();
+            }
+
+            function closeProgressModal() {
+                document.getElementById('progressModal').style.display = 'none';
+            }
+
+            // Close modal when clicking outside
+            window.onclick = function (event) {
+                const modal = document.getElementById('progressModal');
+                if (event.target == modal) {
+                    closeProgressModal();
+                }
+            }
+
+            function resetProgress() {
+                progressTracker.resetProgress();
+            }
+
+            // Modify existing functions to track progress
+            const originalGenerateCustomArray = generateCustomArray;
+            generateCustomArray = function () {
+                originalGenerateCustomArray();
+                progressTracker.updateProgress('arrayGenerated', true);
+            }
+
+            const originalStartSearch = startSearch;
+            startSearch = function () {
+                originalStartSearch();
+                progressTracker.updateProgress('searchPerformed', true);
+
+                // Determine if search was successful
+                const target = parseInt(document.getElementById('targetInput').value);
+                const foundIndex = array.indexOf(target);
+                progressTracker.incrementSearchCount(foundIndex !== -1);
+            }
+
+            // Add progress tracking to page load
+            document.addEventListener('DOMContentLoaded', () => {
+                addProgressTrackingToNavbar();
+
+                // Track theory reading (can be triggered by a button or scroll)
+                const theorySection = document.querySelector('.bg-gray-50');
+                if (theorySection) {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                progressTracker.updateProgress('theoryRead', true);
+                                observer.disconnect();
+                            }
+                        });
+                    }, { threshold: 0.5 });
+                    observer.observe(theorySection);
+                }
+            });
+
+            let array = [];
+            let currentIndex = -1;
+            let searchInterval;
+            let executionSteps = [];
+            let currentStep = -1;
+            let animationSpeed = 1000;
+
+            function toggleCodeExecution() {
+                const container = document.getElementById('codeExecutionContainer');
+                container.classList.toggle('hidden-content');
+                const minimizeBtn = container.querySelector('.minimize-btn');
+                minimizeBtn.textContent = container.classList.contains('hidden-content') ? '🔼' : '🔽';
+            }
+
+            function generateNewArray() {
+                array = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
+                array.sort((a, b) => a - b); // Sort the array for binary search
+                displayArray();
+                resetExecution();
+            }
+
+            function generateCustomArray() {
+                const input = document.getElementById('arrayInput').value.trim();
+                if (input) {
+                    array = input.split(',')
+                        .map(num => parseInt(num.trim()))
+                        .filter(num => !isNaN(num))
+                        .sort((a, b) => a - b); // Sort the array for binary search
+                    displayArray();
+                    resetExecution();
+                } else {
+                    generateNewArray();
+                }
+            }
+
+            function resetExecution() {
+                const pauseBtn = document.getElementById('pauseResumeBtn');
+                if (pauseBtn) {
+                    pauseBtn.textContent = '⏸️ Tạm Dừng';
+
+                    // Loại bỏ các lớp Tailwind không cần thiết
+                    pauseBtn.style.backgroundColor = '#16a085'; /* Thay cho bg-green-300 */
+                    pauseBtn.style.transition = 'background-color 0.3s ease'; /* Thêm hiệu ứng hover */
+
+                    // Thay đổi khi hover bằng cách thêm sự kiện
+                    pauseBtn.addEventListener('mouseover', function () {
+                        pauseBtn.style.backgroundColor = '#1abc9c'; /* Thay cho hover:bg-green-500 */
+                    });
+
+                    pauseBtn.addEventListener('mouseout', function () {
+                        pauseBtn.style.backgroundColor = '#16a085'; /* Trở lại màu gốc */
+                    });
+                }
+
+                // Reset pause-related variables
+                isPaused = false;
+
+                // Existing reset logic
+                document.getElementById('stepDisplay').textContent = '';
+                document.getElementById('executionLog').innerHTML = '';
+                document.getElementById('variableDisplay').innerHTML = '';
+                clearInterval(searchInterval);
+                currentIndex = -1;
+                executionSteps = [];
+                currentStep = -1;
+                document.querySelectorAll('.code-line').forEach(line => {
+                    line.classList.remove('active-line');
+                });
+                document.querySelectorAll('.array-element').forEach(el => {
+                    el.classList.remove('current', 'found', 'not-found', 'low', 'high', 'mid');
+                });
+            }
+
+            function displayArray() {
+                const container = document.getElementById('arrayContainer');
+                container.innerHTML = '';
+                array.forEach((num, index) => {
+                    const element = document.createElement('div');
+                    element.className = 'array-element inline-block m-1 p-2 border border-gray-300 rounded';
+                    element.textContent = num;
+                    container.appendChild(element);
+                });
+            }
+
+            function addExecutionStep(lineNumber, description, variables) {
+                executionSteps.push({
+                    lineNumber,
+                    description,
+                    variables: { ...variables }
+                });
+            }
+
+            function displayExecutionStep(step) {
+                // Highlight code line
+                document.querySelectorAll('.code-line').forEach(line => {
+                    line.classList.remove('active-line');
+                });
+                document.querySelector(`.code-line[data-line="${step.lineNumber}"]`).classList.add('active-line');
+
+                // Update execution log
+                const executionLog = document.getElementById('executionLog');
+                const stepElement = document.createElement('div');
+                stepElement.className = 'execution-step current-step';
+                stepElement.textContent = step.description;
+                executionLog.innerHTML = '';
+                executionLog.appendChild(stepElement);
+
+                // Update variable display
+                const variableDisplay = document.getElementById('variableDisplay');
+                variableDisplay.innerHTML = Object.entries(step.variables)
+                    .map(([key, value]) => `${key} = ${JSON.stringify(value)}`)
+                    .join('<br>');
+
+                // Update array visualization with improved highlighting
+                const elements = document.getElementsByClassName('array-element');
+                Array.from(elements).forEach((el, idx) => {
+                    // Clear all previous classes first
+                    el.classList.remove('current', 'found', 'not-found', 'low', 'high', 'mid');
+
+                    // Apply new classes based on current search state
+                    if (typeof step.variables.left !== 'undefined' &&
+                        typeof step.variables.right !== 'undefined') {
+
+                        if (idx >= step.variables.left && idx <= step.variables.right) {
+                            if (idx < step.variables.mid) {
+                                el.classList.add('low');
+                            } else if (idx > step.variables.mid) {
+                                el.classList.add('high');
+                            }
+                        }
+                    }
+
+                    if (idx === step.variables.mid) {
+                        el.classList.add('mid');
+                    }
+
+                    if (step.variables.found && idx === step.variables.mid) {
+                        el.classList.add('found');
+                    }
+
+                    if (step.variables.notFound) {
+                        el.classList.add('not-found');
+                    }
+                });
+
+                // Update step display
+                document.getElementById('stepDisplay').textContent = step.description;
+            }
+
+            // Update the displayArray function to ensure proper initial styling
+            function displayArray() {
+                const container = document.getElementById('arrayContainer');
+                container.innerHTML = '';
+                array.forEach((num, index) => {
+                    const element = document.createElement('div');
+                    element.className = 'array-element';
+                    element.textContent = num;
+                    container.appendChild(element);
+                });
+            }
+            function updateSpeed(speed) {
+                animationSpeed = 1000 / speed;
+                if (searchInterval) {
+                    clearInterval(searchInterval);
+                    if (currentStep < executionSteps.length) {
+                        searchInterval = setInterval(() => {
+                            if (currentStep < executionSteps.length) {
+                                displayExecutionStep(executionSteps[currentStep]);
+                                currentStep++;
+                            } else {
+                                clearInterval(searchInterval);
+                            }
+                        }, animationSpeed);
+                    }
+                }
+            }
+
+            function startSearch() {
+                resetExecution();
+                const target = parseInt(document.getElementById('targetInput').value);
+                if (isNaN(target)) {
+                    alert('Vui lòng nhập số cần tìm!');
+                    return;
+                }
+
+                let left = 0;
+                let right = array.length - 1;
+                let found = false;
+
+                addExecutionStep(1, 'Bắt đầu tìm kiếm nhị phân', { target, array });
+                addExecutionStep(2, 'Khởi tạo left = 0', { left, right, target });
+                addExecutionStep(3, 'Khởi tạo right = ' + (array.length - 1), { left, right, target });
+
+                while (left <= right) {
+                    const mid = Math.floor((left + right) / 2);
+                    addExecutionStep(6, `Tính mid = (${left} + ${right}) / 2 = ${mid}`, { left, right, mid, target });
+
+                    if (array[mid] === target) {
+                        addExecutionStep(7, `Tìm thấy ${target} tại vị trí ${mid}`, { left, right, mid, target, found: true });
+                        addExecutionStep(8, `Số ${target} nằm ở vị trí ${mid} trong mảng`, { left, right, mid, target, found: true });
+                        found = true;
+                        break;
+                    } else if (array[mid] < target) {
+                        addExecutionStep(9, `${array[mid]} < ${target}, tìm bên phải`, { left, right, mid, target });
+                        addExecutionStep(10, `Cập nhật left = ${mid + 1}`, { left: mid + 1, right, mid, target });
+                        left = mid + 1;
+                    } else {
+                        addExecutionStep(11, `${array[mid]} > ${target}, tìm bên trái`, { left, right, mid, target });
+                        addExecutionStep(12, `Cập nhật right = ${mid - 1}`, { left, right: mid - 1, mid, target });
+                        right = mid - 1;
+                    }
+                }
+
+                if (!found) {
+                    addExecutionStep(14, `Không tìm thấy ${target} trong mảng`, { left, right, target, notFound: true });
+                }
+
+                currentStep = 0;
+                searchInterval = setInterval(() => {
+                    if (currentStep < executionSteps.length) {
+                        displayExecutionStep(executionSteps[currentStep]);
+                        currentStep++;
+                    } else {
+                        clearInterval(searchInterval);
+                    }
+                }, animationSpeed);
+            }
+
+            // Initialize with a random array
+            generateNewArray();
+
+            function nextStep() {
+                if (!executionSteps.length || currentStep >= executionSteps.length) return;
+
+                // Clear any existing interval
+                clearInterval(searchInterval);
+                searchInterval = null;
+
+                // Display the current step
+                displayExecutionStep(executionSteps[currentStep]);
+                currentStep++;
+
+                // Update pause button state
+                const pauseBtn = document.getElementById('pauseResumeBtn');
+                pauseBtn.textContent = '⏸️ Tạm Dừng';
+                isPaused = false;
+            }
+
+
+            function generateExecutionSteps(target) {
+                executionSteps = [];
+                let left = 0;
+                let right = array.length - 1;
+                let found = false;
+
+                addExecutionStep(1, 'Bắt đầu tìm kiếm nhị phân', { target, array });
+                addExecutionStep(2, 'Khởi tạo left = 0', { left, right, target });
+                addExecutionStep(3, 'Khởi tạo right = ' + (array.length - 1), { left, right, target });
+
+                while (left <= right) {
+                    const mid = Math.floor((left + right) / 2);
+                    addExecutionStep(6, `Tính mid = (${left} + ${right}) / 2 = ${mid}`, { left, right, mid, target });
+
+                    if (array[mid] === target) {
+                        addExecutionStep(7, `Tìm thấy ${target} tại vị trí ${mid}`, { left, right, mid, target, found: true });
+                        addExecutionStep(8, `Số ${target} nằm ở vị trí ${mid} trong mảng`, { left, right, mid, target, found: true });
+                        found = true;
+                        break;
+                    } else if (array[mid] < target) {
+                        addExecutionStep(9, `${array[mid]} < ${target}, tìm bên phải`, { left, right, mid, target });
+                        addExecutionStep(10, `Cập nhật left = ${mid + 1}`, { left: mid + 1, right, mid, target });
+                        left = mid + 1;
+                    } else {
+                        addExecutionStep(11, `${array[mid]} > ${target}, tìm bên trái`, { left, right, mid, target });
+                        addExecutionStep(12, `Cập nhật right = ${mid - 1}`, { left, right: mid - 1, mid, target });
+                        right = mid - 1;
+                    }
+                }
+
+                if (!found) {
+                    addExecutionStep(14, `Không tìm thấy ${target} trong mảng`, { left, right, target, notFound: true });
+                }
+            }
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mô phỏng Thuật toán Sắp xếp Nổi bọt</title>
+    <style>
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 10rem 2rem 6rem;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .centered-container {
+            display: grid;
+            place-items: center;
+            height: 20vh;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .path-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 176px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            border-radius: 8px;
+            padding: 10px 0;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #16a085;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+
+        @keyframes highlight {
+            0% {
+                background-color: #ffd700;
+                transform: scale(1.05);
+            }
+
+            100% {
+                background-color: #e2e8f0;
+                transform: scale(1);
+            }
+        }
+
+        * {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            /* Add some space below the heading */
+            color: #16a085;
+            /* Add a nice color */
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            align-items: center;
+        }
+
+        button,
+        select,
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        button {
+            background: #16a085;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover:not(:disabled) {
+            background: #1abc9c;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .array-container {
+            display: flex;
+            gap: 15px;
+            min-height: 250px;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .array-box {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #16a085, #1abc9c);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border-radius: 8px;
+            transition: all 0.4s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-section {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .code-line {
+            padding: 5px 10px;
+            font-family: monospace;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .two-column-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .algorithm-section {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+
+        .code-line.active {
+            background: #4a5568;
+            color: #fbbf24;
+        }
+
+        .comparing {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            animation: pulse 0.8s infinite;
+        }
+
+        .swapping {
+            background: linear-gradient(135deg, #fbbf24, #fbbf24);
+            animation: bounce 0.5s;
+        }
+
+        .sorted {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        details {
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        summary {
+            font-size: 1 rem;
+            /* Kích thước lớn hơn, giá trị tùy chỉnh */
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2c3e50;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        summary:hover {
+            background-color: #e9ecef;
+        }
+
+        details[open] summary {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        ul {
+            padding-left: 40px;
+            /* Thụt vào từ cạnh trái */
+            margin: 0;
+            /* Bỏ khoảng cách mặc định */
+            list-style-type: disc;
+            /* Hiển thị dấu chấm tròn trước mỗi mục */
+        }
+
+        li {
+            margin-bottom: 5px;
+            /* Khoảng cách giữa các mục */
+        }
+
+        table {
+            width: 60%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            text-align: left;
+            font-family: Arial, sans-serif;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        label {
+            font-size: 16px;
+            /* Đảm bảo kích thước chữ phù hợp */
+            margin: 0;
+        }
+
+        .status-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            color: #2c3e50;
+            min-height: 50px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-comparing {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .status-swapping {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .status-complete {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .highlighted-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #16a085;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .example-table th,
+        .example-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .example-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .example-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .example-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            /* Mặc định 1 cột */
+            gap: 16px;
+            /* Khoảng cách giữa các cột */
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+                /* Chia thành 2 cột khi màn hình rộng hơn 768px */
+            }
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .text-green-700 {
+            color: #15803d;
+        }
+
+        .text-red-700 {
+            color: #B91C1C;
+        }
+
+        .list-disc {
+            list-style-type: disc;
+        }
+
+        .list-inside {
+            padding-left: 0;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --secondary: #16a085;
+            --secondary-light: #1abc9c;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --bg-light: #f5f6fa;
+            --bg-dark: #2c3e50;
+            --danger: #f44336;
+            --danger-dark: #d32f2f;
+            --success: #4CAF50;
+            --success-dark: #45a049;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-md: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            line-height: 1.5;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--secondary-light);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            background: var(--bg-light);
+            transform: translateX(4px);
+        }
+
+        .list-item:not(:last-child) {
+            border-bottom: 1px solid var(--bg-light);
+        }
+
+        .item-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .item-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-light);
+            border-radius: 6px;
+            color: var(--secondary);
+        }
+
+        .status {
+            text-align: center;
+            font-weight: 500;
+            padding: 0.5rem;
+            border-radius: 20px;
+            min-width: 100px;
+        }
+
+        .watched {
+            color: var(--success);
+            background: #ecfdf5;
+        }
+
+        .not-watched {
+            color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .btn {
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            width: 120px;
+            justify-self: end;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn.disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .reset-container {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--bg-light);
+        }
+
+        .reset-btn {
+            background-color: var(--danger);
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            width: auto;
+            min-width: 200px;
+        }
+
+        .reset-btn:hover {
+            background-color: var(--danger-dark);
+        }
+
+        @media (max-width: 768px) {
+            .list-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .item-name {
+                justify-content: center;
+            }
+
+            .btn {
+                justify-self: center;
+            }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-user {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-name {
+            color: #2c3e50;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
+            background: #16a085;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="Home.html" class="logo">Algo<span>Learn</span></a>
+            <div class="nav-user">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <span class="user-name" id="userNameDisplay"></span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Thuật toán Sắp xếp Nổi bọt (Bubble Sort)</h1>
+        <div class="content-wrapper">
+            <details>
+                <summary>I. Lý thuyết</summary>
+                <div class="theory-content">
+                    <h3>1. Khái niệm</h3>
+                    <p>Bubble Sort là thuật toán sắp xếp dựa trên việc so sánh và hoán đổi các phần tử liền kề trong
+                        mảng.</p>
+
+                    <h3>2. Nguyên lý hoạt động</h3>
+                    <ul>
+                        <li>Duyệt qua mảng từ đầu đến cuối</li>
+                        <li>So sánh từng cặp phần tử liền kề</li>
+                        <li>Hoán đổi cặp phần tử nếu chúng không theo đúng thứ tự</li>
+                        <li>Lặp lại quá trình này cho đến khi không còn cần thực hiện hoán đổi</li>
+                    </ul>
+
+                    <h3>3. Độ phức tạp</h3>
+                    <strong>Thời gian:</strong><br>
+                    - Trường hợp xấu nhất: O(n²) - Khi mảng ở trạng thái ngược hoàn toàn<br>
+                    - Trường hợp tốt nhất: O(n) - Khi mảng đã được sắp xếp sẵn và có tối ưu dừng<br>
+                    <strong>Không gian:</strong> O(1) - Không yêu cầu bộ nhớ bổ sung
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2">4. Ưu và Nhược Điểm</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Cột 1: Ưu Điểm -->
+                        <div>
+                            <h4 class="font-semibold text-green-700">Ưu Điểm</h4>
+                            <ul>
+                                <li>Dễ cài đặt và hiểu</li>
+                                <li>Hoạt động tốt với mảng nhỏ</li>
+                                <li>Không yêu cầu bộ nhớ bổ sung</li>
+                            </ul>
+                        </div>
+
+                        <!-- Cột 2: Nhược Điểm -->
+                        <div>
+                            <h4 class="font-semibold text-red-700">Nhược Điểm</h4>
+                            <ul>
+                                <li>Hiệu suất kém với mảng lớn</li>
+                                <li>Độ phức tạp thời gian cao: O(n²)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>II. Minh họa bằng ví dụ</summary>
+                <div class="example-content">
+                    <h3>1. Mảng đầu vào</h3>
+                    <p>Giả sử chúng ta cần sắp xếp mảng số sau theo thứ tự tăng dần:</p>
+                    <div class="highlighted-box">
+                        <strong>Mảng ban đầu:</strong> [5, 3, 8, 4, 2]
+                    </div>
+
+                    <h3>2. Các bước thực hiện</h3>
+                    <p>Thuật toán sẽ lặp qua mảng và so sánh từng cặp phần tử liền kề. Nếu chúng không theo đúng thứ tự,
+                        thuật toán sẽ hoán đổi hai phần tử.</p>
+
+                    <table class="example-table">
+                        <thead>
+                            <tr>
+                                <th>Lần lặp</th>
+                                <th>Trạng thái mảng</th>
+                                <th>So sánh</th>
+                                <th>Hoán đổi?</th>
+                                <th>Mô tả</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>[5, 3, 8, 4, 2] → [3, 5, 8, 4, 2]</td>
+                                <td>5 > 3</td>
+                                <td>Có</td>
+                                <td>Hoán đổi 5 và 3.</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>[3, 5, 8, 4, 2] → [3, 5, 8, 4, 2]</td>
+                                <td>5 < 8</td>
+                                <td>Không</td>
+                                <td>Giữ nguyên.</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>[3, 5, 8, 4, 2] → [3, 5, 4, 8, 2]</td>
+                                <td>8 > 4</td>
+                                <td>Có</td>
+                                <td>Hoán đổi 8 và 4.</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>[3, 5, 4, 8, 2] → [3, 5, 4, 2, 8]</td>
+                                <td>8 > 2</td>
+                                <td>Có</td>
+                                <td>Hoán đổi 8 và 2.</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>[3, 5, 4, 2, 8] → [3, 4, 5, 2, 8]</td>
+                                <td>5 > 4</td>
+                                <td>Có</td>
+                                <td>Hoán đổi 5 và 4.</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>[3, 4, 5, 2, 8] → [3, 4, 2, 5, 8]</td>
+                                <td>5 > 2</td>
+                                <td>Có</td>
+                                <td>Hoán đổi 5 và 2.</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>[3, 4, 2, 5, 8] → [3, 2, 4, 5, 8]</td>
+                                <td>4 > 2</td>
+                                <td>Có</td>
+                                <td>Hoán đổi 4 và 2.</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>[3, 2, 4, 5, 8] → [2, 3, 4, 5, 8]</td>
+                                <td>3 > 2</td>
+                                <td>Có</td>
+                                <td>Hoán đổi 3 và 2.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>3. Kết quả cuối cùng</h3>
+                    <div class="highlighted-box">
+                        <strong>Mảng kết quả:</strong> [2, 3, 4, 5, 8]
+                    </div>
+
+                    <h3>4. Giải thích</h3>
+                    <p>Tại mỗi vòng lặp, thuật toán đảm bảo rằng phần tử lớn nhất trong đoạn chưa sắp xếp "nổi" lên vị
+                        trí đúng của nó. Số vòng lặp cần thiết giảm dần vì các phần tử cuối cùng đã ở đúng vị trí.</p>
+                </div>
+            </details>
+
+            <!-- Mô phỏng section -->
+            <details open>
+                <summary>III. Mô phỏng</summary>
+                <div class="main-content">
+                    <div class="two-column-section">
+                        <div class="array-container" id="arrayContainer"></div>
+                        <div class="code-section">
+                            <h3>Mã nguồn thuật toán:</h3>
+                            <div id="codeContainer">
+                                <div class="code-line">def bubble_sort(arr):</div>
+                                <div class="code-line"> n = len(arr)</div>
+                                <div class="code-line"> for i in range(n):</div>
+                                <div class="code-line"> for j in range(0, n - i - 1):</div>
+                                <div class="code-line"> # So sánh các phần tử kề nhau</div>
+                                <div class="code-line"> if arr[j] > arr[j + 1]:</div>
+                                <div class="code-line"> # Hoán đổi nếu không đúng thứ tự</div>
+                                <div class="code-line"> arr[j], arr[j + 1] = arr[j + 1], arr[j]</div>
+                                <div class="code-line"> return arr</div>
+                            </div>
+                        </div>
+                        <div id="statusDisplay" class="status-display ">Trạng thái sẽ hiển thị tại đây</div>
+                    </div>
+                    <div class="controls">
+                        <div class="control-group">
+                            <div class="button-group">
+                                <button id="startBtn" onclick="startSort()">Bắt đầu</button>
+                                <button id="nextStepBtn" onclick="manualStep()" disabled>Bước tiếp</button>
+                                <button id="pauseBtn" onclick="togglePause()" disabled>Tạm dừng</button>
+                                <button id="resetBtn" onclick="resetArray()">Đặt lại</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="input-group">
+                                <select id="mode" class="mode-select">
+                                    <option value="auto">Tự động</option>
+                                    <option value="manual">Thủ công</option>
+                                </select>
+                                <input type="text" id="arrayInput" placeholder="Nhập mảng (VD: 5,3,8,4,2)">
+                                <button onclick="generateRandomArray()">Tạo ngẫu nhiên</button>
+                                <select id="sortOrder">
+                                    <option value="asc">Tăng dần</option>
+                                    <option value="desc">Giảm dần</option>
+                                </select>
+                                <input type="range" id="speed" min="1" max="5" value="3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat-card">
+                            <h3>Thời gian</h3>
+                            <div id="timeStats">0.00s</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>So sánh</h3>
+                            <div id="compareStats">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Hoán đổi</h3>
+                            <div id="swapStats">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // Hàm lấy chữ cái đầu của tên người dùng
+                    function getInitials(name) {
+                        if (!name) return 'U';
+                        return name
+                            .split(' ')
+                            .map(word => word[0])
+                            .join('')
+                            .toUpperCase()
+                            .slice(0, 2);
+                    }
+
+                    // Cập nhật hiển thị avatar khi trang load
+                    window.addEventListener('DOMContentLoaded', async function () {
+                        const isAuthenticated = await checkAuthentication();
+
+                        if (isAuthenticated) {
+                            const username = localStorage.getItem('username');
+                            if (username) {
+                                const userNameDisplay = document.getElementById('userNameDisplay');
+                                const userAvatar = document.getElementById('userAvatar');
+
+                                if (userNameDisplay) userNameDisplay.textContent = username;
+                                if (userAvatar) userAvatar.textContent = getInitials(username);
+                            }
+                        }
+                    });
+                    // Add this at the start of your script section in BinarySearch.html
+                    const API_URL = 'https://873s8t-5000.csb.app';
+
+                    // Authentication check function
+                    async function checkAuthentication() {
+                        const token = localStorage.getItem('auth_token');
+
+                        if (!token) {
+                            console.log('No token found, redirecting to login');
+                            window.location.href = 'Login.html';
+                            return false;
+                        }
+
+                        try {
+                            const response = await fetch(`${API_URL}/check-auth`, {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            const data = await response.json();
+
+                            if (!response.ok || !data.authenticated) {
+                                throw new Error('Authentication failed');
+                            }
+
+                            return true;
+                        } catch (error) {
+                            console.error('Auth check failed:', error);
+                            clearAuthData();
+                            window.location.href = 'Login.html';
+                            return false;
+                        }
+                    }
+
+                    // Clear auth data function
+                    function clearAuthData() {
+                        localStorage.removeItem('auth_token');
+                        localStorage.removeItem('auth_user');
+                        localStorage.removeItem('username');
+                    }
+
+                    // Updated logout function
+                    function logout() {
+                        clearAuthData();
+                        // Use replace instead of href to prevent back button issues
+                        window.location.replace('Login.html');
+                    }
+
+                    window.addEventListener('DOMContentLoaded', async function () {
+                        const isAuthenticated = await checkAuthentication();
+
+                        if (isAuthenticated) {
+                            const username = localStorage.getItem('username');
+                            if (username) {
+                                document.getElementById('userNameDisplay').textContent = username;
+                                document.getElementById('userAvatar').textContent = getInitials(username);
+                            } else {
+                                document.getElementById('userNameDisplay').textContent = 'User';
+                                document.getElementById('userAvatar').textContent = 'U';
+                            }
+                        }
+                    });
+                    function parseArrayInput(input) {
+                        // Remove all whitespaces
+                        input = input.replace(/\s/g, '');
+
+                        // Check if input is empty
+                        if (!input) {
+                            throw new Error('Mảng không được để trống');
+                        }
+
+                        // Split by comma and filter out empty strings
+                        const parsedArray = input.split(',')
+                            .filter(x => x !== '')
+                            .map(x => {
+                                // Try to parse as integer
+                                const num = parseInt(x, 10);
+
+                                // Validate parsed number
+                                if (isNaN(num)) {
+                                    throw new Error(`Giá trị "${x}" không hợp lệ. Vui lòng chỉ nhập số.`);
+                                }
+
+                                return num;
+                            });
+
+                        // Check if array is empty after parsing
+                        if (parsedArray.length === 0) {
+                            throw new Error('Mảng không hợp lệ');
+                        }
+
+                        return parsedArray;
+                    }
+                    let array = [];
+                    let sortingInterval;
+                    let isPaused = false;
+                    let currentI = 0;  // Vị trí hiện tại để chèn phần tử
+                    let currentJ = 0;  // Vị trí tìm kiếm phần tử
+                    let extremeIndex = 0;  // Vị trí phần tử nhỏ/lớn nhất
+                    let startTime;
+                    let comparisons = 0;
+                    let swaps = 0;
+                    let isSortedIncreasing = true;
+                    let isManualMode = false;
+                    let originalArray = []; // New global variable to store the original array
+                    let isAnimating = false;
+                    let currentTimeout = null;
+
+                    function updateStatus(step, i, j, key) {
+                        const statusDisplay = document.getElementById('statusDisplay');
+                        statusDisplay.className = 'status-display'; // Xóa mọi lớp trước đó
+
+                        switch (step) {
+                            case 'init':
+                                statusDisplay.innerHTML = `Chọn phần tử <strong>${key}</strong> để chèn`;
+                                statusDisplay.classList.add('status-comparing'); // Thêm màu cho trạng thái so sánh
+                                break;
+                            case 'compare':
+                                statusDisplay.innerHTML = `So sánh <strong>${key}</strong> với <strong>${array[j]}</strong>`;
+                                statusDisplay.classList.add('status-comparing'); // Màu đỏ
+                                break;
+                            case 'shift':
+                                statusDisplay.innerHTML = `Di chuyển <strong>${array[j]}</strong> sang phải`;
+                                statusDisplay.classList.add('status-swapping'); // Màu vàng
+                                break;
+                            case 'insert':
+                                statusDisplay.innerHTML = `Chèn <strong>${key}</strong> vào vị trí ${j + 1}`;
+                                break;
+                            case 'complete':
+                                statusDisplay.innerHTML = 'Sắp xếp hoàn tất!';
+                                statusDisplay.classList.add('status-complete'); // Màu xanh dương
+                                break;
+                        }
+                    }
+
+
+                    function updateStatus(step, i, j) {
+                        const statusDisplay = document.getElementById('statusDisplay');
+
+                        if (!statusDisplay) return;
+
+                        switch (step) {
+                            case 'init':
+                                statusDisplay.innerHTML = `Bắt đầu vòng lặp mới với i = ${i}`;
+                                statusDisplay.className = 'status-display';
+                                break;
+                            case 'compare':
+                                statusDisplay.innerHTML = `So sánh phần tử thứ ${j} (${array[j]}) với phần tử thứ ${j + 1} (${array[j + 1]})`;
+                                statusDisplay.className = 'status-display status-comparing';
+                                break;
+                            case 'swap':
+                                statusDisplay.innerHTML = `Hoán đổi ${array[j + 1]} và ${array[j]} vì ${array[j]} ${isSortedIncreasing ? '>' : '<'} ${array[j + 1]}`;
+                                statusDisplay.className = 'status-display status-swapping';
+                                break;
+                            case 'no-swap':
+                                statusDisplay.innerHTML = `Không cần hoán đổi vì ${array[j]} ${isSortedIncreasing ? '<=' : '>='} ${array[j + 1]}`;
+                                statusDisplay.className = 'status-display';
+                                break;
+                            case 'complete':
+                                statusDisplay.innerHTML = 'Sắp xếp hoàn tất!';
+                                statusDisplay.className = 'status-display status-complete';
+                                break;
+                            default:
+                                statusDisplay.innerHTML = 'Trạng thái sẽ hiển thị tại đây';
+                                statusDisplay.className = 'status-display';
+                        }
+                    }
+
+                    function parseArrayInput(input) {
+                        // Remove all whitespaces
+                        input = input.replace(/\s/g, '');
+
+                        // Check if input is empty
+                        if (!input) {
+                            throw new Error('Mảng không được để trống');
+                        }
+
+                        // Split by comma and filter out empty strings
+                        const parsedArray = input.split(',')
+                            .filter(x => x !== '')
+                            .map(x => {
+                                // Try to parse as integer
+                                const num = parseInt(x, 10);
+
+                                // Validate parsed number
+                                if (isNaN(num)) {
+                                    throw new Error(`Giá trị "${x}" không hợp lệ. Vui lòng chỉ nhập số.`);
+                                }
+
+                                return num;
+                            });
+
+                        // Check if array is empty after parsing
+                        if (parsedArray.length === 0) {
+                            throw new Error('Mảng không hợp lệ');
+                        }
+
+                        return parsedArray;
+                    }
+
+                    function generateRandomArray() {
+                        const arrayLength = 8;
+                        array = Array.from({ length: arrayLength }, () => Math.floor(Math.random() * 100) + 1);
+
+                        // Store the original array for reset
+                        originalArray = [...array];
+
+                        console.log('Mảng ngẫu nhiên:', array);
+                        renderArray();
+                        resetStats();
+                    }
+
+                    function renderArray() {
+                        const container = document.getElementById('arrayContainer');
+                        if (!container) {
+                            console.error('Không tìm thấy container');
+                            return;
+                        }
+
+                        container.innerHTML = '';
+
+                        array.forEach(val => {
+                            const box = document.createElement('div');
+                            box.className = 'array-box';
+                            box.textContent = val;
+                            container.appendChild(box);
+                        });
+                    }
+
+                    // Cập nhật hàm startSort để reset các biến đếm khi bắt đầu sắp xếp mới
+                    function startSort() {
+                        try {
+                            const input = document.getElementById('arrayInput').value.trim();
+
+                            if (!input && (!array || array.length === 0)) {
+                                generateRandomArray();
+                            }
+                            else if (input) {
+                                array = parseArrayInput(input);
+                                originalArray = [...array];
+                            }
+
+                            currentI = 0;
+                            currentJ = 0;
+                            comparisons = 0;
+                            swaps = 0;
+                            isPaused = false;
+                            isAnimating = true;
+
+                            renderArray();
+                            resetStats();
+
+                            document.getElementById('startBtn').disabled = true;
+                            const mode = document.getElementById('mode').value;
+                            const sortOrderSelect = document.getElementById('sortOrder');
+
+                            isSortedIncreasing = sortOrderSelect.value === 'asc';
+                            isManualMode = mode === 'manual';
+
+                            if (isManualMode) {
+                                document.getElementById('nextStepBtn').disabled = false;
+                                document.getElementById('pauseBtn').disabled = true;
+                            } else {
+                                document.getElementById('pauseBtn').disabled = false;
+                                document.getElementById('nextStepBtn').disabled = true;
+                            }
+
+                            startTime = Date.now();
+
+                            if (!isManualMode) {
+                                sortingStep();
+                            }
+                        } catch (error) {
+                            alert(error.message);
+                            resetArray();
+                        }
+                    }
+                    function manualStep() {
+                        try {
+                            const input = document.getElementById('arrayInput').value.trim();
+
+                            // If input is empty, check if random array exists
+                            if (!input && (!array || array.length === 0)) {
+                                alert('Vui lòng nhập mảng');
+                                return;
+                            }
+
+                            // Parse and validate input if provided
+                            if (input) {
+                                array = parseArrayInput(input);
+                            }
+
+                            renderArray();
+
+                            // Ensure manual mode
+                            isManualMode = true;
+                            document.getElementById('mode').value = 'manual';
+
+                            // Initialize sorting state if not started
+                            if (currentI === 0 && currentJ === 0) {
+                                const sortOrderSelect = document.getElementById('sortOrder');
+                                isSortedIncreasing = sortOrderSelect.value === 'asc';
+                                startTime = Date.now();
+
+                                document.getElementById('startBtn').disabled = true;
+                                document.getElementById('pauseBtn').disabled = true;
+                            }
+
+                            document.getElementById('nextStepBtn').disabled = false;
+
+                            // Perform sorting step
+                            sortingStep(true);
+
+                            // Check and update end state
+                            if (currentI >= array.length - 1) {
+                                document.getElementById('nextStepBtn').disabled = true;
+                                const endTime = Date.now();
+                                const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                                document.getElementById('timeStats').textContent = `${timeTaken}s`;
+                                document.getElementById('startBtn').disabled = false;
+                            }
+                        } catch (error) {
+                            alert(error.message);
+                            resetArray();
+                        }
+                    }
+
+                    // Đánh dấu dòng code đang thực thi
+                    function highlightCode(step) {
+                        const codeLines = document.querySelectorAll('.code-line');
+                        codeLines.forEach(line => line.classList.remove('active'));
+
+                        switch (step) {
+                            case 'init':
+                                codeLines[2].classList.add('active');
+                                break;
+                            case 'inner-loop':
+                                codeLines[3].classList.add('active');
+                                break;
+                            case 'compare':
+                                codeLines[4].classList.add('active');
+                                codeLines[5].classList.add('active');
+                                break;
+                            case 'swap':
+                                codeLines[6].classList.add('active');
+                                codeLines[7].classList.add('active');
+                                break;
+                            case 'complete': // Thêm trường hợp hoàn thành
+                                codeLines[8].classList.add('active'); // Dòng "return arr"
+                                break;
+                        }
+                    }
+
+                    function sortingStep(isManual = false) {
+                        if (!isAnimating || (isPaused && !isManual)) {
+                            return;
+                        }
+
+                        if (currentI >= array.length - 1 || !array || array.length === 0) {
+                            completeSorting();
+                            return;
+                        }
+
+                        highlightCode('init');
+                        updateStatus('init', currentI, currentJ);
+                        const boxes = document.querySelectorAll('.array-box');
+                        boxes.forEach(box => box.classList.remove('comparing', 'swapping'));
+
+                        if (currentJ < array.length - currentI - 1) {
+                            highlightCode('inner-loop');
+                            const speedMap = {
+                                1: 2000,
+                                2: 1500,
+                                3: 1000,
+                                4: 700,
+                                5: 400
+                            };
+                            const speed = speedMap[document.getElementById('speed').value] || 1000;
+
+                            currentTimeout = setTimeout(() => {
+                                if (!isAnimating) return;
+
+                                highlightCode('compare');
+                                updateStatus('compare', currentI, currentJ);
+                                boxes[currentJ].classList.add('comparing');
+                                boxes[currentJ + 1].classList.add('comparing');
+
+                                comparisons++;
+                                document.getElementById('compareStats').textContent = comparisons;
+
+                                const compareCondition = isSortedIncreasing
+                                    ? array[currentJ] > array[currentJ + 1]
+                                    : array[currentJ] < array[currentJ + 1];
+
+                                currentTimeout = setTimeout(() => {
+                                    if (!isAnimating) return;
+
+                                    if (compareCondition) {
+                                        highlightCode('swap');
+                                        updateStatus('swap', currentI, currentJ);
+                                        const temp = array[currentJ];
+                                        array[currentJ] = array[currentJ + 1];
+                                        array[currentJ + 1] = temp;
+
+                                        swaps++;
+                                        document.getElementById('swapStats').textContent = swaps;
+
+                                        renderArray();
+
+                                        const updatedBoxes = document.querySelectorAll('.array-box');
+                                        updatedBoxes[currentJ].classList.add('swapping');
+                                        updatedBoxes[currentJ + 1].classList.add('swapping');
+                                    } else {
+                                        updateStatus('no-swap', currentI, currentJ);
+                                    }
+
+                                    currentJ++;
+                                    if (!isManual) {
+                                        currentTimeout = setTimeout(() => sortingStep(), speed / 2);
+                                    }
+                                }, speed * 0.7);
+                            }, speed * 0.3);
+                        } else {
+                            currentI++;
+                            currentJ = 0;
+                            if (!isManual) {
+                                currentTimeout = setTimeout(() => sortingStep(), 1000);
+                            }
+                        }
+                    }
+
+                    function togglePause() {
+                        isPaused = !isPaused;
+                        const pauseBtn = document.getElementById('pauseBtn');
+                        pauseBtn.textContent = isPaused ? 'Tiếp tục' : 'Tạm dừng';
+
+                        if (!isPaused) {
+                            sortingStep();
+                        }
+                    }
+
+                    function completeSorting() {
+                        isAnimating = false;
+                        if (currentTimeout) {
+                            clearTimeout(currentTimeout);
+                            currentTimeout = null;
+                        }
+
+                        highlightCode('complete');
+
+                        const boxes = document.querySelectorAll('.array-box');
+                        boxes.forEach(box => {
+                            box.classList.add('sorted');
+                        });
+
+                        const endTime = Date.now();
+                        const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                        document.getElementById('timeStats').textContent = `${timeTaken}s`;
+
+                        document.getElementById('startBtn').disabled = false;
+                        document.getElementById('pauseBtn').disabled = true;
+                        document.getElementById('nextStepBtn').disabled = true;
+                        updateStatus('complete');
+                    }
+
+                    function resetArray() {
+                        isAnimating = false;
+                        isPaused = false;
+                        if (currentTimeout) {
+                            clearTimeout(currentTimeout);
+                            currentTimeout = null;
+                        }
+
+                        // Nếu không có mảng gốc, tạo mảng ngẫu nhiên mới
+                        if (!originalArray || originalArray.length === 0) {
+                            generateRandomArray();
+                        } else {
+                            array = [...originalArray];
+                        }
+
+                        currentI = 0;
+                        currentJ = 0;
+                        comparisons = 0;
+                        swaps = 0;
+                        isManualMode = false;
+
+                        // Reset UI elements
+                        document.getElementById('arrayInput').value = '';
+                        document.getElementById('mode').value = 'auto';
+                        document.getElementById('sortOrder').value = 'asc';
+                        document.getElementById('speed').value = 3;
+                        document.getElementById('pauseBtn').textContent = 'Tạm dừng';
+
+                        // Reset status display
+                        const statusDisplay = document.getElementById('statusDisplay');
+                        if (statusDisplay) {
+                            statusDisplay.innerHTML = 'Trạng thái sẽ hiển thị tại đây';
+                            statusDisplay.className = 'status-display';
+                        }
+
+                        // Enable start button
+                        document.getElementById('startBtn').disabled = false;
+                        document.getElementById('pauseBtn').disabled = true;
+                        document.getElementById('nextStepBtn').disabled = true;
+
+                        resetStats();
+
+                        const codeLines = document.querySelectorAll('.code-line');
+                        codeLines.forEach(line => line.classList.remove('active'));
+
+                        renderArray();
+                    }
+
+                    function resetStats() {
+                        comparisons = 0;
+                        swaps = 0;
+                        document.getElementById('timeStats').textContent = '0.00s';
+                        document.getElementById('compareStats').textContent = '0';
+                        document.getElementById('swapStats').textContent = '0';
+                    }
+
+                    // Initialize with a random array on page load
+                    generateRandomArray();
+                </script>
+</body>
+
+</html>
