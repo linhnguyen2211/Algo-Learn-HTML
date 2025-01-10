@@ -1315,6 +1315,12 @@
             // Tính điểm tổng
             const totalScore = (correctAnswers / totalQuestions) * 100;
 
+            // Đảm bảo hoàn thành ít nhất 5 câu hỏi
+            if (totalQuestions < 5 || correctAnswers < 5) {
+                alert("Bạn cần trả lời đúng ít nhất 5 câu hỏi để qua cửa! 🚀");
+                return;
+            }
+
             // Tạo thông báo kết quả
             let message = `Kết quả level ${currentLevel}:\n\n`;
             message += `Tổng số câu hỏi: ${totalQuestions}\n`;
@@ -1399,39 +1405,38 @@
                     feedbackContainer.className = 'feedback-container feedback-correct';
                     feedbackIcon.textContent = '🎉';
                     feedbackText.innerHTML = `Chính xác! Bạn đã trả lời đúng. <br>${currentQuestionData.explanation || ''}`;
+                    checkButton.style.display = 'none';
+                    nextButton.style.display = 'block';
                 } else {
                     feedbackContainer.className = 'feedback-container feedback-incorrect';
                     feedbackIcon.textContent = '❌';
-                    feedbackText.innerHTML = `Sai rồi! Đáp án đúng là: <b>${currentQuestionData.answer}</b>. <br>${currentQuestionData.explanation || ''}`;
+                    feedbackText.innerHTML = `Sai rồi! Hãy thử lại!`;
+                    feedbackContainer.style.display = 'block';
+                    nextButton.style.display = 'none'; // Không cho qua câu tiếp theo
                 }
 
             } else if (currentQuestionData.type === 'fill-in-the-code') {
                 // Kiểm tra câu hỏi lập trình
                 const userCode = document.querySelector('.essay-answer').value.trim();
-                const correctCode = currentQuestionData.sampleCode.trim();
 
-                if (userCode === correctCode) {
+                if (userCode === currentQuestionData.sampleCode.trim()) {
                     levelScores.essay++;
                     feedbackContainer.className = 'feedback-container feedback-correct';
                     feedbackIcon.textContent = '🎉';
                     feedbackText.textContent = `Chính xác! Mã của bạn hoạt động đúng.`;
+                    checkButton.style.display = 'none';
+                    nextButton.style.display = 'block';
                 } else {
                     feedbackContainer.className = 'feedback-container feedback-incorrect';
                     feedbackIcon.textContent = '❌';
-                    feedbackText.innerHTML = `Sai rồi! Hãy kiểm tra lại mã của bạn. <br><b>Mẫu đúng:</b><pre>${correctCode}</pre>`;
+                    feedbackText.textContent = `Sai rồi! Hãy thử lại viết mã của bạn.`;
+                    feedbackContainer.style.display = 'block';
+                    nextButton.style.display = 'none'; // Không cho qua câu tiếp theo
                 }
             }
+
             feedbackContainer.style.display = 'block';
-            checkButton.style.display = 'none';
-
-            if (currentQuestion < questions[currentLevel].length) {
-                nextButton.style.display = 'block';
-            } else {
-                nextButton.textContent = 'Kết thúc level';
-                nextButton.style.display = 'block';
-            }
         }
-
 
         function nextQuestion() {
             const totalQuestions = questions[currentLevel].length;
