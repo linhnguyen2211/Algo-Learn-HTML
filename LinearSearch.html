@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <title>Mô phỏng thuật toán tìm kiếm tuần tự</title>
@@ -9,10 +8,8 @@
         .nav-links {
             display: flex;
             gap: 2rem;
-            justify-content: center;
-            /* Căn giữa các menu items */
-            margin: 0 auto;
-            /* Căn giữa nav-links */
+            justify-content: center; /* Căn giữa các menu items */
+            margin: 0 auto; /* Căn giữa nav-links */
         }
 
         .nav-links a {
@@ -24,10 +21,8 @@
             padding: 0.5rem 1rem;
             border-radius: 8px;
             position: relative;
-            text-align: center;
-            /* Căn giữa text trong mỗi link */
-            min-width: 120px;
-            /* Đặt chiều rộng tối thiểu cho mỗi menu item */
+            text-align: center; /* Căn giữa text trong mỗi link */
+            min-width: 120px; /* Đặt chiều rộng tối thiểu cho mỗi menu item */
         }
 
         /* Hiệu ứng hover */
@@ -36,7 +31,7 @@
             color: white;
             transform: translateY(-2px);
         }
-
+         
         .nav-links .dropdown {
             position: relative;
         }
@@ -86,7 +81,6 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-
         .centered-container {
             display: grid;
             place-items: center;
@@ -97,20 +91,19 @@
             .nav-links {
                 display: none;
             }
-
+            
             .hero h1 {
                 font-size: 2.5rem;
             }
-
+            
             .hero p {
                 font-size: 1.1rem;
             }
-
+            
             .path-steps {
                 grid-template-columns: 1fr;
             }
         }
-
         .nav-links .dropdown {
             position: relative;
         }
@@ -120,7 +113,7 @@
             position: absolute;
             background-color: white;
             min-width: 176px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             z-index: 1000;
             top: 100%;
             left: 0;
@@ -146,53 +139,33 @@
 
 
 
-        @keyframes highlight {
-            0% {
-                background-color: #ffd700;
-                transform: scale(1.05);
-            }
-
-            100% {
-                background-color: #e2e8f0;
-                transform: scale(1);
-            }
+       @keyframes highlight {
+            0% { background-color: #ffd700; transform: scale(1.05); }
+            100% { background-color: #e2e8f0; transform: scale(1); }
         }
-
-        .search-item {
+        .search-item { 
             transition: all 0.3s ease;
             position: relative;
         }
-
-        .current-search {
+        .current-search { 
             animation: highlight 0.5s;
-            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+            box-shadow: 0 0 10px rgba(255,107,107,0.5);
             z-index: 10;
         }
-
-        .found-item {
+        .found-item { 
             background-color: #48bb78 !important;
             color: white;
             animation: pulse 1s infinite;
         }
-
         .not-found-item {
             opacity: 0.6;
         }
 
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
-
         .array-element {
             display: inline-block;
             margin: 5px;
@@ -200,18 +173,15 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-
         .array-element.current {
             background-color: #ffd700;
             animation: pulse 1s infinite;
         }
-
         .array-element.found {
             background-color: #48bb78;
             color: white;
             animation: pulse 1s infinite;
         }
-
         .array-element.not-found {
             opacity: 0.6;
             background-color: red;
@@ -219,25 +189,21 @@
             color: white;
             animation: pulse 1s infinite;
         }
-
         .active-line {
             background-color: #e0f2fe;
             font-weight: bold;
         }
-
         .header {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-
+             text-align: center;
+             color: #2c3e50;
+             margin-bottom: 30px;
+         }
         .header h1 {
             margin: 0;
             padding: 0 2rem;
             font-size: 2rem;
             color: #16a085;
         }
-
         .modal {
             display: none;
             position: fixed;
@@ -248,7 +214,6 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
-
         .modal-content {
             background-color: white;
             margin: 15% auto;
@@ -258,7 +223,6 @@
             border-radius: 10px;
             position: relative;
         }
-
         .code-execution-container {
             position: fixed;
             bottom: 20px;
@@ -266,11 +230,10 @@
             width: 350px;
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             z-index: 100;
             transition: all 0.3s ease;
         }
-
         .code-execution-header {
             display: flex;
             justify-content: space-between;
@@ -280,17 +243,14 @@
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
-
         .code-execution-content {
             max-height: 300px;
             overflow-y: auto;
         }
-
         .minimize-btn {
             cursor: pointer;
             user-select: none;
         }
-
         .hidden-content {
             height: 40px;
             overflow: hidden;
@@ -301,7 +261,7 @@
             position: absolute;
             background-color: white;
             min-width: 176px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             z-index: 1000;
             top: 100%;
             left: 0;
@@ -323,7 +283,6 @@
         .dropdown-content a:hover {
             background-color: #16a085;
         }
-
         details {
             margin: 10px 0;
             padding: 15px;
@@ -349,19 +308,17 @@
             margin-bottom: 15px;
             border-bottom: 1px solid #dee2e6;
         }
-
         /* Main Layout */
         .container {
-            margin-top: 80px;
-            /* Add top margin to push content down */
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
+             margin-top: 80px; /* Add top margin to push content down */
+             max-width: 1400px;
+             margin-left: auto;
+             margin-right: auto;
+             background-color: white;
+             border-radius: 12px;
+             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+             padding: 30px;
+         }
 
         .main-grid {
             display: grid;
@@ -381,8 +338,7 @@
             gap: 30px;
         }
 
-        .array-container,
-        .step-display {
+        .array-container, .step-display {
             text-align: center;
         }
 
@@ -425,21 +381,20 @@
             color: white;
             transition: background-color 0.15s ease;
         }
-
         .btn-taomang {
-            background-color: #16a085;
+            background-color:  #16a085;
         }
 
         .btn-taomang:hover {
-            background-color: #1abc9c;
+            background-color:  #1abc9c;
         }
 
         .btn-batdau {
-            background-color: #16a085;
+            background-color:  #16a085;
         }
 
         .btn-batdau:hover {
-            background-color: #1abc9c;
+            background-color:  #1abc9c;
         }
 
         .btn-tamdung {
@@ -447,11 +402,10 @@
         }
 
         .btn-tamdung:hover {
-            background-color: #1abc9c;
+            background-color:  #1abc9c;
         }
-
-        .btn-buoctiep {
-            background-color: #16a085;
+        .btn-buoctiep{
+            background-color:  #16a085;
         }
 
         .btn-buoctiep:hover {
@@ -504,13 +458,11 @@
             padding: 1rem;
         }
 
-        .code-section,
-        .execution-section {
+        .code-section, .execution-section {
             margin-bottom: 1rem;
         }
 
-        .code-section h3,
-        .execution-section h3 {
+        .code-section h3, .execution-section h3 {
             font-size: 0.875rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
@@ -538,18 +490,15 @@
             border-radius: 0.25rem;
             font-size: 0.75rem;
         }
-
         .theory-content,
         .code-content,
         .visualization-content {
             padding: 15px;
         }
-
         /* Code Line Styles */
         .code-line {
             font-family: monospace;
         }
-
         .array-element {
             display: inline-block;
             margin: 5px;
@@ -591,7 +540,6 @@
             background-color: #c4b5fd;
             border-color: #7c3aed;
         }
-
         /* Hộp nổi bật cho mảng đầu vào và kết quả */
         .highlighted-box {
             background-color: #f0f8ff;
@@ -610,8 +558,7 @@
             text-align: left;
         }
 
-        .example-table th,
-        .example-table td {
+        .example-table th, .example-table td {
             border: 1px solid #ddd;
             padding: 10px;
         }
@@ -642,7 +589,6 @@
                 justify-content: center;
             }
         }
-
         :root {
             --primary: #2c3e50;
             --primary-light: #34495e;
@@ -656,11 +602,10 @@
             --danger-dark: #d32f2f;
             --success: #4CAF50;
             --success-dark: #45a049;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
             --radius-md: 8px;
         }
-
         body {
             background-color: var(--bg-light);
             line-height: 1.5;
@@ -936,7 +881,6 @@
         }
     </style>
 </head>
-
 <body class="bg-gray-100 pt-24">
     <nav class="navbar">
         <div class="nav-content">
@@ -954,15 +898,13 @@
         <div class="p-3">
             <h1 class="text-3xl font-bold text-center text-emerald-500">Thuật Toán Tìm Kiếm Tuần Tự (Linear Search)</h1>
         </div>
-
+        
         <details>
             <summary>I. Lý thuyết</summary>
             <div class="space-y-4">
                 <div>
                     <h3 class="text-xl font-semibold mb-2">1. Định nghĩa</h3>
-                    <p class="text-gray-700">Tìm kiếm tuần tự (Linear Search) là thuật toán tìm kiếm đơn giản nhất,
-                        duyệt qua từng phần tử trong mảng theo thứ tự từ đầu đến cuối cho đến khi tìm thấy phần tử cần
-                        tìm.</p>
+                    <p class="text-gray-700">Tìm kiếm tuần tự (Linear Search) là thuật toán tìm kiếm đơn giản nhất, duyệt qua từng phần tử trong mảng theo thứ tự từ đầu đến cuối cho đến khi tìm thấy phần tử cần tìm.</p>
                 </div>
 
                 <div>
@@ -985,66 +927,65 @@
             </div>
         </details>
         <details>
-            <summary>II. Minh họa bằng ví dụ</summary>
+            <summary>II. Minh họa bằng ví dụ</summary> 
             <div class="example-content">
                 <h3>1. Mảng đầu vào</h3>
-                <p>Giả sử chúng ta cần tìm phần tử <strong>4</strong> trong mảng sau:</p>
+                <p>Giả sử chúng ta cần tìm phần tử <strong>4</strong> trong mảng sau:</p> 
                 <div class="highlighted-box">
                     <strong>Mảng ban đầu:</strong> [5, 3, 8, 4, 2]
                 </div>
-                <h3>2. Các bước thực hiện</h3>
-                <p>Thuật toán sẽ duyệt tuần tự qua từng phần tử của mảng từ trái sang phải, so sánh từng phần tử với giá
-                    trị cần tìm.</p>
-                <table class="example-table">
-                    <thead>
-                        <tr>
-                            <th>Lần duyệt</th>
-                            <th>Phần tử kiểm tra</th>
-                            <th>Kết quả</th>
-                            <th>Mô tả</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>5</td>
-                            <td>Không khớp</td>
-                            <td>So sánh 5 với 4, không tìm thấy.</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>Không khớp</td>
-                            <td>So sánh 3 với 4, không tìm thấy.</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>8</td>
-                            <td>Không khớp</td>
-                            <td>So sánh 8 với 4, không tìm thấy.</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>4</td>
-                            <td>Khớp</td>
-                            <td>So sánh 4 với 4, tìm thấy giá trị cần tìm.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h3>2. Các bước thực hiện</h3> 
+                <p>Thuật toán sẽ duyệt tuần tự qua từng phần tử của mảng từ trái sang phải, so sánh từng phần tử với giá trị cần tìm.</p> 
+                <table class="example-table"> 
+                    <thead> 
+                        <tr> 
+                            <th>Lần duyệt</th> 
+                            <th>Phần tử kiểm tra</th> 
+                            <th>Kết quả</th> 
+                            <th>Mô tả</th> 
+                        </tr> 
+                    </thead> 
+                    <tbody> 
+                        <tr> 
+                            <td>1</td> 
+                            <td>5</td> 
+                            <td>Không khớp</td> 
+                            <td>So sánh 5 với 4, không tìm thấy.</td> 
+                        </tr> 
+                        <tr> 
+                            <td>2</td> 
+                            <td>3</td> 
+                            <td>Không khớp</td> 
+                            <td>So sánh 3 với 4, không tìm thấy.</td> 
+                        </tr> 
+                        <tr> 
+                            <td>3</td> 
+                            <td>8</td> 
+                            <td>Không khớp</td> 
+                            <td>So sánh 8 với 4, không tìm thấy.</td> 
+                        </tr> 
+                        <tr> 
+                            <td>4</td> 
+                            <td>4</td> 
+                            <td>Khớp</td> 
+                            <td>So sánh 4 với 4, tìm thấy giá trị cần tìm.</td> 
+                        </tr> 
+                    </tbody> 
+                </table> 
                 <h3>3. Kết quả cuối cùng</h3>
                 <div class="highlighted-box">
                     <strong>Kết quả:</strong> Phần tử 4 được tìm thấy tại vị trí thứ 4 (index = 3, nếu tính từ 0).
                 </div>
                 <h3>4. Giải thích</h3>
-                <p>Thuật toán **tìm kiếm tuần tự** hoạt động bằng cách:
-                    1. Duyệt qua từng phần tử của mảng từ đầu đến cuối.
-                    2. So sánh phần tử hiện tại với giá trị cần tìm.
-                    3. Nếu phần tử khớp, trả về vị trí.
+                <p>Thuật toán **tìm kiếm tuần tự** hoạt động bằng cách: 
+                    1. Duyệt qua từng phần tử của mảng từ đầu đến cuối. 
+                    2. So sánh phần tử hiện tại với giá trị cần tìm. 
+                    3. Nếu phần tử khớp, trả về vị trí. 
                     4. Nếu duyệt hết mảng mà không tìm thấy, kết luận giá trị không tồn tại trong mảng.
                 </p>
                 <p>Phương pháp này có độ phức tạp **O(n)** vì cần kiểm tra tối đa tất cả các phần tử của mảng.</p>
             </div>
-        </details>
+        </details>          
         <details open>
             <summary>III. Mô phỏng</summary>
             <div class="container">
@@ -1095,13 +1036,13 @@
                                 <h3>Mã nguồn Python</h3>
                                 <div id="codeContainer" class="code-container">
                                     <div class="code-line" data-line="1">def linear_search(arr, target):</div>
-                                    <div class="code-line" data-line="2"> for i in range(len(arr)):</div>
-                                    <div class="code-line" data-line="3"> if arr[i] == target:</div>
-                                    <div class="code-line" data-line="4"> return i</div>
-                                    <div class="code-line" data-line="5"> return -1</div>
+                                    <div class="code-line" data-line="2">    for i in range(len(arr)):</div>
+                                    <div class="code-line" data-line="3">        if arr[i] == target:</div>
+                                    <div class="code-line" data-line="4">            return i</div>
+                                    <div class="code-line" data-line="5">    return -1</div>
                                 </div>
                             </div>
-
+                            
                             <div class="execution-section">
                                 <h3>Thực thi</h3>
                                 <div id="executionLog" class="execution-log"></div>
@@ -1116,34 +1057,34 @@
 
     <script>
         // API configuration
-        const API_URL = 'https://9qs6kq-5000.csb.app';
+        const API_URL = 'http://127.0.0.1:5000';
 
         // Get initials from username
         function getInitials(username) {
             if (!username) return 'U';
-
+            
             // Split the username by spaces or special characters
             const words = username.split(/[\s_-]+/);
-
+            
             // Get first letter of each word and convert to uppercase
             const initials = words
                 .map(word => word.charAt(0).toUpperCase())
                 .join('')
                 .slice(0, 2); // Limit to 2 characters
-
+                
             return initials || 'U';
         }
 
         // Authentication check function
         async function checkAuthentication() {
             const token = localStorage.getItem('auth_token');
-
+            
             if (!token) {
                 console.log('No token found, redirecting to login');
                 window.location.href = 'Login.html';
                 return false;
             }
-
+            
             try {
                 const response = await fetch(`${API_URL}/check-auth`, {
                     method: 'GET',
@@ -1152,13 +1093,13 @@
                         'Content-Type': 'application/json'
                     }
                 });
-
+                
                 const data = await response.json();
-
+                
                 if (!response.ok || !data.authenticated) {
                     throw new Error('Authentication failed');
                 }
-
+                
                 return true;
             } catch (error) {
                 console.error('Auth check failed:', error);
@@ -1183,9 +1124,9 @@
         }
 
         // Initialize on page load
-        window.addEventListener('DOMContentLoaded', async function () {
+        window.addEventListener('DOMContentLoaded', async function() {
             const isAuthenticated = await checkAuthentication();
-
+            
             if (isAuthenticated) {
                 const username = localStorage.getItem('username');
                 if (username) {
@@ -1206,7 +1147,7 @@
         let isPaused = false;
 
         function generateNewArray() {
-            array = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
+            array = Array.from({length: 10}, () => Math.floor(Math.random() * 100));
             displayArray();
             resetExecution();
         }
@@ -1245,7 +1186,7 @@
             currentStep = -1;
             isPaused = false;
             document.getElementById('pauseResumeBtn').textContent = '⏸️ Tạm Dừng';
-
+            
             document.querySelectorAll('.code-line').forEach(line => {
                 line.classList.remove('active-line');
             });
@@ -1266,13 +1207,13 @@
 
             for (let i = 0; i < array.length; i++) {
                 addExecutionStep(2, `Kiểm tra phần tử tại vị trí ${i}: ${array[i]}`, { i, current: array[i], target });
-
+                
                 if (array[i] === target) {
                     addExecutionStep(3, `Tìm thấy ${target} tại vị trí ${i}`, { i, found: true });
                     addExecutionStep(4, `Trả về vị trí ${i}`, { i, found: true });
                     break;
                 }
-
+                
                 if (i === array.length - 1) {
                     addExecutionStep(5, `Không tìm thấy ${target} trong mảng`, { notFound: true });
                 }
@@ -1323,7 +1264,7 @@
             executionSteps.push({
                 lineNumber,
                 description,
-                variables: { ...variables }
+                variables: {...variables}
             });
         }
 
@@ -1341,18 +1282,11 @@
             executionLog.innerHTML = '';
             executionLog.appendChild(stepElement);
 
-            // Update variable display
-            const variableDisplay = document.getElementById('variableDisplay');
-            variableDisplay.innerHTML = Object.entries(step.variables)
-                .filter(([key]) => key !== 'found' && key !== 'notFound')
-                .map(([key, value]) => `${key} = ${JSON.stringify(value)}`)
-                .join('<br>');
-
             // Update array visualization
             const elements = document.getElementsByClassName('array-element');
             Array.from(elements).forEach((el, idx) => {
                 el.classList.remove('current', 'found', 'not-found', 'checked');
-
+                
                 if (typeof step.variables.i !== 'undefined') {
                     if (idx < step.variables.i) {
                         el.classList.add('checked');
@@ -1361,11 +1295,11 @@
                         el.classList.add('current');
                     }
                 }
-
+                
                 if (step.variables.found && idx === step.variables.i) {
                     el.classList.add('found');
                 }
-
+                
                 if (step.variables.notFound) {
                     el.classList.add('not-found');
                 }
@@ -1374,19 +1308,20 @@
             // Update step display
             document.getElementById('stepDisplay').textContent = step.description;
         }
+    
 
         // Initialize with a random array
         generateNewArray();
 
         // User authentication related functions
-        window.addEventListener('load', function () {
+        window.addEventListener('load', function() {
             const username = localStorage.getItem('username');
             if (!username) {
                 alert('Bạn chưa đăng nhập. Đang chuyển về trang đăng nhập...');
                 window.location.href = 'login.html';
                 return;
             }
-
+            
             // Update UI to show logged in user
             const userDisplay = document.createElement('div');
             userDisplay.className = 'absolute top-4 right-4 text-gray-700';
@@ -1405,7 +1340,7 @@
         }
 
         // Add keyboard shortcuts
-        document.addEventListener('keydown', function (event) {
+        document.addEventListener('keydown', function(event) {
             if (event.code === 'Space') {
                 // Space bar to toggle pause/resume
                 togglePause();
@@ -1418,7 +1353,7 @@
         });
 
         // Add responsive design handlers
-        window.addEventListener('resize', function () {
+        window.addEventListener('resize', function() {
             const container = document.querySelector('.container');
             if (window.innerWidth < 768) {
                 container.classList.add('mobile-view');
@@ -1429,5 +1364,4 @@
 
     </script>
 </body>
-
 </html>

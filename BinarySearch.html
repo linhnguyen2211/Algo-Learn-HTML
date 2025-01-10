@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <title>Mô phỏng thuật toán tìm kiếm tuần tự</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+    <style> 
         :root {
             --primary: #2c3e50;
             --primary-light: #34495e;
@@ -19,8 +18,8 @@
             --danger-dark: #d32f2f;
             --success: #4CAF50;
             --success-dark: #45a049;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
             --radius-md: 8px;
         }
 
@@ -208,39 +207,27 @@
             }
         }
 
-        @keyframes highlight {
-            0% {
-                background-color: #ffd700;
-                transform: scale(1.05);
-            }
-
-            100% {
-                background-color: #e2e8f0;
-                transform: scale(1);
-            }
+       @keyframes highlight {
+            0% { background-color: #ffd700; transform: scale(1.05); }
+            100% { background-color: #e2e8f0; transform: scale(1); }
         }
-
-        .search-item {
+        .search-item { 
             transition: all 0.3s ease;
             position: relative;
         }
-
-        .current-search {
+        .current-search { 
             animation: highlight 0.5s;
-            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+            box-shadow: 0 0 10px rgba(255,107,107,0.5);
             z-index: 10;
         }
-
-        .found-item {
+        .found-item { 
             background-color: #48bb78 !important;
             color: white;
             animation: pulse 1s infinite;
         }
-
         .not-found-item {
             opacity: 0.6;
         }
-
         :root {
             --primary: #2c3e50;
             --primary-light: #34495e;
@@ -252,21 +239,11 @@
             --bg-light: #f5f6fa;
             --bg-dark: #2c3e50;
         }
-
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
-
         .array-element {
             display: inline-block;
             margin: 5px;
@@ -274,18 +251,15 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-
         .array-element.current {
             background-color: #ffd700;
             animation: pulse 1s infinite;
         }
-
         .array-element.found {
             background-color: #48bb78;
             color: white;
             animation: pulse 1s infinite;
         }
-
         .array-element.not-found {
             opacity: 0.6;
             background-color: red;
@@ -293,25 +267,21 @@
             color: white;
             animation: pulse 1s infinite;
         }
-
         .active-line {
             background-color: #e0f2fe;
             font-weight: bold;
         }
-
         .header {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-
+             text-align: center;
+             color: #2c3e50;
+             margin-bottom: 30px;
+         }
         .header h1 {
             margin: 0;
             padding: 0 2rem;
             font-size: 2rem;
             color: #16a085;
         }
-
         .modal {
             display: none;
             position: fixed;
@@ -322,7 +292,6 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
-
         .modal-content {
             background-color: white;
             margin: 15% auto;
@@ -332,7 +301,6 @@
             border-radius: 10px;
             position: relative;
         }
-
         .code-execution-container {
             position: fixed;
             bottom: 20px;
@@ -340,11 +308,10 @@
             width: 350px;
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             z-index: 100;
             transition: all 0.3s ease;
         }
-
         .code-execution-header {
             display: flex;
             justify-content: space-between;
@@ -354,29 +321,23 @@
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
-
         .code-execution-content {
             max-height: 300px;
             overflow-y: auto;
         }
-
         .minimize-btn {
             cursor: pointer;
             user-select: none;
         }
-
         .hidden-content {
             height: 40px;
             overflow: hidden;
         }
-
         .nav-links {
             display: flex;
             gap: 2rem;
-            justify-content: center;
-            /* Căn giữa các menu items */
-            margin: 0 auto;
-            /* Căn giữa nav-links */
+            justify-content: center; /* Căn giữa các menu items */
+            margin: 0 auto; /* Căn giữa nav-links */
         }
 
         .nav-links a {
@@ -388,10 +349,8 @@
             padding: 0.5rem 1rem;
             border-radius: 8px;
             position: relative;
-            text-align: center;
-            /* Căn giữa text trong mỗi link */
-            min-width: 120px;
-            /* Đặt chiều rộng tối thiểu cho mỗi menu item */
+            text-align: center; /* Căn giữa text trong mỗi link */
+            min-width: 120px; /* Đặt chiều rộng tối thiểu cho mỗi menu item */
         }
 
         /* Hiệu ứng hover */
@@ -400,7 +359,7 @@
             color: white;
             transform: translateY(-2px);
         }
-
+         
         .nav-links .dropdown {
             position: relative;
         }
@@ -410,13 +369,12 @@
             background: #1abc9c;
             transform: translateY(1px);
         }
-
         .dropdown-content {
             display: none;
             position: absolute;
             background-color: white;
             min-width: 176px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             z-index: 1000;
             top: 100%;
             left: 0;
@@ -438,7 +396,6 @@
         .dropdown-content a:hover {
             background-color: #16a085;
         }
-
         details {
             margin: 10px 0;
             padding: 15px;
@@ -464,21 +421,18 @@
             margin-bottom: 15px;
             border-bottom: 1px solid #dee2e6;
         }
-
         /* Main Layout */
         .container {
-            margin-top: 80px;
-            /* Add top margin to push content down */
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
-
-        .container {
+             margin-top: 80px; /* Add top margin to push content down */
+             max-width: 1400px;
+             margin-left: auto;
+             margin-right: auto;
+             background-color: white;
+             border-radius: 12px;
+             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+             padding: 30px;
+         }
+         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 6rem 2rem 2rem;
@@ -502,8 +456,7 @@
             gap: 30px;
         }
 
-        .array-container,
-        .step-display {
+        .array-container, .step-display {
             text-align: center;
         }
 
@@ -546,21 +499,20 @@
             color: white;
             transition: background-color 0.15s ease;
         }
-
         .btn-taomang {
-            background-color: #16a085;
+            background-color:  #16a085;
         }
 
         .btn-taomang:hover {
-            background-color: #1abc9c;
+            background-color:  #1abc9c;
         }
 
         .btn-batdau {
-            background-color: #16a085;
+            background-color:  #16a085;
         }
 
         .btn-batdau:hover {
-            background-color: #1abc9c;
+            background-color:  #1abc9c;
         }
 
         .btn-tamdung {
@@ -568,11 +520,10 @@
         }
 
         .btn-tamdung:hover {
-            background-color: #1abc9c;
+            background-color:  #1abc9c;
         }
-
-        .btn-buoctiep {
-            background-color: #16a085;
+        .btn-buoctiep{
+            background-color:  #16a085;
         }
 
         .btn-buoctiep:hover {
@@ -625,13 +576,11 @@
             padding: 1rem;
         }
 
-        .code-section,
-        .execution-section {
+        .code-section, .execution-section {
             margin-bottom: 1rem;
         }
 
-        .code-section h3,
-        .execution-section h3 {
+        .code-section h3, .execution-section h3 {
             font-size: 0.875rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
@@ -659,18 +608,15 @@
             border-radius: 0.25rem;
             font-size: 0.75rem;
         }
-
         .theory-content,
         .code-content,
         .visualization-content {
             padding: 15px;
         }
-
         /* Code Line Styles */
         .code-line {
             font-family: monospace;
         }
-
         .array-element {
             display: inline-block;
             margin: 5px;
@@ -712,7 +658,6 @@
             background-color: #c4b5fd;
             border-color: #7c3aed;
         }
-
         /* Hộp nổi bật cho mảng đầu vào và kết quả */
         .highlighted-box {
             background-color: #f0f8ff;
@@ -731,8 +676,7 @@
             text-align: left;
         }
 
-        .example-table th,
-        .example-table td {
+        .example-table th, .example-table td {
             border: 1px solid #ddd;
             padding: 10px;
         }
@@ -752,7 +696,6 @@
         }
     </style>
 </head>
-
 <body class="bg-gray-100 pt-24">
     <nav class="navbar">
         <div class="nav-content">
@@ -768,17 +711,14 @@
     </nav>
     <div class="container">
         <div class="p-3">
-            <h1 class="text-3xl font-bold text-center text-emerald-500">Thuật Toán Tìm Kiếm Nhị Phân (Binary Search)
-            </h1>
+            <h1 class="text-3xl font-bold text-center text-emerald-500">Thuật Toán Tìm Kiếm Nhị Phân (Binary Search)</h1>
         </div>
         <details>
             <summary>I. Lý thuyết</summary>
             <div class="space-y-4">
                 <div>
                     <h3 class="text-xl font-semibold mb-2">1. Định nghĩa</h3>
-                    <p class="text-gray-700">Tìm kiếm nhị phân (Binary Search) là một thuật toán tìm kiếm hiệu quả áp
-                        dụng trên mảng đã được sắp xếp. Thuật toán hoạt động bằng cách chia đôi mảng để giảm không gian
-                        tìm kiếm.</p>
+                    <p class="text-gray-700">Tìm kiếm nhị phân (Binary Search) là một thuật toán tìm kiếm hiệu quả áp dụng trên mảng đã được sắp xếp. Thuật toán hoạt động bằng cách chia đôi mảng để giảm không gian tìm kiếm.</p>
                 </div>
 
                 <div>
@@ -827,656 +767,645 @@
         </details>
 
         <!-- Mã nguồn section -->
-        <details>
-            <summary>II. Minh họa bằng ví dụ</summary>
-            <div class="example-content">
-                <h3>1. Mảng đầu vào</h3>
-                <p>Giả sử chúng ta cần tìm phần tử
-                    <strong>4</strong> trong mảng đã **sắp xếp tăng dần** sau:
-                </p>
-                <div class="highlighted-box">
-                    <strong>Mảng ban đầu:</strong> [2, 3, 4, 5, 8]
-                </div>
-                <h3>2. Các bước thực hiện</h3>
-                <p>Thuật toán sẽ sử dụng phương pháp chia đôi mảng. Các bước thực hiện như sau:</p>
-                <table class="example-table">
-                    <thead>
-                        <tr>
-                            <th>Lần duyệt</th>
-                            <th>Chỉ số giữa</th>
-                            <th>Phần tử kiểm tra</th>
-                            <th>Kết quả</th>
-                            <th>Mô tả</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>4</td>
-                            <td>Khớp</td>
-                            <td>Phần tử giữa là 4, so sánh với 4, tìm thấy giá trị cần tìm.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <h3>3. Kết quả cuối cùng</h3>
-                <div class="highlighted-box">
-                    <strong>Kết quả:</strong> Phần tử 4 được tìm thấy tại vị trí thứ 3 (index = 2, nếu tính từ 0).
-                </div>
-                <h3>4. Giải thích</h3>
-                <p>Thuật toán tìm kiếm nhị phân chia mảng đã sắp xếp thành hai nửa, so sánh giá trị cần tìm với phần tử
-                    giữa. Nếu khớp, trả về vị trí, nếu không, tiếp tục tìm trong nửa trái hoặc phải. Quá trình lặp lại
-                    cho đến khi tìm thấy giá trị hoặc mảng trống. Thuật toán có độ phức tạp O(log n).</p>
-            </div>
+        <details> 
+            <summary>II. Minh họa bằng ví dụ</summary> 
+            <div class="example-content"> 
+                <h3>1. Mảng đầu vào</h3> 
+                <p>Giả sử chúng ta cần tìm phần tử 
+                    <strong>4</strong> trong mảng đã **sắp xếp tăng dần** sau:</p> 
+                    <div class="highlighted-box"> 
+                        <strong>Mảng ban đầu:</strong> [2, 3, 4, 5, 8] 
+                    </div> 
+                    <h3>2. Các bước thực hiện</h3>
+                    <p>Thuật toán sẽ sử dụng phương pháp chia đôi mảng. Các bước thực hiện như sau:</p> 
+                    <table class="example-table"> 
+                        <thead> 
+                            <tr> 
+                                <th>Lần duyệt</th> 
+                                <th>Chỉ số giữa</th> 
+                                <th>Phần tử kiểm tra</th> 
+                                <th>Kết quả</th> 
+                                <th>Mô tả</th> 
+                            </tr> 
+                        </thead> 
+                        <tbody> 
+                            <tr> 
+                                <td>1</td> 
+                                <td>2</td> 
+                                <td>4</td> 
+                                <td>Khớp</td> 
+                                <td>Phần tử giữa là 4, so sánh với 4, tìm thấy giá trị cần tìm.</td> 
+                            </tr> 
+                        </tbody> 
+                    </table> 
+                    <h3>3. Kết quả cuối cùng</h3> 
+                    <div class="highlighted-box"> 
+                        <strong>Kết quả:</strong> Phần tử 4 được tìm thấy tại vị trí thứ 3 (index = 2, nếu tính từ 0). 
+                    </div> 
+                    <h3>4. Giải thích</h3> 
+                    <p>Thuật toán tìm kiếm nhị phân chia mảng đã sắp xếp thành hai nửa, so sánh giá trị cần tìm với phần tử giữa. Nếu khớp, trả về vị trí, nếu không, tiếp tục tìm trong nửa trái hoặc phải. Quá trình lặp lại cho đến khi tìm thấy giá trị hoặc mảng trống. Thuật toán có độ phức tạp O(log n).</p> 
+                </div> 
         </details>
 
         <details open>
             <summary>III. Mô phỏng</summary>
-            <!-- Left Column -->
-            <div class="container">
-                <div class="main-grid">
-                    <!-- Left Column -->
-                    <div class="left-column">
-                        <div class="array-container" id="arrayContainer"></div>
-                        <div class="step-display" id="stepDisplay"></div>
-                        <div class="input-grid">
-                            <div class="input-group">
-                                <label>Nhập Mảng Số:</label>
-                                <input type="text" id="arrayInput" placeholder="Ví dụ: 5, 12, 8, 19, 3, 26">
-                            </div>
-                            <div class="input-group">
-                                <label>Phần Tử Cần Tìm:</label>
-                                <input type="number" id="targetInput">
-                            </div>
+        <!-- Left Column -->
+        <div class="container">
+            <div class="main-grid">
+                <!-- Left Column -->
+                <div class="left-column">
+                    <div class="array-container" id="arrayContainer"></div>
+                    <div class="step-display" id="stepDisplay"></div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Nhập Mảng Số:</label>
+                            <input type="text" id="arrayInput" placeholder="Ví dụ: 5, 12, 8, 19, 3, 26">
                         </div>
-
-                        <div class="button-container">
-                            <button onclick="generateCustomArray()" class="btn btn-taomang">
-                                🎲 Tạo Mảng</button>
-                            <button onclick="startSearch()" class="btn btn-batdau">
-                                🔎 Bắt Đầu </button>
-                            <button onclick="togglePause()" id="pauseResumeBtn" class="btn btn-tamdung">
-                                ⏸️ Tạm Dừng
-                            </button>
-                            <button onclick="nextStep()" id="nextStepBtn" class="btn btn-buoctiep">
-                                ⏭️ Bước Tiếp
-                            </button>
-                            <div class="speed-control">
-                                <label>Tốc độ:</label>
-                                <select id="speedSelect" onchange="updateSpeed(this.value)">
-                                    <option value="0.5">0.5x</option>
-                                    <option value="1" selected>1x</option>
-                                    <option value="1.5">1.5x</option>
-                                    <option value="2">2x</option>
-                                </select>
-                            </div>
+                        <div class="input-group">
+                            <label>Phần Tử Cần Tìm:</label>
+                            <input type="number" id="targetInput">
                         </div>
                     </div>
-
-                    <!-- Right Column -->
-                    <div class="code-panel">
-                        <div class="panel-header">
-                            <span>Mã Nguồn & Thực Thi</span>
+        
+                    <div class="button-container">
+                        <button onclick="generateCustomArray()" class="btn btn-taomang">
+                            🎲 Tạo Mảng</button>
+                        <button onclick="startSearch()" class="btn btn-batdau">
+                            🔎 Bắt Đầu </button>
+                        <button onclick="togglePause()" id="pauseResumeBtn" class="btn btn-tamdung">
+                            ⏸️ Tạm Dừng
+                        </button>
+                        <button onclick="nextStep()" id="nextStepBtn" class="btn btn-buoctiep">
+                            ⏭️ Bước Tiếp
+                        </button>
+                        <div class="speed-control">
+                            <label>Tốc độ:</label>
+                            <select id="speedSelect" onchange="updateSpeed(this.value)">
+                                <option value="0.5">0.5x</option>
+                                <option value="1" selected>1x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2x</option>
+                            </select>
                         </div>
-                        <div class="panel-content">
-                            <div class="code-section">
-                                <h3>Mã nguồn Python</h3>
-                                <div id="codeContainer" class="code-container">
-                                    <div class="code-line" data-line="1">def binary_search(arr, target):</div>
-                                    <div class="code-line" data-line="2"> left = 0</div>
-                                    <div class="code-line" data-line="3"> right = len(arr) - 1</div>
-                                    <div class="code-line" data-line="4"> </div>
-                                    <div class="code-line" data-line="5"> while left <= right:</div>
-                                            <div class="code-line" data-line="6"> mid = (left + right) // 2</div>
-                                            <div class="code-line" data-line="7"> if arr[mid] == target:</div>
-                                            <div class="code-line" data-line="8"> return mid</div>
-                                            <div class="code-line" data-line="9"> elif arr[mid] < target:</div>
-                                                    <div class="code-line" data-line="10"> left = mid + 1</div>
-                                                    <div class="code-line" data-line="11"> else:</div>
-                                                    <div class="code-line" data-line="12"> right = mid - 1</div>
-                                                    <div class="code-line" data-line="13"> </div>
-                                                    <div class="code-line" data-line="14"> return -1</div>
-                                            </div>
+                    </div>
+                </div>
+                
+                        <!-- Right Column -->
+                        <div class="code-panel">
+                            <div class="panel-header">
+                                <span>Mã Nguồn & Thực Thi</span>
+                            </div>
+                            <div class="panel-content">
+                                <div class="code-section">
+                                    <h3>Mã nguồn Python</h3>
+                                    <div id="codeContainer" class="code-container">
+                                        <div class="code-line" data-line="1">def binary_search(arr, target):</div>
+                                        <div class="code-line" data-line="2">    left = 0</div>
+                                        <div class="code-line" data-line="3">    right = len(arr) - 1</div>
+                                        <div class="code-line" data-line="4">    </div>
+                                        <div class="code-line" data-line="5">    while left <= right:</div>
+                                        <div class="code-line" data-line="6">        mid = (left + right) // 2</div>
+                                        <div class="code-line" data-line="7">        if arr[mid] == target:</div>
+                                        <div class="code-line" data-line="8">            return mid</div>
+                                        <div class="code-line" data-line="9">        elif arr[mid] < target:</div>
+                                        <div class="code-line" data-line="10">            left = mid + 1</div>
+                                        <div class="code-line" data-line="11">        else:</div>
+                                        <div class="code-line" data-line="12">            right = mid - 1</div>
+                                        <div class="code-line" data-line="13">    </div>
+                                        <div class="code-line" data-line="14">    return -1</div>
                                     </div>
-
-                                    <div class="execution-section">
-                                        <h3>Thực thi</h3>
-                                        <div id="executionLog" class="execution-log"></div>
-                                        <div id="variableDisplay"></div>
-                                    </div>
+                                </div>
+                                
+                                <div class="execution-section">
+                                    <h3>Thực thi</h3>
+                                    <div id="executionLog" class="execution-log"></div>
+                                    <div id="variableDisplay"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-        </details>
+                </div>
+    </details>
 
-        <script>
-            // API configuration
-            const API_URL = 'https://9qs6kq-5000.csb.app';
+    <script>
+         // API configuration
+         const API_URL = 'http://127.0.0.1:5000';
 
-            // Get initials from username
-            function getInitials(username) {
-                if (!username) return 'U';
+        // Get initials from username
+        function getInitials(username) {
+            if (!username) return 'U';
+            
+            // Split the username by spaces or special characters
+            const words = username.split(/[\s_-]+/);
+            
+            // Get first letter of each word and convert to uppercase
+            const initials = words
+                .map(word => word.charAt(0).toUpperCase())
+                .join('')
+                .slice(0, 2); // Limit to 2 characters
+                
+            return initials || 'U';
+        }
 
-                // Split the username by spaces or special characters
-                const words = username.split(/[\s_-]+/);
-
-                // Get first letter of each word and convert to uppercase
-                const initials = words
-                    .map(word => word.charAt(0).toUpperCase())
-                    .join('')
-                    .slice(0, 2); // Limit to 2 characters
-
-                return initials || 'U';
+        // Authentication check function
+        async function checkAuthentication() {
+            const token = localStorage.getItem('auth_token');
+            
+            if (!token) {
+                console.log('No token found, redirecting to login');
+                window.location.href = 'Login.html';
+                return false;
             }
-
-            // Authentication check function
-            async function checkAuthentication() {
-                const token = localStorage.getItem('auth_token');
-
-                if (!token) {
-                    console.log('No token found, redirecting to login');
-                    window.location.href = 'Login.html';
-                    return false;
-                }
-
-                try {
-                    const response = await fetch(`${API_URL}/check-auth`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok || !data.authenticated) {
-                        throw new Error('Authentication failed');
+            
+            try {
+                const response = await fetch(`${API_URL}/check-auth`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
-
-                    return true;
-                } catch (error) {
-                    console.error('Auth check failed:', error);
-                    clearAuthData();
-                    window.location.href = 'Login.html';
-                    return false;
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok || !data.authenticated) {
+                    throw new Error('Authentication failed');
                 }
-            }
-
-            // Clear auth data function
-            function clearAuthData() {
-                localStorage.removeItem('auth_token');
-                localStorage.removeItem('auth_user');
-                localStorage.removeItem('username');
-            }
-
-            // Updated logout function
-            function logout() {
+                
+                return true;
+            } catch (error) {
+                console.error('Auth check failed:', error);
                 clearAuthData();
-                // Use replace instead of href to prevent back button issues
-                window.location.replace('Login.html');
+                window.location.href = 'Login.html';
+                return false;
             }
+        }
 
-            // Initialize on page load
-            window.addEventListener('DOMContentLoaded', async function () {
-                const isAuthenticated = await checkAuthentication();
+        // Clear auth data function
+        function clearAuthData() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+            localStorage.removeItem('username');
+        }
 
-                if (isAuthenticated) {
-                    const username = localStorage.getItem('username');
-                    if (username) {
-                        document.getElementById('userNameDisplay').textContent = username;
-                        document.getElementById('userAvatar').textContent = getInitials(username);
-                    } else {
-                        document.getElementById('userNameDisplay').textContent = 'User';
-                        document.getElementById('userAvatar').textContent = 'U';
-                    }
-                }
-            });
-            let isPaused = false;
-            let pauseInterval = null;
+        // Updated logout function
+        function logout() {
+            clearAuthData();
+            // Use replace instead of href to prevent back button issues
+            window.location.replace('Login.html');
+        }
 
-            function togglePause() {
-                const pauseBtn = document.getElementById('pauseResumeBtn');
-
-                // If no search is in progress, do nothing
-                if (!searchInterval) return;
-
-                if (!isPaused) {
-                    // Pause the animation
-                    clearInterval(searchInterval);
-                    isPaused = true;
-                    pauseBtn.textContent = '▶️ Tiếp Tục';
-                    pauseBtn.classList.remove;
-                    pauseBtn.classList.add;
-                    document.getElementById('stepDisplay').textContent += ' (Đã Tạm Dừng)';
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', async function() {
+            const isAuthenticated = await checkAuthentication();
+            
+            if (isAuthenticated) {
+                const username = localStorage.getItem('username');
+                if (username) {
+                    document.getElementById('userNameDisplay').textContent = username;
+                    document.getElementById('userAvatar').textContent = getInitials(username);
                 } else {
-                    // Resume the animation
-                    isPaused = false;
-                    pauseBtn.textContent = '⏸️ Tạm Dừng';
-                    pauseBtn.classList.remove;
-                    pauseBtn.classList.add;
-
-                    // Restart the interval
-                    searchInterval = setInterval(() => {
-                        if (currentStep < executionSteps.length) {
-                            displayExecutionStep(executionSteps[currentStep]);
-                            currentStep++;
-                        } else {
-                            clearInterval(searchInterval);
-                            // Reset pause button
-                            pauseBtn.textContent = '⏸️ Tạm Dừng';
-                            pauseBtn.classList.remove;
-                            pauseBtn.classList.add;
-                        }
-                    }, animationSpeed);
+                    document.getElementById('userNameDisplay').textContent = 'User';
+                    document.getElementById('userAvatar').textContent = 'U';
                 }
             }
-            // Progress Tracking Functionality
-            class ProgressTracker {
-                constructor() {
-                    this.initializeProgress();
-                }
+        });
+        let isPaused = false;
+        let pauseInterval = null;
 
-                initializeProgress() {
-                    if (!localStorage.getItem('binarySearchProgress')) {
-                        localStorage.setItem('binarySearchProgress', JSON.stringify({
-                            theoryRead: false,
-                            arrayGenerated: false,
-                            searchPerformed: false,
-                            totalSearches: 0,
-                            successfulSearches: 0
-                        }));
-                    }
-                }
+        function togglePause() {
+            const pauseBtn = document.getElementById('pauseResumeBtn');
+            
+            // If no search is in progress, do nothing
+            if (!searchInterval) return;
 
-                updateProgress(key, value) {
-                    const progress = this.getProgress();
-                    progress[key] = value;
-                    localStorage.setItem('binarySearchProgress', JSON.stringify(progress));
-                    this.updateProgressDisplay();
-                }
-
-                incrementSearchCount(success) {
-                    const progress = this.getProgress();
-                    progress.totalSearches++;
-                    if (success) {
-                        progress.successfulSearches++;
-                    }
-                    localStorage.setItem('binarySearchProgress', JSON.stringify(progress));
-                    this.updateProgressDisplay();
-                }
-
-                getProgress() {
-                    return JSON.parse(localStorage.getItem('binarySearchProgress')) || {};
-                }
-
-                resetProgress() {
-                    localStorage.removeItem('binarySearchProgress');
-                    this.initializeProgress();
-                    this.updateProgressDisplay();
-                    closeProgressModal();
-                }
-            }
-
-            // Global progress tracker
-            const progressTracker = new ProgressTracker();
-
-            // Update navigation to include progress tracking
-            function addProgressTrackingToNavbar() {
-                const navLinks = document.querySelector('.nav-links');
-                if (navLinks) {
-                    const progressLink = document.createElement('a');
-                    progressLink.href = '#';
-                    progressLink.onclick = openProgressModal;
-                    progressLink.classList.add('cursor-pointer');
-                    navLinks.appendChild(progressLink);
-                }
-            }
-
-            // Modal functions
-            function openProgressModal() {
-                document.getElementById('progressModal').style.display = 'block';
-                progressTracker.updateProgressDisplay();
-            }
-
-            function closeProgressModal() {
-                document.getElementById('progressModal').style.display = 'none';
-            }
-
-            // Close modal when clicking outside
-            window.onclick = function (event) {
-                const modal = document.getElementById('progressModal');
-                if (event.target == modal) {
-                    closeProgressModal();
-                }
-            }
-
-            function resetProgress() {
-                progressTracker.resetProgress();
-            }
-
-            // Modify existing functions to track progress
-            const originalGenerateCustomArray = generateCustomArray;
-            generateCustomArray = function () {
-                originalGenerateCustomArray();
-                progressTracker.updateProgress('arrayGenerated', true);
-            }
-
-            const originalStartSearch = startSearch;
-            startSearch = function () {
-                originalStartSearch();
-                progressTracker.updateProgress('searchPerformed', true);
-
-                // Determine if search was successful
-                const target = parseInt(document.getElementById('targetInput').value);
-                const foundIndex = array.indexOf(target);
-                progressTracker.incrementSearchCount(foundIndex !== -1);
-            }
-
-            // Add progress tracking to page load
-            document.addEventListener('DOMContentLoaded', () => {
-                addProgressTrackingToNavbar();
-
-                // Track theory reading (can be triggered by a button or scroll)
-                const theorySection = document.querySelector('.bg-gray-50');
-                if (theorySection) {
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                progressTracker.updateProgress('theoryRead', true);
-                                observer.disconnect();
-                            }
-                        });
-                    }, { threshold: 0.5 });
-                    observer.observe(theorySection);
-                }
-            });
-
-            let array = [];
-            let currentIndex = -1;
-            let searchInterval;
-            let executionSteps = [];
-            let currentStep = -1;
-            let animationSpeed = 1000;
-
-            function toggleCodeExecution() {
-                const container = document.getElementById('codeExecutionContainer');
-                container.classList.toggle('hidden-content');
-                const minimizeBtn = container.querySelector('.minimize-btn');
-                minimizeBtn.textContent = container.classList.contains('hidden-content') ? '🔼' : '🔽';
-            }
-
-            function generateNewArray() {
-                array = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
-                array.sort((a, b) => a - b); // Sort the array for binary search
-                displayArray();
-                resetExecution();
-            }
-
-            function generateCustomArray() {
-                const input = document.getElementById('arrayInput').value.trim();
-                if (input) {
-                    array = input.split(',')
-                        .map(num => parseInt(num.trim()))
-                        .filter(num => !isNaN(num))
-                        .sort((a, b) => a - b); // Sort the array for binary search
-                    displayArray();
-                    resetExecution();
-                } else {
-                    generateNewArray();
-                }
-            }
-
-            function resetExecution() {
-                const pauseBtn = document.getElementById('pauseResumeBtn');
-                if (pauseBtn) {
-                    pauseBtn.textContent = '⏸️ Tạm Dừng';
-
-                    // Loại bỏ các lớp Tailwind không cần thiết
-                    pauseBtn.style.backgroundColor = '#16a085'; /* Thay cho bg-green-300 */
-                    pauseBtn.style.transition = 'background-color 0.3s ease'; /* Thêm hiệu ứng hover */
-
-                    // Thay đổi khi hover bằng cách thêm sự kiện
-                    pauseBtn.addEventListener('mouseover', function () {
-                        pauseBtn.style.backgroundColor = '#1abc9c'; /* Thay cho hover:bg-green-500 */
-                    });
-
-                    pauseBtn.addEventListener('mouseout', function () {
-                        pauseBtn.style.backgroundColor = '#16a085'; /* Trở lại màu gốc */
-                    });
-                }
-
-                // Reset pause-related variables
-                isPaused = false;
-
-                // Existing reset logic
-                document.getElementById('stepDisplay').textContent = '';
-                document.getElementById('executionLog').innerHTML = '';
-                document.getElementById('variableDisplay').innerHTML = '';
+            if (!isPaused) {
+                // Pause the animation
                 clearInterval(searchInterval);
-                currentIndex = -1;
-                executionSteps = [];
-                currentStep = -1;
-                document.querySelectorAll('.code-line').forEach(line => {
-                    line.classList.remove('active-line');
-                });
-                document.querySelectorAll('.array-element').forEach(el => {
-                    el.classList.remove('current', 'found', 'not-found', 'low', 'high', 'mid');
-                });
-            }
-
-            function displayArray() {
-                const container = document.getElementById('arrayContainer');
-                container.innerHTML = '';
-                array.forEach((num, index) => {
-                    const element = document.createElement('div');
-                    element.className = 'array-element inline-block m-1 p-2 border border-gray-300 rounded';
-                    element.textContent = num;
-                    container.appendChild(element);
-                });
-            }
-
-            function addExecutionStep(lineNumber, description, variables) {
-                executionSteps.push({
-                    lineNumber,
-                    description,
-                    variables: { ...variables }
-                });
-            }
-
-            function displayExecutionStep(step) {
-                // Highlight code line
-                document.querySelectorAll('.code-line').forEach(line => {
-                    line.classList.remove('active-line');
-                });
-                document.querySelector(`.code-line[data-line="${step.lineNumber}"]`).classList.add('active-line');
-
-                // Update execution log
-                const executionLog = document.getElementById('executionLog');
-                const stepElement = document.createElement('div');
-                stepElement.className = 'execution-step current-step';
-                stepElement.textContent = step.description;
-                executionLog.innerHTML = '';
-                executionLog.appendChild(stepElement);
-
-                // Update variable display
-                const variableDisplay = document.getElementById('variableDisplay');
-                variableDisplay.innerHTML = Object.entries(step.variables)
-                    .map(([key, value]) => `${key} = ${JSON.stringify(value)}`)
-                    .join('<br>');
-
-                // Update array visualization with improved highlighting
-                const elements = document.getElementsByClassName('array-element');
-                Array.from(elements).forEach((el, idx) => {
-                    // Clear all previous classes first
-                    el.classList.remove('current', 'found', 'not-found', 'low', 'high', 'mid');
-
-                    // Apply new classes based on current search state
-                    if (typeof step.variables.left !== 'undefined' &&
-                        typeof step.variables.right !== 'undefined') {
-
-                        if (idx >= step.variables.left && idx <= step.variables.right) {
-                            if (idx < step.variables.mid) {
-                                el.classList.add('low');
-                            } else if (idx > step.variables.mid) {
-                                el.classList.add('high');
-                            }
-                        }
-                    }
-
-                    if (idx === step.variables.mid) {
-                        el.classList.add('mid');
-                    }
-
-                    if (step.variables.found && idx === step.variables.mid) {
-                        el.classList.add('found');
-                    }
-
-                    if (step.variables.notFound) {
-                        el.classList.add('not-found');
-                    }
-                });
-
-                // Update step display
-                document.getElementById('stepDisplay').textContent = step.description;
-            }
-
-            // Update the displayArray function to ensure proper initial styling
-            function displayArray() {
-                const container = document.getElementById('arrayContainer');
-                container.innerHTML = '';
-                array.forEach((num, index) => {
-                    const element = document.createElement('div');
-                    element.className = 'array-element';
-                    element.textContent = num;
-                    container.appendChild(element);
-                });
-            }
-            function updateSpeed(speed) {
-                animationSpeed = 1000 / speed;
-                if (searchInterval) {
-                    clearInterval(searchInterval);
-                    if (currentStep < executionSteps.length) {
-                        searchInterval = setInterval(() => {
-                            if (currentStep < executionSteps.length) {
-                                displayExecutionStep(executionSteps[currentStep]);
-                                currentStep++;
-                            } else {
-                                clearInterval(searchInterval);
-                            }
-                        }, animationSpeed);
-                    }
-                }
-            }
-
-            function startSearch() {
-                resetExecution();
-                const target = parseInt(document.getElementById('targetInput').value);
-                if (isNaN(target)) {
-                    alert('Vui lòng nhập số cần tìm!');
-                    return;
-                }
-
-                let left = 0;
-                let right = array.length - 1;
-                let found = false;
-
-                addExecutionStep(1, 'Bắt đầu tìm kiếm nhị phân', { target, array });
-                addExecutionStep(2, 'Khởi tạo left = 0', { left, right, target });
-                addExecutionStep(3, 'Khởi tạo right = ' + (array.length - 1), { left, right, target });
-
-                while (left <= right) {
-                    const mid = Math.floor((left + right) / 2);
-                    addExecutionStep(6, `Tính mid = (${left} + ${right}) / 2 = ${mid}`, { left, right, mid, target });
-
-                    if (array[mid] === target) {
-                        addExecutionStep(7, `Tìm thấy ${target} tại vị trí ${mid}`, { left, right, mid, target, found: true });
-                        addExecutionStep(8, `Số ${target} nằm ở vị trí ${mid} trong mảng`, { left, right, mid, target, found: true });
-                        found = true;
-                        break;
-                    } else if (array[mid] < target) {
-                        addExecutionStep(9, `${array[mid]} < ${target}, tìm bên phải`, { left, right, mid, target });
-                        addExecutionStep(10, `Cập nhật left = ${mid + 1}`, { left: mid + 1, right, mid, target });
-                        left = mid + 1;
-                    } else {
-                        addExecutionStep(11, `${array[mid]} > ${target}, tìm bên trái`, { left, right, mid, target });
-                        addExecutionStep(12, `Cập nhật right = ${mid - 1}`, { left, right: mid - 1, mid, target });
-                        right = mid - 1;
-                    }
-                }
-
-                if (!found) {
-                    addExecutionStep(14, `Không tìm thấy ${target} trong mảng`, { left, right, target, notFound: true });
-                }
-
-                currentStep = 0;
+                isPaused = true;
+                pauseBtn.textContent = '▶️ Tiếp Tục';
+                pauseBtn.classList.remove;
+                pauseBtn.classList.add;
+                document.getElementById('stepDisplay').textContent += ' (Đã Tạm Dừng)';
+            } else {
+                // Resume the animation
+                isPaused = false;
+                pauseBtn.textContent = '⏸️ Tạm Dừng';
+                pauseBtn.classList.remove;
+                pauseBtn.classList.add;
+                
+                // Restart the interval
                 searchInterval = setInterval(() => {
                     if (currentStep < executionSteps.length) {
                         displayExecutionStep(executionSteps[currentStep]);
                         currentStep++;
                     } else {
                         clearInterval(searchInterval);
+                        // Reset pause button
+                        pauseBtn.textContent = '⏸️ Tạm Dừng';
+                        pauseBtn.classList.remove;
+                        pauseBtn.classList.add;
                     }
                 }, animationSpeed);
             }
-
-            // Initialize with a random array
-            generateNewArray();
-
-            function nextStep() {
-                if (!executionSteps.length || currentStep >= executionSteps.length) return;
-
-                // Clear any existing interval
-                clearInterval(searchInterval);
-                searchInterval = null;
-
-                // Display the current step
-                displayExecutionStep(executionSteps[currentStep]);
-                currentStep++;
-
-                // Update pause button state
-                const pauseBtn = document.getElementById('pauseResumeBtn');
-                pauseBtn.textContent = '⏸️ Tạm Dừng';
-                isPaused = false;
+        }
+        // Progress Tracking Functionality
+        class ProgressTracker {
+            constructor() {
+                this.initializeProgress();
             }
 
+            initializeProgress() {
+                if (!localStorage.getItem('binarySearchProgress')) {
+                    localStorage.setItem('binarySearchProgress', JSON.stringify({
+                        theoryRead: false,
+                        arrayGenerated: false,
+                        searchPerformed: false,
+                        totalSearches: 0,
+                        successfulSearches: 0
+                    }));
+                }
+            }
 
-            function generateExecutionSteps(target) {
-                executionSteps = [];
-                let left = 0;
-                let right = array.length - 1;
-                let found = false;
+            updateProgress(key, value) {
+                const progress = this.getProgress();
+                progress[key] = value;
+                localStorage.setItem('binarySearchProgress', JSON.stringify(progress));
+                this.updateProgressDisplay();
+            }
 
-                addExecutionStep(1, 'Bắt đầu tìm kiếm nhị phân', { target, array });
-                addExecutionStep(2, 'Khởi tạo left = 0', { left, right, target });
-                addExecutionStep(3, 'Khởi tạo right = ' + (array.length - 1), { left, right, target });
+            incrementSearchCount(success) {
+                const progress = this.getProgress();
+                progress.totalSearches++;
+                if (success) {
+                    progress.successfulSearches++;
+                }
+                localStorage.setItem('binarySearchProgress', JSON.stringify(progress));
+                this.updateProgressDisplay();
+            }
 
-                while (left <= right) {
-                    const mid = Math.floor((left + right) / 2);
-                    addExecutionStep(6, `Tính mid = (${left} + ${right}) / 2 = ${mid}`, { left, right, mid, target });
+            getProgress() {
+                return JSON.parse(localStorage.getItem('binarySearchProgress')) || {};
+            }
 
-                    if (array[mid] === target) {
-                        addExecutionStep(7, `Tìm thấy ${target} tại vị trí ${mid}`, { left, right, mid, target, found: true });
-                        addExecutionStep(8, `Số ${target} nằm ở vị trí ${mid} trong mảng`, { left, right, mid, target, found: true });
-                        found = true;
-                        break;
-                    } else if (array[mid] < target) {
-                        addExecutionStep(9, `${array[mid]} < ${target}, tìm bên phải`, { left, right, mid, target });
-                        addExecutionStep(10, `Cập nhật left = ${mid + 1}`, { left: mid + 1, right, mid, target });
-                        left = mid + 1;
-                    } else {
-                        addExecutionStep(11, `${array[mid]} > ${target}, tìm bên trái`, { left, right, mid, target });
-                        addExecutionStep(12, `Cập nhật right = ${mid - 1}`, { left, right: mid - 1, mid, target });
-                        right = mid - 1;
+            resetProgress() {
+                localStorage.removeItem('binarySearchProgress');
+                this.initializeProgress();
+                this.updateProgressDisplay();
+                closeProgressModal();
+            }
+        }
+
+        // Global progress tracker
+        const progressTracker = new ProgressTracker();
+
+        // Update navigation to include progress tracking
+        function addProgressTrackingToNavbar() {
+            const navLinks = document.querySelector('.nav-links');
+            if (navLinks) {
+                const progressLink = document.createElement('a');
+                progressLink.href = '#';
+                progressLink.onclick = openProgressModal;
+                progressLink.classList.add('cursor-pointer');
+                navLinks.appendChild(progressLink);
+            }
+        }
+
+        // Modal functions
+        function openProgressModal() {
+            document.getElementById('progressModal').style.display = 'block';
+            progressTracker.updateProgressDisplay();
+        }
+
+        function closeProgressModal() {
+            document.getElementById('progressModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('progressModal');
+            if (event.target == modal) {
+                closeProgressModal();
+            }
+        }
+
+        function resetProgress() {
+            progressTracker.resetProgress();
+        }
+
+        // Modify existing functions to track progress
+        const originalGenerateCustomArray = generateCustomArray;
+        generateCustomArray = function() {
+            originalGenerateCustomArray();
+            progressTracker.updateProgress('arrayGenerated', true);
+        }
+
+        const originalStartSearch = startSearch;
+        startSearch = function() {
+            originalStartSearch();
+            progressTracker.updateProgress('searchPerformed', true);
+            
+            // Determine if search was successful
+            const target = parseInt(document.getElementById('targetInput').value);
+            const foundIndex = array.indexOf(target);
+            progressTracker.incrementSearchCount(foundIndex !== -1);
+        }
+
+        // Add progress tracking to page load
+        document.addEventListener('DOMContentLoaded', () => {
+            addProgressTrackingToNavbar();
+            
+            // Track theory reading (can be triggered by a button or scroll)
+            const theorySection = document.querySelector('.bg-gray-50');
+            if (theorySection) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            progressTracker.updateProgress('theoryRead', true);
+                            observer.disconnect();
+                        }
+                    });
+                }, { threshold: 0.5 });
+                observer.observe(theorySection);
+            }
+        });
+
+        let array = [];
+        let currentIndex = -1;
+        let searchInterval;
+        let executionSteps = [];
+        let currentStep = -1;
+        let animationSpeed = 1000;
+
+        function toggleCodeExecution() {
+            const container = document.getElementById('codeExecutionContainer');
+            container.classList.toggle('hidden-content');
+            const minimizeBtn = container.querySelector('.minimize-btn');
+            minimizeBtn.textContent = container.classList.contains('hidden-content') ? '🔼' : '🔽';
+        }
+
+        function generateNewArray() {
+            array = Array.from({length: 10}, () => Math.floor(Math.random() * 100));
+            array.sort((a, b) => a - b); // Sort the array for binary search
+            displayArray();
+            resetExecution();
+        }
+
+        function generateCustomArray() {
+            const input = document.getElementById('arrayInput').value.trim();
+            if (input) {
+                array = input.split(',')
+                    .map(num => parseInt(num.trim()))
+                    .filter(num => !isNaN(num))
+                    .sort((a, b) => a - b); // Sort the array for binary search
+                displayArray();
+                resetExecution();
+            } else {
+                generateNewArray();
+            }
+        }
+
+        function resetExecution() {
+            const pauseBtn = document.getElementById('pauseResumeBtn');
+            if (pauseBtn) {
+                pauseBtn.textContent = '⏸️ Tạm Dừng';
+                
+                // Loại bỏ các lớp Tailwind không cần thiết
+                pauseBtn.style.backgroundColor = '#16a085'; /* Thay cho bg-green-300 */
+                pauseBtn.style.transition = 'background-color 0.3s ease'; /* Thêm hiệu ứng hover */
+
+                // Thay đổi khi hover bằng cách thêm sự kiện
+                pauseBtn.addEventListener('mouseover', function() {
+                    pauseBtn.style.backgroundColor = '#1abc9c'; /* Thay cho hover:bg-green-500 */
+                });
+
+                pauseBtn.addEventListener('mouseout', function() {
+                    pauseBtn.style.backgroundColor = '#16a085'; /* Trở lại màu gốc */
+                });
+            }
+        
+            // Reset pause-related variables
+            isPaused = false;
+            
+            // Existing reset logic
+            document.getElementById('stepDisplay').textContent = '';
+            document.getElementById('executionLog').innerHTML = '';
+            document.getElementById('variableDisplay').innerHTML = '';
+            clearInterval(searchInterval);
+            currentIndex = -1;
+            executionSteps = [];
+            currentStep = -1;
+            document.querySelectorAll('.code-line').forEach(line => {
+                line.classList.remove('active-line');
+            });
+            document.querySelectorAll('.array-element').forEach(el => {
+                el.classList.remove('current', 'found', 'not-found', 'low', 'high', 'mid');
+            });
+        }
+
+        function displayArray() {
+            const container = document.getElementById('arrayContainer');
+            container.innerHTML = '';
+            array.forEach((num, index) => {
+                const element = document.createElement('div');
+                element.className = 'array-element inline-block m-1 p-2 border border-gray-300 rounded';
+                element.textContent = num;
+                container.appendChild(element);
+            });
+        }
+
+        function addExecutionStep(lineNumber, description, variables) {
+            executionSteps.push({
+                lineNumber,
+                description,
+                variables: {...variables}
+            });
+        }
+
+        function displayExecutionStep(step) {
+            document.querySelectorAll('.code-line').forEach(line => {
+                line.classList.remove('active-line');
+            });
+            document.querySelector(`.code-line[data-line="${step.lineNumber}"]`).classList.add('active-line');
+            const executionLog = document.getElementById('executionLog');
+            const stepElement = document.createElement('div');
+            stepElement.className = 'execution-step current-step';
+            stepElement.textContent = step.description;
+            executionLog.innerHTML = '';
+            executionLog.appendChild(stepElement);
+
+            document.getElementById('variableDisplay').innerHTML = '';
+
+            const elements = document.getElementsByClassName('array-element');
+            Array.from(elements).forEach((el, idx) => {
+                el.classList.remove('current', 'found', 'not-found', 'low', 'high', 'mid');
+                
+                if (typeof step.variables.left !== 'undefined' && 
+                    typeof step.variables.right !== 'undefined') {
+                    
+                    if (idx >= step.variables.left && idx <= step.variables.right) {
+                        if (idx < step.variables.mid) {
+                            el.classList.add('low');
+                        } else if (idx > step.variables.mid) {
+                            el.classList.add('high');
+                        }
                     }
                 }
+                
+                if (idx === step.variables.mid) {
+                    el.classList.add('mid');
+                }
+                
+                if (step.variables.found && idx === step.variables.mid) {
+                    el.classList.add('found');
+                }
+            });
 
-                if (!found) {
-                    addExecutionStep(14, `Không tìm thấy ${target} trong mảng`, { left, right, target, notFound: true });
+            document.getElementById('stepDisplay').textContent = step.description;
+        }
+
+        function addExecutionStep(lineNumber, description, variables) {
+            executionSteps.push({
+                lineNumber,
+                description,
+                variables: {...variables}  // Keep variables for internal logic but don't display them
+            });
+        }
+
+        // Update the displayArray function to ensure proper initial styling
+        function displayArray() {
+            const container = document.getElementById('arrayContainer');
+            container.innerHTML = '';
+            array.forEach((num, index) => {
+                const element = document.createElement('div');
+                element.className = 'array-element';
+                element.textContent = num;
+                container.appendChild(element);
+            });
+        }
+        function updateSpeed(speed) {
+            animationSpeed = 1000 / speed;
+            if (searchInterval) {
+                clearInterval(searchInterval);
+                if (currentStep < executionSteps.length) {
+                    searchInterval = setInterval(() => {
+                        if (currentStep < executionSteps.length) {
+                            displayExecutionStep(executionSteps[currentStep]);
+                            currentStep++;
+                        } else {
+                            clearInterval(searchInterval);
+                        }
+                    }, animationSpeed);
                 }
             }
-        </script>
-</body>
+        }
 
+        function startSearch() {
+            resetExecution();
+            const target = parseInt(document.getElementById('targetInput').value);
+            if (isNaN(target)) {
+                alert('Vui lòng nhập số cần tìm!');
+                return;
+            }
+
+            let left = 0;
+            let right = array.length - 1;
+            let found = false;
+            
+            addExecutionStep(1, 'Bắt đầu tìm kiếm nhị phân', { target, array });
+            addExecutionStep(2, 'Khởi tạo left = 0', { left, right, target });
+            addExecutionStep(3, 'Khởi tạo right = ' + (array.length - 1), { left, right, target });
+
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2);
+                addExecutionStep(6, `Tính mid = (${left} + ${right}) / 2 = ${mid}`, { left, right, mid, target });
+
+                if (array[mid] === target) {
+                    addExecutionStep(7, `Tìm thấy ${target} tại vị trí ${mid}`, { left, right, mid, target, found: true });
+                    addExecutionStep(8, `Số ${target} nằm ở vị trí ${mid} trong mảng`, { left, right, mid, target, found: true });
+                    found = true;
+                    break;
+                } else if (array[mid] < target) {
+                    addExecutionStep(9, `${array[mid]} < ${target}, tìm bên phải`, { left, right, mid, target });
+                    addExecutionStep(10, `Cập nhật left = ${mid + 1}`, { left: mid + 1, right, mid, target });
+                    left = mid + 1;
+                } else {
+                    addExecutionStep(11, `${array[mid]} > ${target}, tìm bên trái`, { left, right, mid, target });
+                    addExecutionStep(12, `Cập nhật right = ${mid - 1}`, { left, right: mid - 1, mid, target });
+                    right = mid - 1;
+                }
+            }
+
+            if (!found) {
+                addExecutionStep(14, `Không tìm thấy ${target} trong mảng`, { left, right, target, notFound: true });
+            }
+
+            currentStep = 0;
+            searchInterval = setInterval(() => {
+                if (currentStep < executionSteps.length) {
+                    displayExecutionStep(executionSteps[currentStep]);
+                    currentStep++;
+                } else {
+                    clearInterval(searchInterval);
+                }
+            }, animationSpeed);
+        }
+
+        // Initialize with a random array
+        generateNewArray();
+
+        function nextStep() {
+            if (!executionSteps.length || currentStep >= executionSteps.length) return;
+            
+            // Clear any existing interval
+            clearInterval(searchInterval);
+            searchInterval = null;
+            
+            // Display the current step
+            displayExecutionStep(executionSteps[currentStep]);
+            currentStep++;
+            
+            // Update pause button state
+            const pauseBtn = document.getElementById('pauseResumeBtn');
+            pauseBtn.textContent = '⏸️ Tạm Dừng';
+            isPaused = false;
+        }
+
+
+        function generateExecutionSteps(target) {
+            executionSteps = [];
+            let left = 0;
+            let right = array.length - 1;
+            let found = false;
+            
+            addExecutionStep(1, 'Bắt đầu tìm kiếm nhị phân', { target, array });
+            addExecutionStep(2, 'Khởi tạo left = 0', { left, right, target });
+            addExecutionStep(3, 'Khởi tạo right = ' + (array.length - 1), { left, right, target });
+
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2);
+                addExecutionStep(6, `Tính mid = (${left} + ${right}) / 2 = ${mid}`, { left, right, mid, target });
+
+                if (array[mid] === target) {
+                    addExecutionStep(7, `Tìm thấy ${target} tại vị trí ${mid}`, { left, right, mid, target, found: true });
+                    addExecutionStep(8, `Số ${target} nằm ở vị trí ${mid} trong mảng`, { left, right, mid, target, found: true });
+                    found = true;
+                    break;
+                } else if (array[mid] < target) {
+                    addExecutionStep(9, `${array[mid]} < ${target}, tìm bên phải`, { left, right, mid, target });
+                    addExecutionStep(10, `Cập nhật left = ${mid + 1}`, { left: mid + 1, right, mid, target });
+                    left = mid + 1;
+                } else {
+                    addExecutionStep(11, `${array[mid]} > ${target}, tìm bên trái`, { left, right, mid, target });
+                    addExecutionStep(12, `Cập nhật right = ${mid - 1}`, { left, right: mid - 1, mid, target });
+                    right = mid - 1;
+                }
+            }
+
+            if (!found) {
+                addExecutionStep(14, `Không tìm thấy ${target} trong mảng`, { left, right, target, notFound: true });
+            }
+        }
+    </script>
+</body>
 </html>
