@@ -1341,11 +1341,18 @@
             executionLog.innerHTML = '';
             executionLog.appendChild(stepElement);
 
+            // Update variable display
+            const variableDisplay = document.getElementById('variableDisplay');
+            variableDisplay.innerHTML = Object.entries(step.variables)
+                .filter(([key]) => key !== 'found' && key !== 'notFound')
+                .map(([key, value]) => `${key} = ${JSON.stringify(value)}`)
+                .join('<br>');
+
             // Update array visualization
             const elements = document.getElementsByClassName('array-element');
             Array.from(elements).forEach((el, idx) => {
                 el.classList.remove('current', 'found', 'not-found', 'checked');
-                
+
                 if (typeof step.variables.i !== 'undefined') {
                     if (idx < step.variables.i) {
                         el.classList.add('checked');
@@ -1354,11 +1361,11 @@
                         el.classList.add('current');
                     }
                 }
-                
+
                 if (step.variables.found && idx === step.variables.i) {
                     el.classList.add('found');
                 }
-                
+
                 if (step.variables.notFound) {
                     el.classList.add('not-found');
                 }
@@ -1367,7 +1374,6 @@
             // Update step display
             document.getElementById('stepDisplay').textContent = step.description;
         }
-    
 
         // Initialize with a random array
         generateNewArray();
