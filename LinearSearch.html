@@ -1206,7 +1206,7 @@
         let isPaused = false;
 
         function generateNewArray() {
-            array = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100));
+            array = Array.from({length: 10}, () => Math.floor(Math.random() * 100));
             displayArray();
             resetExecution();
         }
@@ -1245,7 +1245,7 @@
             currentStep = -1;
             isPaused = false;
             document.getElementById('pauseResumeBtn').textContent = '⏸️ Tạm Dừng';
-
+            
             document.querySelectorAll('.code-line').forEach(line => {
                 line.classList.remove('active-line');
             });
@@ -1266,13 +1266,13 @@
 
             for (let i = 0; i < array.length; i++) {
                 addExecutionStep(2, `Kiểm tra phần tử tại vị trí ${i}: ${array[i]}`, { i, current: array[i], target });
-
+                
                 if (array[i] === target) {
                     addExecutionStep(3, `Tìm thấy ${target} tại vị trí ${i}`, { i, found: true });
                     addExecutionStep(4, `Trả về vị trí ${i}`, { i, found: true });
                     break;
                 }
-
+                
                 if (i === array.length - 1) {
                     addExecutionStep(5, `Không tìm thấy ${target} trong mảng`, { notFound: true });
                 }
@@ -1323,7 +1323,7 @@
             executionSteps.push({
                 lineNumber,
                 description,
-                variables: { ...variables }
+                variables: {...variables}
             });
         }
 
@@ -1341,18 +1341,11 @@
             executionLog.innerHTML = '';
             executionLog.appendChild(stepElement);
 
-            // Update variable display
-            const variableDisplay = document.getElementById('variableDisplay');
-            variableDisplay.innerHTML = Object.entries(step.variables)
-                .filter(([key]) => key !== 'found' && key !== 'notFound')
-                .map(([key, value]) => `${key} = ${JSON.stringify(value)}`)
-                .join('<br>');
-
             // Update array visualization
             const elements = document.getElementsByClassName('array-element');
             Array.from(elements).forEach((el, idx) => {
                 el.classList.remove('current', 'found', 'not-found', 'checked');
-
+                
                 if (typeof step.variables.i !== 'undefined') {
                     if (idx < step.variables.i) {
                         el.classList.add('checked');
@@ -1361,11 +1354,11 @@
                         el.classList.add('current');
                     }
                 }
-
+                
                 if (step.variables.found && idx === step.variables.i) {
                     el.classList.add('found');
                 }
-
+                
                 if (step.variables.notFound) {
                     el.classList.add('not-found');
                 }
@@ -1374,19 +1367,19 @@
             // Update step display
             document.getElementById('stepDisplay').textContent = step.description;
         }
-
+    
         // Initialize with a random array
         generateNewArray();
 
         // User authentication related functions
-        window.addEventListener('load', function () {
+        window.addEventListener('load', function() {
             const username = localStorage.getItem('username');
             if (!username) {
                 alert('Bạn chưa đăng nhập. Đang chuyển về trang đăng nhập...');
                 window.location.href = 'login.html';
                 return;
             }
-
+            
             // Update UI to show logged in user
             const userDisplay = document.createElement('div');
             userDisplay.className = 'absolute top-4 right-4 text-gray-700';
@@ -1405,7 +1398,7 @@
         }
 
         // Add keyboard shortcuts
-        document.addEventListener('keydown', function (event) {
+        document.addEventListener('keydown', function(event) {
             if (event.code === 'Space') {
                 // Space bar to toggle pause/resume
                 togglePause();
@@ -1418,7 +1411,7 @@
         });
 
         // Add responsive design handlers
-        window.addEventListener('resize', function () {
+        window.addEventListener('resize', function() {
             const container = document.querySelector('.container');
             if (window.innerWidth < 768) {
                 container.classList.add('mobile-view');
